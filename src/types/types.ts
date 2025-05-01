@@ -45,6 +45,9 @@ export interface Destinations {
     rating: number
     category: Categories
     agency: Agencies
+    reviewCount?: number
+    averageRating?: number
+    reviews?: Reviews[]
 }
 
 export interface Categories {
@@ -77,4 +80,25 @@ export interface Hotels {
     destination: Destinations
     category: Categories
     agency: Agencies
+}
+
+export interface Reviews {
+    _id: string
+    user: {
+        username: string
+    }
+    comment: string
+    rating: number
+    destination?: {
+         _id: string
+          name: string 
+    } | string
+    hotel?: { 
+        _id: string
+        name: string
+     } | string
+    agency?: {
+        _id: string
+        name: string
+    } | string
 }

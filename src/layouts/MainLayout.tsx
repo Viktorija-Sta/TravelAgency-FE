@@ -5,9 +5,9 @@ function MainLayout() {
   return (
     <div>
       <header>
+          <h1>Kelionių svetainė</h1>
         <nav>
           <NavBar />
-          <h1>Kelionių svetainė</h1>
         </nav>
       </header>
       <main>

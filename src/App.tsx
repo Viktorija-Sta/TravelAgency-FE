@@ -4,6 +4,11 @@ import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import MainLayout from './layouts/MainLayout'
 import HomePage from './Pages/HomePage'
+import DestinationsPage from './Pages/DestinationsPage'
+import Login from './Pages/Login'
+import Register from './Pages/Register'
+import ReviewsPage from './Pages/ReviewsPage'
+import DestinationItem from './ItemPage/DestinationItem'
 
 function App() {
 
@@ -16,12 +21,15 @@ function App() {
               <Route  element={<MainLayout />}>
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<HomePage />} />
-                {/* <Route index element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} /> */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+
+              <Route path='/destinations' element={<DestinationsPage />} />
+              <Route path='/destinations/:id' element={<DestinationItem />} />
+
+
+              <Route path='/reviews' element={<ReviewsPage />} />
+               
               </Route>
             </Routes>
           </BrowserRouter>
