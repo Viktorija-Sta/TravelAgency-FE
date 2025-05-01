@@ -18,7 +18,7 @@ export interface User {
 
     export interface CartItem {
         _id: string
-        username: string
+        name: string
         price: number
         quantity: number
         image?: string;

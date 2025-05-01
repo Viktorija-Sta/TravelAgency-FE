@@ -15,7 +15,7 @@ const NavBar: React.FC = () => {
     <nav>
       <ul>
         <li>
-          <NavLink to="/">Home</NavLink>
+          <NavLink to="/">Pagrindis</NavLink>
         </li>
         <li>
           <NavLink to="/destinations">Kelionų kryptys</NavLink>
@@ -25,6 +25,9 @@ const NavBar: React.FC = () => {
         </li>
         <li>
           <NavLink to="/agencies">Agentūros</NavLink>
+        </li>
+        <li>
+          <NavLink to="/reviews">Atsiliepimai</NavLink>
         </li>
 
         {isAuthenticated && (
