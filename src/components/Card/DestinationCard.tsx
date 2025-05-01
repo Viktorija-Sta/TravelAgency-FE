@@ -9,15 +9,15 @@ interface DestinationProps {
 const DestinationCard: React.FC<DestinationProps> = ({ destination }) => {
     const { addToCart } = useCart()
     return (
-        <div key={destination._id} className="border rounded p-4 shadow">
+        <div key={destination._id} className="destination">
               <img
                 src={destination.imageUrl}
                 alt={destination.name}
-                className="w-full h-48 object-cover rounded"
+                className="main-image"
               />
-              <h3 className="text-lg font-semibold mt-2">{destination.name}</h3>
-              <p className="text-sm">{destination.description}</p>
-            <p className="text-sm">€{destination.price}</p>
+              <h3 >{destination.name}</h3>
+              <p>{destination.description}</p>
+            <p>€{destination.price}</p>
               
               <button
                 onClick={() =>
@@ -29,13 +29,13 @@ const DestinationCard: React.FC<DestinationProps> = ({ destination }) => {
                     quantity: 1,
                   })
                 }
-                className="mt-2 bg-blue-500 text-white px-3 py-1 rounded"
+                className="add-to-cart"
               >
                 Į krepšelį
               </button>
               <Link
                 to={`/destinations/${destination._id}`}
-                className="text-blue-500 mt-2 inline-block hover:underline"
+                className="button-more"
               >
                 Plačiau
               </Link>
