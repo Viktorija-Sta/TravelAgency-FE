@@ -102,7 +102,12 @@ const HomePage: React.FC = () => {
         <h2 className="text-2xl font-bold mb-4">Top 3 Agentūros</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {agencies.map((agency) => (
-            <AgencyCard key={agency._id} agency={agency} />
+            <AgencyCard
+              key={agency._id}
+              agency={agency}
+              averageRating={agency.averageRating ?? 0}
+              reviewCount={agency.reviewCount ?? 0}
+            />
           ))}
         </div>
         <div className="text-right mt-2">

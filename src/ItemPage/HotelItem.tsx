@@ -44,6 +44,7 @@ const HotelItem: React.FC = () => {
         _id: hotel._id,
         name: hotel.name,
         price: hotel.pricePerNight,
+        image: hotel.image,
         quantity: 1,
       })
       alert(`${hotel.name} buvo pridėta į krepšelį`)

@@ -15,6 +15,7 @@ import AgenciesPage from './Pages/AgenciesPage'
 import AgencyItem from './ItemPage/AgencyItem'
 import ProfilePage from './Profile/ProfilePage'
 import ProtectedRoute from './components/ProtectedRoute'
+import CartPage from './CartPage/CartPage'
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
               <Route path='/agencies' element={<AgenciesPage />} />
               <Route path='/agencies/:id' element={<AgencyItem />} />
 
+              <Route path='/cart' element={<CartPage />} />
               <Route path='/reviews' element={<ReviewsPage />} />
               <Route path="/profile" element={
                   <ProtectedRoute>

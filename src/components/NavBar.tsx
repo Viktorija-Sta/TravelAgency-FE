@@ -36,10 +36,10 @@ const NavBar: React.FC = () => {
               <NavLink to="/profile">Profilis</NavLink>
             </li>
             <li>
-              <NavLink to="/my-orders">Užsakymai</NavLink>
+              <NavLink to="/cart">Krepšelis</NavLink>
             </li>
             <li>
-              <NavLink to="/cart">Krepšelis</NavLink>
+              <NavLink to="/my-orders">Užsakymai</NavLink>
             </li>
 
             {user?.role?.toLowerCase() === "admin" && (

@@ -21,7 +21,7 @@ export interface User {
         name: string
         price: number
         quantity: number
-        image?: string;
+        image?: string
       }
       
     

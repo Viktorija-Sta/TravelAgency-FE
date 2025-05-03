@@ -1,97 +1,91 @@
 import { useEffect, useState } from "react"
 import { Destinations, Categories, Reviews } from "../types/types"
-import { getAllDestinations, getDestinationsByCategory } from "../services/destinationApi"
+import { getAllDestinations } from "../services/destinationApi"
 import { useCart } from "../hooks/useCart"
 import DestinationCard from "../components/Card/DestinationCard"
 import api from "../utils/axios"
+import SearchElement from "../SearchElement/SearchElement"
 
 const DestinationsPage: React.FC = () => {
   const { addToCart } = useCart()
 
   const [destinations, setDestinations] = useState<Destinations[]>([])
+  const [filtered, setFiltered] = useState<Destinations[]>([])
   const [reviews, setReviews] = useState<Reviews[]>([])
   const [categories, setCategories] = useState<Categories[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<string>("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await api.get("/categories")
-        setCategories(res.data)
-      } catch {
-        console.error("Nepavyko gauti kategorijų")
-      }
-    }
-
-    const fetchReviews = async () => {
-      try {
-        const response = await api.get("/reviews")
-        setReviews(response.data)
-      } catch {
-        setError("Nepavyko gauti atsiliepimų")
-      }
-    }
-
-    fetchCategories()
-    fetchReviews()
-  }, [])
-
-  useEffect(() => {
     const fetchData = async () => {
-      setLoading(true)
       try {
-        const data = selectedCategory
-          ? await getDestinationsByCategory(selectedCategory)
-          : await getAllDestinations()
+        const [res1, res2, res3] = await Promise.all([
+          getAllDestinations(),
+          api.get("/reviews"),
+          api.get("/categories"),
+        ])
 
-        setDestinations(data.data || data)
+        const allDest = res1.data || res1
+        setDestinations(allDest)
+        setFiltered(allDest)
+        setReviews(res2.data)
+        setCategories(res3.data)
       } catch {
-        setError("Nepavyko gauti kelionių")
+        setError("Nepavyko gauti kelionių duomenų")
       } finally {
         setLoading(false)
       }
     }
 
     fetchData()
-  }, [selectedCategory])
+  }, [])
 
-  const changeCategoryHandler = (value: string) => {
-    setSelectedCategory(value)
+  const handleFilterChange = (selectedCategoryIds: string[], searchTerm: string) => {
+    let filteredResults = destinations
+
+    if (selectedCategoryIds.length > 0) {
+      filteredResults = filteredResults.filter(dest =>
+        selectedCategoryIds.includes(dest.category?._id)
+      )
+    }
+
+    if (searchTerm.trim()) {
+      const lower = searchTerm.toLowerCase()
+      filteredResults = filteredResults.filter(dest =>
+        dest.name.toLowerCase().includes(lower) ||
+        dest.location.toLowerCase().includes(lower)
+      )
+    }
+
+    setFiltered(filteredResults)
   }
 
   if (loading) return <div>Kraunama...</div>
   if (error) return <div>{error}</div>
 
   return (
-    <div>
+    <div className="destinations-page">
       <h1>Kelionių sąrašas</h1>
 
-      <label>
-        Filtruoti pagal kryptį:{" "}
-        <select onChange={(e) => changeCategoryHandler(e.target.value)} value={selectedCategory}>
-          <option value="">Visos kryptys</option>
-          {categories.map((cat) => (
-            <option key={cat._id} value={cat._id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <SearchElement
+        options={categories.map(cat => ({
+          label: cat.name,
+          value: cat._id
+        }))}
+        onFilterChange={handleFilterChange}
+        placeholder="Ieškoti kelionės..."
+      />
 
-      <div>
-        {destinations.map((destination) => {
-          const relatedReviews = reviews.filter((review) => {
-            const reviewDestinationId =
-              typeof review.destination === "string"
-                ? review.destination
-                : review.destination?._id
-
-            return reviewDestinationId === destination._id
+      <div className="destination-list">
+        {filtered.map(destination => {
+          const relatedReviews = reviews.filter(review => {
+            const destId = typeof review.destination === "string"
+              ? review.destination
+              : review.destination?._id
+            return destId === destination._id
           })
 
-          const averageRating =
+          const avgRating =
             relatedReviews.length > 0
               ? relatedReviews.reduce((acc, r) => acc + r.rating, 0) / relatedReviews.length
               : 0
@@ -99,7 +93,7 @@ const DestinationsPage: React.FC = () => {
           return (
             <DestinationCard
               key={destination._id}
-              destination={{ ...destination, averageRating, reviewCount: relatedReviews.length }}
+              destination={{ ...destination, averageRating: avgRating, reviewCount: relatedReviews.length }}
               onAddToCart={() =>
                 addToCart({
                   _id: destination._id,

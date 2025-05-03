@@ -1,13 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useCart } from "../hooks/useCart"
 import { useEffect, useState } from "react"
-import { Destinations, Reviews } from "../types/types"
+import { Destinations, Hotels, Reviews } from "../types/types"
 import api from "../utils/axios"
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
 import "./DestinationItem.scss"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
+import HotelCard from "../components/Card/HotelCard"
 
 const DestinationItem: React.FC = () => {
   const { id } = useParams()
@@ -15,6 +16,7 @@ const DestinationItem: React.FC = () => {
   const { addToCart } = useCart()
 
   const [destination, setDestination] = useState<Destinations | null>(null)
+  const [hotels, setHotels] = useState<Hotels[]>([])
   const [reviews, setReviews] = useState<Reviews[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -24,8 +26,11 @@ const DestinationItem: React.FC = () => {
     const fetchData = async () => {
       try {
         const res = await api.get(`/destinations/${id}`)
-        setDestination(res.data.destination || res.data)
-        setReviews(res.data.reviews || []) 
+        const { destination, hotels, reviews } = res.data
+
+        setHotels(hotels || [])
+        setDestination(destination || [])
+        setReviews(reviews || []) 
       } catch {
         setError("Nepavyko gauti kelionės")
       } finally {
@@ -42,7 +47,7 @@ const DestinationItem: React.FC = () => {
         _id: destination._id,
         name: destination.name,
         price: destination.price,
-        image: destination.imageUrl,
+        image: destination.imageUrl || "",
         quantity: 1,
       })
       alert(`${destination.name} buvo pridėta į krepšelį`)
@@ -133,6 +138,21 @@ const DestinationItem: React.FC = () => {
           ))}
         </Slider>
       </div>
+
+      {hotels.length > 0 && (
+        <>
+          <h2>Viešbučiai siūlomi šios agentūros:</h2>
+          {hotels.map((hotel) => (
+            <HotelCard
+              key={hotel._id}
+              hotel={hotel}
+              reviewCount={hotel.reviewsCount || 0}
+              averageRating={hotel.rating || 0}
+              onAddToCart={() => console.log("Įdėta į krepšelį")}
+            />
+          ))}
+        </>
+      )}
 
       <button className="add-to-cart" onClick={addToCartHandler}>
         Įdėti į krepšelį

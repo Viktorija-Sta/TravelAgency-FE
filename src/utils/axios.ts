@@ -1,34 +1,34 @@
-import axios from "axios";
+import axios from "axios"
 
 const api = axios.create({
-    baseURL: "http://localhost:3000/api",
-    headers: {
-        "Content-Type": "application/json",
-    }
+  baseURL: "http://localhost:3000/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
 })
 
-api.interceptors.request.use((config) => {
+// Pridedam tokeną prie visų užklausų, jei jis yra
+api.interceptors.request.use(
+  (config) => {
     const token = localStorage.getItem("token")
-
     if (token && token !== "undefined") {
-    config.headers.Authorization = `Bearer ${token}`
+      config.headers.Authorization = `Bearer ${token}`
     }
-
     return config
-
-    }, (error) => {
-        return Promise.reject(error)
-    }
+  },
+  (error) => Promise.reject(error)
 )
 
-api.interceptors.response.use((response) => {
-    return response
-}, (error) => {
-    if (error.response.status === 401) {
-        localStorage.removeItem("token")
-        window.location.href = "/login"
+// Atsakymo interceptorius, kuris tvarko 401 ir 403 klaidas
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      localStorage.removeItem("token")
+      window.location.href = "/login"
     }
     return Promise.reject(error)
-})
+  }
+)
 
 export default api

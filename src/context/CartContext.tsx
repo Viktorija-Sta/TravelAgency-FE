@@ -6,11 +6,6 @@ export interface CartState {
 }
 import { cartReducer } from "../reducer/cartReducer";
 
-//const { items, addToCart, removeFromCart, updateQuantity, getTotal } = useCart()
-//  galime naudoti useCart hook'ą bet kuriame komponente taip
-
-
-
 interface CartContextType {
   items: CartItem[];
   addToCart: (item: CartItem) => void;

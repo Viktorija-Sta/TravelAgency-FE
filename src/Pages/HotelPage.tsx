@@ -1,45 +1,60 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useCart } from "../hooks/useCart"
 import { Destinations, Hotels } from "../types/types"
 import api from "../utils/axios"
 import HotelCard from "../components/Card/HotelCard"
+import SearchElement from "../SearchElement/SearchElement"
 
 const HotelsPage: React.FC = () => {
   const { addToCart } = useCart()
-  const [hotels, setHotels] = useState<Hotels[]>([])
+  const [allHotels, setAllHotels] = useState<Hotels[]>([])
+  const [filteredHotels, setFilteredHotels] = useState<Hotels[]>([])
   const [destinations, setDestinations] = useState<Destinations[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<string>("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchDestinations = async () => {
+    const fetchData = async () => {
       try {
-        const res = await api.get("/destinations")
-        setDestinations(res.data)
+        const [hotelRes, destRes] = await Promise.all([
+          api.get("/hotels"),
+          api.get("/destinations"),
+        ])
+        setAllHotels(hotelRes.data)
+        setFilteredHotels(hotelRes.data)
+        setDestinations(destRes.data)
       } catch {
-        console.error("Nepavyko gauti krypčių")
-      }
-    }
-    fetchDestinations()
-  }, [])
-
-  useEffect(() => {
-    const fetchHotels = async () => {
-      setLoading(true)
-      try {
-        const res = await api.get("/hotels", {
-          params: selectedCategory ? { destination: selectedCategory } : {}
-        })
-        setHotels(res.data)
-      } catch {
-        setError("Nepavyko gauti viešbučių")
+        setError("Nepavyko gauti viešbučių ar krypčių")
       } finally {
         setLoading(false)
       }
     }
-    fetchHotels()
-  }, [selectedCategory])
+
+    fetchData()
+  }, [])
+
+  const handleFilterChange = useCallback(
+    (selectedDestIds: string[], searchTerm: string) => {
+      let filtered = [...allHotels]
+
+      if (selectedDestIds.length > 0) {
+        filtered = filtered.filter((hotel) =>
+          selectedDestIds.includes(hotel.destination?._id)
+        )
+      }
+
+      if (searchTerm.trim()) {
+        const lower = searchTerm.toLowerCase()
+        filtered = filtered.filter((hotel) =>
+          hotel.name.toLowerCase().includes(lower) ||
+          hotel.location.toLowerCase().includes(lower)
+        )
+      }
+
+      setFilteredHotels(filtered)
+    },
+    [allHotels]
+  )
 
   if (loading) return <div>Kraunama...</div>
   if (error) return <div>{error}</div>
@@ -47,18 +62,18 @@ const HotelsPage: React.FC = () => {
   return (
     <div>
       <h1>Viešbučių sąrašas</h1>
-      <label>
-        Filtruoti pagal kryptį:{" "}
-        <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-          <option value="">Visos kryptys</option>
-          {destinations.map((dest) => (
-            <option key={dest._id} value={dest._id}>{dest.name}</option> // 👈 naudok _id kaip value
-          ))}
-        </select>
-      </label>
+
+      <SearchElement
+        options={destinations.map((d) => ({
+          label: d.name,
+          value: d._id,
+        }))}
+        onFilterChange={handleFilterChange}
+        placeholder="Ieškoti viešbučio..."
+      />
 
       <div>
-        {hotels.map((hotel) => (
+        {filteredHotels.map((hotel) => (
           <HotelCard
             key={hotel._id}
             hotel={hotel}
@@ -69,7 +84,8 @@ const HotelsPage: React.FC = () => {
                 _id: hotel._id,
                 name: hotel.name,
                 price: hotel.pricePerNight,
-                quantity: 1
+                image: hotel.image,
+                quantity: 1,
               })
             }
           />
