@@ -38,7 +38,7 @@ const AgencyItem: React.FC = () => {
     
       if (id) fetchAgencyData()
     }, [id])
-  
+
   const renderStars = (rating: number) => {
     const fullStars = Math.round(rating)
     return "★".repeat(fullStars) + "☆".repeat(5 - fullStars)
@@ -56,6 +56,8 @@ const AgencyItem: React.FC = () => {
   return (
     <div>
       <h1>{agency.name}</h1>
+
+      <img src={agency.logo} alt={agency.name} />
       <p>
         Įvertinimas: {renderStars(averageRating)} ({reviews.length}){" "}
         <button onClick={() => setShowReviews((prev) => !prev)} className="ml-2 text-blue-600 underline">
@@ -78,8 +80,6 @@ const AgencyItem: React.FC = () => {
           )}
         </div>
       )}
-
-      <img src={agency.logo} alt={agency.name} />
       <p>{agency.fullDescription}</p>
       <p>
         Kontaktai: {agency.contactInfo?.email}, {agency.contactInfo?.phone}
