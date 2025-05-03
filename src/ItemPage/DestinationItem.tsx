@@ -18,12 +18,14 @@ const DestinationItem: React.FC = () => {
   const [reviews, setReviews] = useState<Reviews[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showReviews, setShowReviews] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get(`/destinations/${id}`)
-        setDestination(response.data.destination || response.data)
+        const res = await api.get(`/destinations/${id}`)
+        setDestination(res.data.destination || res.data)
+        setReviews(res.data.reviews || []) // 👈 gauna tik susijusius review'us
       } catch {
         setError("Nepavyko gauti kelionės")
       } finally {
@@ -31,19 +33,7 @@ const DestinationItem: React.FC = () => {
       }
     }
 
-    const fetchReviews = async () => {
-      try {
-        const res = await api.get(`/reviews?destination=${id}`)
-        setReviews(res.data)
-      } catch {
-        console.error("Nepavyko gauti atsiliepimų")
-      }
-    }
-
-    if (id) {
-      fetchData()
-      fetchReviews()
-    }
+    if (id) fetchData()
   }, [id])
 
   const addToCartHandler = () => {
@@ -61,8 +51,7 @@ const DestinationItem: React.FC = () => {
 
   const renderStars = (rating: number) => {
     const fullStars = Math.round(rating)
-    const totalStars = 5
-    return "★".repeat(fullStars) + "☆".repeat(totalStars - fullStars)
+    return "★".repeat(fullStars) + "☆".repeat(5 - fullStars)
   }
 
   const averageRating = reviews.length
@@ -70,19 +59,13 @@ const DestinationItem: React.FC = () => {
     : 0
 
   const imageList =
-    destination?.gallery.length === 1
+    destination?.gallery?.length === 1
       ? [destination.gallery[0], destination.gallery[0]]
       : destination?.gallery || []
 
-  const NextArrow = ({ onClick }: { onClick?: () => void }) => (
-    <div className="custom-arrow next" onClick={onClick}>
-      <FiChevronRight />
-    </div>
-  )
-
-  const PrevArrow = ({ onClick }: { onClick?: () => void }) => (
-    <div className="custom-arrow prev" onClick={onClick}>
-      <FiChevronLeft />
+  const Arrow = ({ direction, onClick }: { direction: "next" | "prev"; onClick?: () => void }) => (
+    <div className={`custom-arrow ${direction}`} onClick={onClick}>
+      {direction === "next" ? <FiChevronRight /> : <FiChevronLeft />}
     </div>
   )
 
@@ -93,18 +76,39 @@ const DestinationItem: React.FC = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     adaptiveHeight: true,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
+    nextArrow: <Arrow direction="next" />,
+    prevArrow: <Arrow direction="prev" />,
   }
 
-  if (loading) return <div className="text-center py-10">🔄 Kraunama...</div>
-  if (error) return <div className="text-center py-10 text-red-500">{error}</div>
-  if (!destination) return <div className="text-center py-10">Kelionė nerasta</div>
+  if (loading) return <div>🔄 Kraunama...</div>
+  if (error) return <div>{error}</div>
+  if (!destination) return <div>Kelionė nerasta</div>
 
   return (
     <div className="detail-page">
       <h1>{destination.name}</h1>
-      <p>Įvertinimas: {renderStars(averageRating)} ({reviews.length})</p>
+      <p>
+        Įvertinimas: {renderStars(averageRating)} ({reviews.length}){" "}
+        <button onClick={() => setShowReviews((prev) => !prev)} className="ml-2 text-blue-600 underline">
+          {showReviews ? "Slėpti atsiliepimus" : "Rodyti atsiliepimus"}
+        </button>
+      </p>
+
+      {showReviews && (
+        <div className="bg-gray-100 p-4 mt-2 rounded">
+          {reviews.length === 0 ? (
+            <p>Nėra atsiliepimų apie šią kelionę.</p>
+          ) : (
+            reviews.map((review) => (
+              <div key={review._id} className="mb-2 border-b pb-2">
+                <p className="font-semibold">{review.user?.username || "Anonimas"}</p>
+                <p>{renderStars(review.rating)}</p>
+                <p>{review.comment}</p>
+              </div>
+            ))
+          )}
+        </div>
+      )}
 
       <p>Kategorija: {destination.category?.name || "Nenurodyta"}</p>
       <p>{destination.description}</p>
@@ -135,12 +139,8 @@ const DestinationItem: React.FC = () => {
       </button>
 
       <div className="back-button">
-        <button onClick={() => navigate(-1)} className="button">
-          Grįžti atgal
-        </button>
-        <button className="button" onClick={() => navigate("/")}>
-          Grįžti į pagrindinį meniu
-        </button>
+        <button onClick={() => navigate(-1)} className="button">Grįžti atgal</button>
+        <button onClick={() => navigate("/")} className="button">Grįžti į pagrindinį meniu</button>
       </div>
     </div>
   )

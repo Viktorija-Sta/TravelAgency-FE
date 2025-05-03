@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Destinations, Categories } from "../types/types"
+import { Destinations, Categories, Reviews } from "../types/types"
 import { getAllDestinations, getDestinationsByCategory } from "../services/destinationApi"
 import { useCart } from "../hooks/useCart"
 import DestinationCard from "../components/Card/DestinationCard"
@@ -9,6 +9,7 @@ const DestinationsPage: React.FC = () => {
   const { addToCart } = useCart()
 
   const [destinations, setDestinations] = useState<Destinations[]>([])
+  const [reviews, setReviews] = useState<Reviews[]>([])
   const [categories, setCategories] = useState<Categories[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>("")
   const [loading, setLoading] = useState(true)
@@ -24,7 +25,17 @@ const DestinationsPage: React.FC = () => {
       }
     }
 
+    const fetchReviews = async () => {
+      try {
+        const response = await api.get("/reviews")
+        setReviews(response.data)
+      } catch {
+        setError("Nepavyko gauti atsiliepimų")
+      }
+    }
+
     fetchCategories()
+    fetchReviews()
   }, [])
 
   useEffect(() => {
@@ -35,7 +46,7 @@ const DestinationsPage: React.FC = () => {
           ? await getDestinationsByCategory(selectedCategory)
           : await getAllDestinations()
 
-        setDestinations(data.data || data) 
+        setDestinations(data.data || data)
       } catch {
         setError("Nepavyko gauti kelionių")
       } finally {
@@ -62,7 +73,7 @@ const DestinationsPage: React.FC = () => {
         <select onChange={(e) => changeCategoryHandler(e.target.value)} value={selectedCategory}>
           <option value="">Visos kryptys</option>
           {categories.map((cat) => (
-            <option key={cat._id} value={cat.name}>
+            <option key={cat._id} value={cat._id}>
               {cat.name}
             </option>
           ))}
@@ -70,21 +81,37 @@ const DestinationsPage: React.FC = () => {
       </label>
 
       <div>
-        {destinations.map((destination) => (
-          <DestinationCard
-            key={destination._id}
-            destination={destination}
-            onAddToCart={() =>
-              addToCart({
-                _id: destination._id,
-                name: destination.name,
-                price: destination.price,
-                image: destination.imageUrl,
-                quantity: 1,
-              })
-            }
-          />
-        ))}
+        {destinations.map((destination) => {
+          const relatedReviews = reviews.filter((review) => {
+            const reviewDestinationId =
+              typeof review.destination === "string"
+                ? review.destination
+                : review.destination?._id
+
+            return reviewDestinationId === destination._id
+          })
+
+          const averageRating =
+            relatedReviews.length > 0
+              ? relatedReviews.reduce((acc, r) => acc + r.rating, 0) / relatedReviews.length
+              : 0
+
+          return (
+            <DestinationCard
+              key={destination._id}
+              destination={{ ...destination, averageRating, reviewCount: relatedReviews.length }}
+              onAddToCart={() =>
+                addToCart({
+                  _id: destination._id,
+                  name: destination.name,
+                  price: destination.price,
+                  image: destination.imageUrl,
+                  quantity: 1,
+                })
+              }
+            />
+          )
+        })}
       </div>
     </div>
   )
