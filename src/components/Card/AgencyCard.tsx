@@ -7,7 +7,7 @@ interface AgencyProps {
   reviewCount: number
 }
 
-const AgencyCard: React.FC<AgencyProps> = ({ agency, averageRating, reviewCount }) => {
+const AgencyCard: React.FC<AgencyProps> = ({ agency }) => {
   const renderStars = (rating: number) => {
     const fullStars = Math.round(rating)
     const totalStars = 5
@@ -30,7 +30,7 @@ const AgencyCard: React.FC<AgencyProps> = ({ agency, averageRating, reviewCount 
       {agency.establishedYear && <p>Įkurta: {agency.establishedYear}</p>}
 
       <div className="mt-2 mb-2 text-sm text-gray-600">
-        {renderStars(averageRating)} ({reviewCount} atsiliepimai)
+        {renderStars(agency.averageRating || 0)} ({agency.reviewCount || 0} atsiliepimai)
       </div>
 
       <Link to={`/agencies/${agency._id}`}>Plačiau</Link>

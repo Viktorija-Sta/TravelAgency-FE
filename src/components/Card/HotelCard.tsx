@@ -8,7 +8,7 @@ interface HotelProps {
   onAddToCart: () => void
 }
 
-const HotelCard: React.FC<HotelProps> = ({ hotel, reviewCount, averageRating, onAddToCart }) => {
+const HotelCard: React.FC<HotelProps> = ({ hotel, onAddToCart }) => {
   const { addToCart } = useCart()
 
   const handleAddToCart = () => {
@@ -35,7 +35,7 @@ const HotelCard: React.FC<HotelProps> = ({ hotel, reviewCount, averageRating, on
       <p>€{hotel.pricePerNight}/naktis</p>
 
       <div className="mt-2 mb-2 text-sm text-gray-600">
-        {renderStars(averageRating)} ({reviewCount} atsiliepimai)
+        {renderStars(hotel.averageRating || 0)} ({hotel.reviewsCount || 0} atsiliepimai)
       </div>
 
       <button onClick={handleAddToCart} className="add-to-cart">
