@@ -119,6 +119,7 @@ export interface Reviews {
 
 
 export interface UserProfile {
+    _id: string
     username: string
     email: string
     phoneNumber: string

@@ -5,7 +5,7 @@ import { User } from "../types/types";
 
   
   interface DecodedToken {
-    _id: string
+    id: string
     name: string
     email: string
     username: string
@@ -46,7 +46,7 @@ import { User } from "../types/types";
           console.log("🚀 ~ useEffect ~ decoded:", decoded)
           setToken(savedToken);
           setUser({
-            _id: decoded._id,
+            _id: decoded.id,
             username: decoded.username,
             email: decoded.email,
             role: decoded.role === "user" || decoded.role === "admin" ? decoded.role : "user",
@@ -72,7 +72,7 @@ import { User } from "../types/types";
       const decoded = jwtDecode<DecodedToken>(token)
       console.log("🚀 ~ login ~ decoded:", decoded)
       const user: User = {
-        _id: decoded._id,
+        _id: decoded.id,
         username: decoded.username,
         email: decoded.email,
         role: decoded.role === "user" || decoded.role === "admin" ? decoded.role : "user",
