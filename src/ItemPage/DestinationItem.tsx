@@ -25,7 +25,7 @@ const DestinationItem: React.FC = () => {
       try {
         const res = await api.get(`/destinations/${id}`)
         setDestination(res.data.destination || res.data)
-        setReviews(res.data.reviews || []) // 👈 gauna tik susijusius review'us
+        setReviews(res.data.reviews || []) 
       } catch {
         setError("Nepavyko gauti kelionės")
       } finally {

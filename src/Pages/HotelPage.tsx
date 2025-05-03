@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react"
 import { useCart } from "../hooks/useCart"
-import { Categories, Hotels } from "../types/types"
+import { Destinations, Hotels } from "../types/types"
 import api from "../utils/axios"
 import HotelCard from "../components/Card/HotelCard"
-import { getAllHotels, getHotelsByDestination } from "../services/hotelApi"
 
 const HotelsPage: React.FC = () => {
   const { addToCart } = useCart()
   const [hotels, setHotels] = useState<Hotels[]>([])
-  const [destinations, setDestinations] = useState<Categories[]>([])
+  const [destinations, setDestinations] = useState<Destinations[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -29,10 +28,10 @@ const HotelsPage: React.FC = () => {
     const fetchHotels = async () => {
       setLoading(true)
       try {
-        const data = selectedCategory
-          ? await getHotelsByDestination(selectedCategory)
-          : await getAllHotels()
-        setHotels(data.data || data)
+        const res = await api.get("/hotels", {
+          params: selectedCategory ? { destination: selectedCategory } : {}
+        })
+        setHotels(res.data)
       } catch {
         setError("Nepavyko gauti viešbučių")
       } finally {
@@ -53,7 +52,7 @@ const HotelsPage: React.FC = () => {
         <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
           <option value="">Visos kryptys</option>
           {destinations.map((dest) => (
-            <option key={dest._id} value={dest.name}>{dest.name}</option>
+            <option key={dest._id} value={dest._id}>{dest.name}</option> // 👈 naudok _id kaip value
           ))}
         </select>
       </label>

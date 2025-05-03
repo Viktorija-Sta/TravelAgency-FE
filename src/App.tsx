@@ -13,6 +13,7 @@ import HotelsPage from './Pages/HotelPage'
 import HotelItem from './ItemPage/HotelItem'
 import AgenciesPage from './Pages/AgenciesPage'
 import AgencyItem from './ItemPage/AgencyItem'
+import ProfilePage from './Pages/ProfilePage'
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
               <Route path='/agencies/:id' element={<AgencyItem />} />
 
               <Route path='/reviews' element={<ReviewsPage />} />
+              <Route path='/profile' element={<ProfilePage />} />
 
                
               </Route>

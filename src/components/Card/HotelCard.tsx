@@ -24,6 +24,12 @@ const HotelCard: React.FC<HotelProps> = ({ hotel, reviewCount, averageRating, on
 
   return (
     <div key={hotel._id} className="hotel">
+      <img
+        style={{ width: "30%" }}
+        src={hotel.image}
+        alt={hotel.name}
+        className="main-image"
+      />
       <h3>{hotel.name}</h3>
       <p>{hotel.location}</p>
       <p>€{hotel.pricePerNight}/naktis</p>

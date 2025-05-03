@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
-import { Agencies } from "../types/types"
+import { Agencies, Reviews } from "../types/types"
 import api from "../utils/axios"
 import AgencyCard from "../components/Card/AgencyCard"
 
 const AgenciesPage: React.FC = () => {
 
   const [agencies, setAgencies] = useState<Agencies[]>([])
+   const [reviews, setReviews] = useState<Reviews[]>([])
   
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -28,7 +29,17 @@ const AgenciesPage: React.FC = () => {
       }
     }
 
+    const fetchReviews = async () => {
+      try {
+        const response = await api.get("/reviews")
+        setReviews(response.data)
+      } catch {
+        setError("Nepavyko gauti atsiliepimų")
+      }
+    }
+
     fetchData()
+    fetchReviews()
   }, [])
 
   if (loading) return <div>Kraunama...</div>
@@ -39,9 +50,25 @@ const AgenciesPage: React.FC = () => {
     <div className="p-4">
       <h1>Kelionių Agentūrų Sąrašas</h1>
       <div>
-        {agencies.map((agency) => (
-          <AgencyCard key={agency._id} agency={agency} />
-        ))}
+      {agencies.map((agency) => {
+        const relatedReviews = reviews.filter((review) => {
+          const reviewAgencyId =
+            typeof review.agency === "string"
+              ? review.agency
+              : review.agency?._id
+
+          return reviewAgencyId === agency._id
+        })
+
+        const averageRating =
+          relatedReviews.length > 0
+            ? relatedReviews.reduce((acc, r) => acc + r.rating, 0) / relatedReviews.length
+            : 0
+
+        return (
+          <AgencyCard key={agency._id} agency={agency} averageRating={averageRating} reviewCount={relatedReviews.length}/>
+        )
+      })}
       </div>
     </div>
   )

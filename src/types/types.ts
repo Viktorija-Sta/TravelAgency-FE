@@ -92,6 +92,8 @@ export interface Hotels {
     destination: Destinations
     category: Categories
     agency: Agencies
+    gallery: string[]
+    image: string
 }
 
 export interface Reviews {
@@ -114,3 +116,19 @@ export interface Reviews {
         name: string
     } | string
 }
+
+
+export interface UserProfile {
+    username: string
+    email: string
+    phoneNumber: string
+    role: string
+    profilePicture: string
+    address?: {
+      street?: string
+      city?: string
+      postalCode?: string
+      country?: string
+    }
+    orders?: string[]
+  }
