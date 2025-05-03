@@ -1,18 +1,13 @@
-import { Link } from "react-router-dom"
 import { Destinations } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
 
 interface DestinationProps {
   destination: Destinations
-  reviewCount: number
-  averageRating: number
   onAddToCart: () => void
 }
 
 const DestinationCard: React.FC<DestinationProps> = ({
   destination,
-  reviewCount,
-  averageRating,
   onAddToCart,
 }) => {
   const { addToCart } = useCart()
@@ -31,6 +26,7 @@ const DestinationCard: React.FC<DestinationProps> = ({
   return (
     <div className="destination">
       <img
+        style={{ width: "30%" }}
         src={destination.imageUrl}
         alt={destination.name}
         className="main-image"
@@ -40,23 +36,16 @@ const DestinationCard: React.FC<DestinationProps> = ({
       <p>€{destination.price}</p>
 
       <div className="mt-2 mb-2 text-sm text-gray-600">
-        {renderStars(averageRating)} ({reviewCount} atsiliepimai)
-        <br />
-        <Link
-          to={`/destinations/${destination._id}/reviews`}
-          className="text-blue-500 hover:underline"
-        >
-          Žiūrėti visus atsiliepimus
-        </Link>
+        {renderStars(destination.averageRating || 0)} ({destination.reviewCount || 0} atsiliepimai)
       </div>
 
       <button onClick={handleAddToCart} className="add-to-cart">
         Į krepšelį
       </button>
 
-      <Link to={`/destinations/${destination._id}`} className="button-more">
+      <button onClick={() => window.location.href = `/destinations/${destination._id}`} className="button-more">
         Plačiau
-      </Link>
+      </button>
     </div>
   )
 }

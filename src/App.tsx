@@ -9,6 +9,11 @@ import Login from './Pages/Login'
 import Register from './Pages/Register'
 import ReviewsPage from './Pages/ReviewsPage'
 import DestinationItem from './ItemPage/DestinationItem'
+import HotelsPage from './Pages/HotelPage'
+import HotelItem from './ItemPage/HotelItem'
+import AgenciesPage from './Pages/AgenciesPage'
+import AgencyItem from './ItemPage/AgencyItem'
+
 
 function App() {
 
@@ -27,8 +32,14 @@ function App() {
               <Route path='/destinations' element={<DestinationsPage />} />
               <Route path='/destinations/:id' element={<DestinationItem />} />
 
+              <Route path='/hotels' element={<HotelsPage />} />
+              <Route path='/hotels/:id' element={<HotelItem />} />
+
+              <Route path='/agencies' element={<AgenciesPage />} />
+              <Route path='/agencies/:id' element={<AgencyItem />} />
 
               <Route path='/reviews' element={<ReviewsPage />} />
+
                
               </Route>
             </Routes>

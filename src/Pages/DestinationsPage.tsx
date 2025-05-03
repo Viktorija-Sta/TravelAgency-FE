@@ -1,6 +1,5 @@
-// DestinationsPage.tsx
 import { useEffect, useState } from "react"
-import { Destinations, Reviews, Categories } from "../types/types"
+import { Destinations, Categories } from "../types/types"
 import { getAllDestinations, getDestinationsByCategory } from "../services/destinationApi"
 import { useCart } from "../hooks/useCart"
 import DestinationCard from "../components/Card/DestinationCard"
@@ -10,7 +9,6 @@ const DestinationsPage: React.FC = () => {
   const { addToCart } = useCart()
 
   const [destinations, setDestinations] = useState<Destinations[]>([])
-  const [reviews, setReviews] = useState<Reviews[]>([])
   const [categories, setCategories] = useState<Categories[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>("")
   const [loading, setLoading] = useState(true)
@@ -26,16 +24,6 @@ const DestinationsPage: React.FC = () => {
       }
     }
 
-    const fetchReviews = async () => {
-      try {
-        const response = await api.get("/reviews")
-        setReviews(response.data)
-      } catch {
-        setError("Nepavyko gauti atsiliepimų")
-      }
-    }
-
-    fetchReviews()
     fetchCategories()
   }, [])
 
@@ -82,40 +70,21 @@ const DestinationsPage: React.FC = () => {
       </label>
 
       <div>
-      {destinations.map((destination) => {
-        const relatedReviews = reviews.filter((review) => {
-            const reviewDestinationId =
-            typeof review.destination === "string"
-                ? review.destination
-                : review.destination?._id
-
-            return reviewDestinationId === destination._id
-        })
-
-        const averageRating =
-            relatedReviews.length > 0
-            ? relatedReviews.reduce((acc, r) => acc + (r.rating || 0), 0) /
-                relatedReviews.length
-            : 0
-
-        return (
-            <DestinationCard
+        {destinations.map((destination) => (
+          <DestinationCard
             key={destination._id}
             destination={destination}
-            reviewCount={relatedReviews.length}
-            averageRating={averageRating}
             onAddToCart={() =>
-                addToCart({
+              addToCart({
                 _id: destination._id,
                 name: destination.name,
                 price: destination.price,
                 image: destination.imageUrl,
                 quantity: 1,
-                })
+              })
             }
-            />
-        )
-        })}
+          />
+        ))}
       </div>
     </div>
   )

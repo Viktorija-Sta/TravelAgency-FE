@@ -43,6 +43,8 @@ export interface Destinations {
     imageUrl: string
     gallery: string[]
     rating: number
+    duration: number
+    departureDate: string
     category: Categories
     agency: Agencies
     reviewCount?: number
@@ -62,10 +64,19 @@ export interface Agencies {
     description: string
     logo: string
     rating: number
+    website: string
+    fullDescription: string
+    establishedYear: number
     contactInfo: {
             email: string
             phone: string
     }
+    reviewCount?: number
+    averageRating?: number
+    reviews?: Reviews[]
+    destinations?: Destinations[]
+    hotels?: Hotels[]
+    categories?: Categories[]
 }
 
 export interface Hotels {
@@ -77,6 +88,7 @@ export interface Hotels {
     amenities: string[]
     rating: number
     reviewsCount: number
+    averageRating: number
     destination: Destinations
     category: Categories
     agency: Agencies

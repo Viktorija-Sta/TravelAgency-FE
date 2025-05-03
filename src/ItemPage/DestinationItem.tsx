@@ -1,10 +1,13 @@
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useCart } from "../hooks/useCart"
 import { useEffect, useState } from "react"
 import { Destinations, Reviews } from "../types/types"
 import api from "../utils/axios"
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
+import "./DestinationItem.scss"
 import Slider from "react-slick"
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
 
 const DestinationItem: React.FC = () => {
   const { id } = useParams()
@@ -32,8 +35,8 @@ const DestinationItem: React.FC = () => {
       try {
         const res = await api.get(`/reviews?destination=${id}`)
         setReviews(res.data)
-      } catch (err) {
-        console.error("Nepavyko gauti atsiliepimų", err)
+      } catch {
+        console.error("Nepavyko gauti atsiliepimų")
       }
     }
 
@@ -56,30 +59,29 @@ const DestinationItem: React.FC = () => {
     }
   }
 
-  const imageList =
-    destination?.gallery?.length === 1
-      ? [destination.gallery[0], destination.gallery[0]]
-      : destination?.gallery || []
-
   const renderStars = (rating: number) => {
     const fullStars = Math.round(rating)
-    return "⭐".repeat(fullStars)
+    const totalStars = 5
+    return "★".repeat(fullStars) + "☆".repeat(totalStars - fullStars)
   }
 
   const averageRating = reviews.length
-    ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
     : 0
 
-  const reviewCount = reviews.length
+  const imageList =
+    destination?.gallery.length === 1
+      ? [destination.gallery[0], destination.gallery[0]]
+      : destination?.gallery || []
 
-  const NextArrow = (props: { onClick?: () => void }) => (
-    <div className="custom-arrow next" onClick={props.onClick}>
+  const NextArrow = ({ onClick }: { onClick?: () => void }) => (
+    <div className="custom-arrow next" onClick={onClick}>
       <FiChevronRight />
     </div>
   )
 
-  const PrevArrow = (props: { onClick?: () => void }) => (
-    <div className="custom-arrow prev" onClick={props.onClick}>
+  const PrevArrow = ({ onClick }: { onClick?: () => void }) => (
+    <div className="custom-arrow prev" onClick={onClick}>
       <FiChevronLeft />
     </div>
   )
@@ -102,21 +104,27 @@ const DestinationItem: React.FC = () => {
   return (
     <div className="detail-page">
       <h1>{destination.name}</h1>
-      <p>{renderStars(averageRating)} ({reviewCount} atsiliepimai)</p>
-      <Link to={`/destinations/${destination._id}/reviews`} className="text-blue-500 hover:underline">
-        Žiūrėti visus atsiliepimus
-      </Link>
+      <p>Įvertinimas: {renderStars(averageRating)} ({reviews.length})</p>
 
       <p>Kategorija: {destination.category?.name || "Nenurodyta"}</p>
       <p>{destination.description}</p>
       <p>Aprašymas: {destination.fullDescription}</p>
+      <p>Išvykimo data: {destination.departureDate}</p>
+      <p>Trukmė: {destination.duration} dienos</p>
       <p>Kaina: {typeof destination.price === "number" ? destination.price.toFixed(2) : "Nenurodyta"} €</p>
 
       <div className="carousel-wrapper">
         <Slider {...settings}>
-          {imageList.map((image, index) => (
-            <div key={index} className="carousel-item">
-              <img src={image} alt={`Kelionės nuotrauka ${index + 1}`} />
+          {imageList.map((img, i) => (
+            <div key={i} className="carousel-item">
+              <img
+                src={img}
+                alt={`${destination.name} ${i + 1}`}
+                className="carousel-image"
+                onError={(e) => {
+                  e.currentTarget.src = "/fallback.jpg"
+                }}
+              />
             </div>
           ))}
         </Slider>
@@ -127,8 +135,12 @@ const DestinationItem: React.FC = () => {
       </button>
 
       <div className="back-button">
-        <button onClick={() => navigate(-1)} className="button">Grįžti atgal</button>
-        <button className="button" onClick={() => navigate("/")}>Grįžti į pagrindinį meniu</button>
+        <button onClick={() => navigate(-1)} className="button">
+          Grįžti atgal
+        </button>
+        <button className="button" onClick={() => navigate("/")}>
+          Grįžti į pagrindinį meniu
+        </button>
       </div>
     </div>
   )
