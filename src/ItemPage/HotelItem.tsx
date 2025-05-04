@@ -8,6 +8,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
+import ReviewForm from "../Review/ReviewForm"
 
 const HotelItem: React.FC = () => {
   const { id } = useParams()
@@ -101,7 +102,7 @@ const HotelItem: React.FC = () => {
       {showReviews && (
         <div className="bg-gray-100 p-4 mt-2 rounded">
           {reviews.length === 0 ? (
-            <p>Nėra atsiliepimų apie šią kelionę.</p>
+            <p>Nėra atsiliepimų apie šį viešbutį.</p>
           ) : (
             reviews.map((review) => (
               <div key={review._id} className="mb-2 border-b pb-2">
@@ -111,8 +112,14 @@ const HotelItem: React.FC = () => {
               </div>
             ))
           )}
-        </div>
-      )}
+          <ReviewForm
+            hotelId={hotel._id}
+            onReviewSubmitted={(newReview) => {
+            setReviews((prev) => [...prev, newReview])
+          }}
+        />
+      </div>
+            )}
 
       <p>Kategorija: {hotel.category?.name || "Nenurodyta"}</p>
       <p>{hotel.description}</p>

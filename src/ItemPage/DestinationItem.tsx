@@ -9,6 +9,7 @@ import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import HotelCard from "../components/Card/HotelCard"
+import ReviewForm from "../Review/ReviewForm"
 
 const DestinationItem: React.FC = () => {
   const { id } = useParams()
@@ -49,6 +50,7 @@ const DestinationItem: React.FC = () => {
         price: destination.price,
         image: destination.imageUrl || "",
         quantity: 1,
+        
       })
       alert(`${destination.name} buvo pridėta į krepšelį`)
     }
@@ -104,13 +106,21 @@ const DestinationItem: React.FC = () => {
           {reviews.length === 0 ? (
             <p>Nėra atsiliepimų apie šią kelionę.</p>
           ) : (
-            reviews.map((review) => (
-              <div key={review._id} className="mb-2 border-b pb-2">
-                <p className="font-semibold">{review.user?.username || "Anonimas"}</p>
-                <p>{renderStars(review.rating)}</p>
-                <p>{review.comment}</p>
-              </div>
-            ))
+            <>
+              {reviews.map((review) => (
+                <div key={review._id} className="mb-2 border-b pb-2">
+                  <p className="font-semibold">{review.user?.username || "Anonimas"}</p>
+                  <p>{renderStars(review.rating)}</p>
+                  <p>{review.comment}</p>
+                </div>
+              ))}
+              <ReviewForm 
+                 destinationId={destination._id}
+                 onReviewSubmitted={(newReview) => {
+                   setReviews((prev) => [...prev, newReview])
+                 }}
+              />
+            </>
           )}
         </div>
       )}

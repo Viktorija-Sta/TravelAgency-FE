@@ -7,15 +7,18 @@ import HomePage from './Pages/HomePage'
 import DestinationsPage from './Pages/DestinationsPage'
 import Login from './Pages/Login'
 import Register from './Pages/Register'
-import ReviewsPage from './Pages/ReviewsPage'
+import ReviewsPage from './Review/ReviewsPage'
 import DestinationItem from './ItemPage/DestinationItem'
-import HotelsPage from './Pages/HotelPage'
 import HotelItem from './ItemPage/HotelItem'
 import AgenciesPage from './Pages/AgenciesPage'
 import AgencyItem from './ItemPage/AgencyItem'
-import ProfilePage from './Profile/ProfilePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import CartPage from './CartPage/CartPage'
+import HotelsPage from './Pages/HotelsPage'
+import Checkout from './CartPage/Checkout'
+import OrderSuccessPage from './CartPage/OrderSuccessPage'
+import MyOrdersPage from './MyOrdersPage/MyOrdersPage'
+import ProfilePage from './Profile/ProfilePage'
 
 
 function App() {
@@ -42,12 +45,20 @@ function App() {
               <Route path='/agencies/:id' element={<AgencyItem />} />
 
               <Route path='/cart' element={<CartPage />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-success" element={<OrderSuccessPage />} />
+
               <Route path='/reviews' element={<ReviewsPage />} />
               <Route path="/profile" element={
-                  <ProtectedRoute>
-                        <ProfilePage />
-                  </ProtectedRoute>
-                }/>
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              } />
+              <Route path="/my-orders" element={
+                <ProtectedRoute>
+                  <MyOrdersPage />
+                </ProtectedRoute>
+              } />
 
                
               </Route>

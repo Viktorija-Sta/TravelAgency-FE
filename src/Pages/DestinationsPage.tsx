@@ -93,7 +93,9 @@ const DestinationsPage: React.FC = () => {
           return (
             <DestinationCard
               key={destination._id}
-              destination={{ ...destination, averageRating: avgRating, reviewCount: relatedReviews.length }}
+              destination={destination}
+              averageRating={avgRating}
+              reviewCount={relatedReviews.length}
               onAddToCart={() =>
                 addToCart({
                   _id: destination._id,
@@ -101,6 +103,7 @@ const DestinationsPage: React.FC = () => {
                   price: destination.price,
                   image: destination.imageUrl,
                   quantity: 1,
+                  
                 })
               }
             />

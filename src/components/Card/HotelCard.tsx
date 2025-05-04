@@ -1,3 +1,4 @@
+import { Link } from "react-router"
 import { useCart } from "../../hooks/useCart"
 import { Hotels } from "../../types/types"
 
@@ -8,7 +9,12 @@ interface HotelProps {
   onAddToCart: () => void
 }
 
-const HotelCard: React.FC<HotelProps> = ({ hotel, onAddToCart }) => {
+const HotelCard: React.FC<HotelProps> = ({
+  hotel,
+  reviewCount,
+  averageRating,
+  onAddToCart
+}) => {
   const { addToCart } = useCart()
 
   const handleAddToCart = () => {
@@ -18,8 +24,7 @@ const HotelCard: React.FC<HotelProps> = ({ hotel, onAddToCart }) => {
 
   const renderStars = (rating: number) => {
     const fullStars = Math.round(rating)
-    const totalStars = 5
-    return "★".repeat(fullStars) + "☆".repeat(totalStars - fullStars)
+    return "★".repeat(fullStars) + "☆".repeat(5 - fullStars)
   }
 
   return (
@@ -35,16 +40,15 @@ const HotelCard: React.FC<HotelProps> = ({ hotel, onAddToCart }) => {
       <p>€{hotel.pricePerNight}/naktis</p>
 
       <div className="mt-2 mb-2 text-sm text-gray-600">
-        {renderStars(hotel.averageRating || 0)} ({hotel.reviewsCount || 0} atsiliepimai)
+        {renderStars(averageRating)} ({reviewCount} atsiliepimai)
       </div>
 
       <button onClick={handleAddToCart} className="add-to-cart">
         Į krepšelį
       </button>
 
-      <a href={`/hotels/${hotel._id}`} className="button-more">
-        Plačiau
-      </a>
+
+      <Link to={`/hotels/${hotel._id}`}>Plačiau</Link>
     </div>
   )
 }

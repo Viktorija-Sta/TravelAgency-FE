@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react"
 import { useCart } from "../hooks/useCart"
-import { Destinations, Hotels } from "../types/types"
+import { Destinations, Hotels, Reviews } from "../types/types"
 import api from "../utils/axios"
 import HotelCard from "../components/Card/HotelCard"
 import SearchElement from "../SearchElement/SearchElement"
@@ -16,12 +16,32 @@ const HotelsPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [hotelRes, destRes] = await Promise.all([
+        const [hotelRes, destRes, reviewRes] = await Promise.all([
           api.get("/hotels"),
           api.get("/destinations"),
+          api.get("/reviews")
         ])
-        setAllHotels(hotelRes.data)
-        setFilteredHotels(hotelRes.data)
+        const hotels = hotelRes.data
+        const reviews = reviewRes.data
+  
+        const hotelsWithReviews = hotels.map((hotel: Hotels) => {
+          const related = reviews.filter((r: Reviews) => {
+            const hId = typeof r.hotel === "string" ? r.hotel : r.hotel?._id
+            return hId === hotel._id
+          })
+          const avg = related.length
+            ? related.reduce((acc: number, r: Reviews) => acc + r.rating, 0) / related.length
+            : 0
+  
+          return {
+            ...hotel,
+            reviewsCount: related.length,
+            averageRating: avg
+          }
+        })
+  
+        setAllHotels(hotelsWithReviews)
+        setFilteredHotels(hotelsWithReviews)
         setDestinations(destRes.data)
       } catch {
         setError("Nepavyko gauti viešbučių ar krypčių")
@@ -29,7 +49,7 @@ const HotelsPage: React.FC = () => {
         setLoading(false)
       }
     }
-
+  
     fetchData()
   }, [])
 

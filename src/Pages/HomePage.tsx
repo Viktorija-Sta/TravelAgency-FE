@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { Agencies, Destinations, Hotels } from "../types/types"
+import { Agencies, Destinations, Hotels, Reviews } from "../types/types"
 import api from "../utils/axios"
 import DestinationCard from "../components/Card/DestinationCard"
 import HotelCard from "../components/Card/HotelCard"
@@ -20,15 +20,57 @@ const HomePage: React.FC = () => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const [destinationRes, hotelRes, agencyRes] = await Promise.all([
+        const [destinationRes, hotelRes, agencyRes, reviewRes] = await Promise.all([
           api.get("/destinations"),
           api.get("/hotels"),
-          api.get("/agencies")
+          api.get("/agencies"),
+          api.get("/reviews"),
         ])
-
-        setDestinations(destinationRes.data.slice(0, 3))
-        setHotels(hotelRes.data.slice(0, 3))
-        setAgencies(agencyRes.data.slice(0, 3))
+  
+        const allReviews = reviewRes.data
+  
+        const destinations = destinationRes.data.slice(0, 3).map((dest: Destinations) => {
+          const destReviews = allReviews.filter((r: Reviews) =>
+            typeof r.destination === "string"
+              ? r.destination === dest._id
+              : r.destination?._id === dest._id
+          )
+          const reviewCount = destReviews.length
+          const averageRating = reviewCount
+            ? destReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
+            : 0
+          return { ...dest, reviewCount, averageRating }
+        })
+  
+        const hotels = hotelRes.data.slice(0, 3).map((hotel: Hotels) => {
+          const hotelReviews = allReviews.filter((r: Reviews) =>
+            typeof r.hotel === "string"
+              ? r.hotel === hotel._id
+              : r.hotel?._id === hotel._id
+          )
+          const reviewCount = hotelReviews.length
+          const averageRating = reviewCount
+            ? hotelReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
+            : 0
+          return { ...hotel, reviewsCount: reviewCount, averageRating }
+        })
+  
+        const agencies = agencyRes.data.slice(0, 3).map((agency: Agencies) => {
+          const agencyReviews = allReviews.filter((r: Reviews) =>
+            typeof r.agency === "string"
+              ? r.agency === agency._id
+              : r.agency?._id === agency._id
+          )
+          const reviewCount = agencyReviews.length
+          const averageRating = reviewCount
+            ? agencyReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
+            : 0
+          return { ...agency, reviewCount, averageRating }
+        })
+  
+        setDestinations(destinations)
+        setHotels(hotels)
+        setAgencies(agencies)
       } catch (error) {
         console.error("Klaida gaunant duomenis:", error)
         setError("Nepavyko gauti duomenų")
@@ -36,22 +78,24 @@ const HomePage: React.FC = () => {
         setLoading(false)
       }
     }
-
+  
     fetchData()
   }, [])
 
-  if (loading) return <div className="text-center py-10">🔄 Kraunama...</div>
-  if (error) return <div className="text-center py-10 text-red-500">{error}</div>
+  if (loading) return <div>Kraunama...</div>
+  if (error) return <div>{error}</div>
 
   return (
-    <div>
+    <div className="home-page">
       <section>
-        <h2 className="text-2xl font-bold mb-4">Top 3 Kelionės</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <h2>Top 3 Kelionės</h2>
+        <div className="cards">
           {destinations.map((destination) => (
             <DestinationCard
               key={destination._id}
               destination={destination}
+              reviewCount={destination.reviewCount || 0}
+              averageRating={destination.averageRating || 0}
               onAddToCart={() =>
                 addToCart({
                   _id: destination._id,
@@ -64,22 +108,20 @@ const HomePage: React.FC = () => {
             />
           ))}
         </div>
-        <div className="text-right mt-2">
-          <Link to="/destinations" className="text-blue-500 hover:underline">
-            Žiūrėti visas keliones
-          </Link>
+        <div>
+          <Link to="/destinations">Žiūrėti visas keliones</Link>
         </div>
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold mb-4">Top 3 Viešbučiai</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <h2>Top 3 Viešbučiai</h2>
+        <div className="cards">
           {hotels.map((hotel) => (
             <HotelCard
               key={hotel._id}
               hotel={hotel}
-              reviewCount={hotel.reviewsCount}
-              averageRating={hotel.averageRating}
+              reviewCount={hotel.reviewsCount || 0}
+              averageRating={hotel.averageRating || 0}
               onAddToCart={() =>
                 addToCart({
                   _id: hotel._id,
@@ -91,29 +133,25 @@ const HomePage: React.FC = () => {
             />
           ))}
         </div>
-        <div className="text-right mt-2">
-          <Link to="/hotels" className="text-blue-500 hover:underline">
-            Žiūrėti visus viešbučius
-          </Link>
+        <div>
+          <Link to="/hotels">Žiūrėti visus viešbučius</Link>
         </div>
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold mb-4">Top 3 Agentūros</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <h2>Top 3 Agentūros</h2>
+        <div className="cards">
           {agencies.map((agency) => (
             <AgencyCard
               key={agency._id}
               agency={agency}
-              averageRating={agency.averageRating ?? 0}
-              reviewCount={agency.reviewCount ?? 0}
+              averageRating={agency.averageRating || 0}
+              reviewCount={agency.reviewCount || 0}
             />
           ))}
         </div>
-        <div className="text-right mt-2">
-          <Link to="/agencies" className="text-blue-500 hover:underline">
-            Žiūrėti visas agentūras
-          </Link>
+        <div>
+          <Link to="/agencies">Žiūrėti visas agentūras</Link>
         </div>
       </section>
     </div>

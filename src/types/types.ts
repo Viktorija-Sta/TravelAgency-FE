@@ -1,3 +1,29 @@
+export interface AuthState {
+  user: User | null
+}
+
+export type AuthAction =
+  | { type: 'LOGIN'; payload: User }
+  | { type: 'LOGOUT' }
+
+
+  export interface CartItem {
+      _id: string
+      name: string
+      price: number
+      quantity: number
+      image?: string
+      createdAt?: string
+    }
+    
+  
+    
+    export type CartAction =
+    | { type: "ADD_ITEM"; payload: CartItem }
+    | { type: "REMOVE_ITEM"; payload: string }
+    | { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } }
+    | { type: "CLEAR_CART" }      
+
 
 export interface User {
     _id: string
@@ -5,33 +31,24 @@ export interface User {
     email: string
     role: 'user' | 'admin'
     token: string
-  }
-  
-  export interface AuthState {
-    user: User | null
-  }
-  
-  export type AuthAction =
-    | { type: 'LOGIN'; payload: User }
-    | { type: 'LOGOUT' }
-  
+  }  
 
-    export interface CartItem {
-        _id: string
-        name: string
-        price: number
-        quantity: number
-        image?: string
-      }
-      
-    
-      
-      export type CartAction =
-      | { type: "ADD_ITEM"; payload: CartItem }
-      | { type: "REMOVE_ITEM"; payload: string }
-      | { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } }
-      | { type: "CLEAR_CART" }      
-
+  export interface UserProfile {
+    _id: string  
+    username: string
+    email: string
+    phoneNumber: string
+    role: string
+    profilePicture: string
+    address?: {
+      street?: string  
+      city?: string
+      postalCode?: string
+      country?: string
+    }  
+    orders?: string[]
+  }  
+  
 
 export interface Destinations {
     _id: string
@@ -118,18 +135,12 @@ export interface Reviews {
 }
 
 
-export interface UserProfile {
+export interface Order {
     _id: string
-    username: string
-    email: string
-    phoneNumber: string
-    role: string
-    profilePicture: string
-    address?: {
-      street?: string
-      city?: string
-      postalCode?: string
-      country?: string
-    }
-    orders?: string[]
+    user: User
+    items: CartItem[]
+    totalAmount: number
+    orderDate: string
+    status: string
+    createdAt: string
   }

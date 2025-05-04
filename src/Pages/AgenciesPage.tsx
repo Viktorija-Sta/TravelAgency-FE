@@ -66,7 +66,11 @@ const AgenciesPage: React.FC = () => {
             : 0
 
         return (
-          <AgencyCard key={agency._id} agency={agency} averageRating={averageRating} reviewCount={relatedReviews.length}/>
+          <AgencyCard 
+            key={agency._id}
+            agency={agency}
+            averageRating={averageRating}
+            reviewCount={relatedReviews.length}/>
         )
       })}
       </div>
