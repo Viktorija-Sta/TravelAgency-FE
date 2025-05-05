@@ -23,7 +23,8 @@ const DestinationCard: React.FC<DestinationProps> = ({
       name: destination.name,
       price: destination.price,
       image: destination.imageUrl,
-      quantity: 1  
+      quantity: 1  ,
+      modelType: "Destination",
     })
     
   }

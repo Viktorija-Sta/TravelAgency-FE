@@ -29,7 +29,8 @@ const Checkout: React.FC = () => {
         items: items.map((item) => ({
           productId: item._id,
           quantity: item.quantity,
-          price: item.price
+          price: item.price,
+          modelType: item.modelType, 
         })),
         totalAmount: getTotal(),
         shippingAddress,

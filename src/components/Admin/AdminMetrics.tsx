@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "../../context/AuthContext"
 import api from "../../utils/axios"
+import Breadcrumb from "../Breadcrumb/Breadcrumb"
 
 const AdminMetrics: React.FC = () => {
     const { user } = useAuth()
@@ -10,15 +11,16 @@ const AdminMetrics: React.FC = () => {
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(true)
 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true) 
-                const res = await api.get('/admin/stats')
+                const res = await api.get('/admin/metrics')
                 console.log("Received data: ", res.data)
 
                 setTotalOrders(res.data.totalOrders || 0)
-                setRevenue(res.data.revenue || 0)
+                setRevenue(res.data.totalRevenue  || 0)
 
             } catch {
                 setError("Nepavyko gauti duomenų")
@@ -35,6 +37,7 @@ const AdminMetrics: React.FC = () => {
 
     return (
         <div className="admin-metrics">
+            <Breadcrumb />
             <h1>Statistika</h1>
             {error ? (
                 <p className="error">{error}</p>
@@ -46,6 +49,7 @@ const AdminMetrics: React.FC = () => {
                     <p><strong>Bendra apyvarta: </strong>{(revenue ?? 0).toFixed(2)} €</p>
                 </>
             )}
+
         </div>
     )
 }

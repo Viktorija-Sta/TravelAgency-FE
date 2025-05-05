@@ -19,6 +19,11 @@ const AdminPanel: React.FC = () => {
                         Valdyti užsakymus
                     </Link>
                 </div>
+                <div className="admin-button-wrapper">
+                    <Link to='/admin/metrics' className="admin-button">
+                        Užsakymų statistika
+                    </Link>
+                </div>
             </div>
             <button className="button" onClick={() => navigate('/')}>GrĮžti į pagrindinį puslapį</button>
         </div>

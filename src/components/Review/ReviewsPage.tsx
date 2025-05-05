@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { Reviews } from "../types/types"
+import { Reviews } from "../../types/types"
 import { Link } from "react-router-dom"
-import api from "../utils/axios"
+import api from "../../utils/axios"
 
 const ReviewsPage: React.FC = () => {
   const [reviews, setReviews] = useState<Reviews[]>([])

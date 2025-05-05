@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import api from "../utils/axios"
-import { UserProfile } from "../types/types"
+import api from "../../utils/axios"
+import { UserProfile } from "../../types/types"
 
 interface Props {
     isOpen: boolean

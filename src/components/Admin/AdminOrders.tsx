@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useAuth } from "../../context/AuthContext"
 import { Order } from "../../types/types"
 import api from "../../utils/axios"
+import Breadcrumb from "../Breadcrumb/Breadcrumb"
 
 interface OrderRowProps {
     order: Order
@@ -13,10 +14,10 @@ const OrderRow: React.FC<OrderRowProps> = ({ order, statusChangeHandler }) => {
     return (
         <tr key={order._id}>
             <td>{order._id}</td>
-            <td>{order.userEmail}</td>
-            <td>{order.items.map(item => item.name).join(", ")}</td>
+            <td>{order.user?.email}</td>
+            <td>{order.items.map(item => item.details?.name || "N/A").join(", ")}</td>
             <td>{order.totalAmount} €</td>
-            <td>{order.address}</td>
+            <td>{order.shippingAddress}</td>
             <td>
                 <select value={order.status} onChange={(e) => statusChangeHandler(order._id, e.target.value)}>
                     <option value="pending">Laukiama</option>
@@ -35,6 +36,7 @@ const AdminOrders: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+
 
     const fetchOrders = async () => {
         try {
@@ -55,7 +57,7 @@ const AdminOrders: React.FC = () => {
 
     const statusChangeHandler = async (orderId: string, newStatus: Order['status']) => {
         try {
-            await api.put(`/admin/orders/${orderId}`, {status: newStatus})
+            await api.put(`admin/orders/${orderId}`, {status: newStatus})
 
             setOrders(prevOrders => 
                 prevOrders.map(order =>
@@ -80,6 +82,7 @@ const AdminOrders: React.FC = () => {
     return (
         <>
             <div className="admin-Orders">
+                <Breadcrumb />
                 <h1>UŽsakymų valdymas</h1>
                 <table className="orders-table">
                     <thead>
@@ -100,6 +103,8 @@ const AdminOrders: React.FC = () => {
                     </tbody>
                 </table>
             </div>
+
+            
         </>
     )
 }

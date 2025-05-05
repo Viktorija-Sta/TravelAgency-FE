@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import api from "../utils/axios"
-import { Agencies, Destinations, Hotels, Reviews } from "../types/types"
-import DestinationCard from "../components/Card/DestinationCard"
-import HotelCard from "../components/Card/HotelCard"
+import api from "../../utils/axios"
+import { Agencies, Destinations, Hotels, Reviews } from "../../types/types"
+import DestinationCard from "../Card/DestinationCard"
+import HotelCard from "../Card/HotelCard"
 import ReviewForm from "../Review/ReviewForm"
 
 const AgencyItem: React.FC = () => {

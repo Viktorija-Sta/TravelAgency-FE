@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Agencies } from "../../types/types";
 import api from "../../utils/axios";
+import { Link } from "react-router-dom";
 
-const AdminAgencies = () => {
+const AdminAgencies: React.FC = () => {
   const [agencies, setAgencies] = useState<Agencies[]>([]);
   const [newAgency, setNewAgency] = useState<Partial<Agencies>>({
-    contactInfo: { email: "", phone: "" },
+    contactInfo: { email: "", phone: "" } as Agencies["contactInfo"],
   });
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -24,21 +25,18 @@ const AdminAgencies = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-
-    // Specialus tvarkymas kontaktinei informacijai
     if (name === "email" || name === "phone") {
       setNewAgency((prev) => ({
         ...prev,
         contactInfo: {
-          email: prev.contactInfo?.email || "",
-          phone: prev.contactInfo?.phone || "",
+          ...prev.contactInfo!,
           [name]: value,
         },
       }));
     } else {
       setNewAgency((prev) => ({
         ...prev,
-        [name]: name === "establishedYear" ? Number(value) : value,
+        [name]: name === "establishedYear" ? parseInt(value) || undefined : value,
       }));
     }
   };
@@ -89,42 +87,78 @@ const AdminAgencies = () => {
     <div>
       <h2>Agentūrų valdymas</h2>
 
-      <input name="name" placeholder="Pavadinimas" value={newAgency.name || ""} onChange={handleChange} />
-      <input name="location" placeholder="Vieta" value={newAgency.location || ""} onChange={handleChange} />
-      <input
-        name="establishedYear"
-        type="number"
-        placeholder="Įkurimo metai"
-        value={newAgency.establishedYear || ""}
-        onChange={handleChange}
-      />
-      <input name="phone" placeholder="Telefonas" value={newAgency.contactInfo?.phone || ""} onChange={handleChange} />
-      <input name="email" placeholder="El. paštas" value={newAgency.contactInfo?.email || ""} onChange={handleChange} />
-      <input name="website" placeholder="Tinklalapis" value={newAgency.website || ""} onChange={handleChange} />
-      <input name="logo" placeholder="Logotipas (URL)" value={newAgency.logo || ""} onChange={handleChange} />
-      <input name="description" placeholder="Aprašymas" value={newAgency.description || ""} onChange={handleChange} />
-      <textarea
-        name="fullDescription"
-        placeholder="Pilnas Aprašymas"
-        value={newAgency.fullDescription || ""}
-        onChange={handleChange}
-      ></textarea>
+      <form>
+        <label>
+          Pavadinimas:
+          <input name="name" value={newAgency.name || ""} onChange={handleChange} />
+        </label>
+        <label>
+          Vieta:
+          <input name="location" value={newAgency.location || ""} onChange={handleChange} />
+        </label>
+        <label>
+          Įkurimo metai:
+          <input
+            name="establishedYear"
+            type="number"
+            value={newAgency.establishedYear || ""}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Telefonas:
+          <input name="phone" value={newAgency.contactInfo?.phone || ""} onChange={handleChange} />
+        </label>
+        <label>
+          El. paštas:
+          <input name="email" value={newAgency.contactInfo?.email || ""} onChange={handleChange} />
+        </label>
+        <label>
+          Tinklalapis:
+          <input name="website" value={newAgency.website || ""} onChange={handleChange} />
+        </label>
+        <label>
+          Logotipas (URL):
+          <input name="logo" value={newAgency.logo || ""} onChange={handleChange} />
+        </label>
+        <label>
+          Aprašymas:
+          <input name="description" value={newAgency.description || ""} onChange={handleChange} />
+        </label>
+        <label>
+          Pilnas aprašymas:
+          <textarea
+            name="fullDescription"
+            value={newAgency.fullDescription || ""}
+            onChange={handleChange}
+          />
+        </label>
 
-      {editingId ? (
-        <button onClick={handleUpdate}>Atnaujinti</button>
-      ) : (
-        <button onClick={handleCreate}>Sukurti</button>
-      )}
+        {editingId && (
+          <p>
+            Redaguojama agentūra:{" "}
+            <Link to={`/agency/${editingId}`} target="_blank" rel="noopener noreferrer">
+              Žiūrėti puslapį
+            </Link>
+          </p>
+        )}
+
+        {editingId ? (
+          <button type="button" onClick={handleUpdate}>Atnaujinti</button>
+        ) : (
+          <button type="button" onClick={handleCreate}>Sukurti</button>
+        )}
+      </form>
 
       <ul>
         {agencies.map((agency) => (
-          <li key={agency._id}>
-            {agency.name} – {agency.location}
+            <li key={agency._id}>
+            <Link to={`/agencies/${agency._id}`}>{agency.name}</Link> – {agency.location}
             <button onClick={() => startEdit(agency)}>Redaguoti</button>
             <button onClick={() => handleDelete(agency._id)}>Ištrinti</button>
-          </li>
+            </li>
         ))}
-      </ul>
+        </ul>
     </div>
   );
 };

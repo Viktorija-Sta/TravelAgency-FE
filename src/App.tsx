@@ -7,22 +7,23 @@ import HomePage from './Pages/HomePage'
 import DestinationsPage from './Pages/DestinationsPage'
 import Login from './Pages/Login'
 import Register from './Pages/Register'
-import ReviewsPage from './Review/ReviewsPage'
-import DestinationItem from './ItemPage/DestinationItem'
-import HotelItem from './ItemPage/HotelItem'
+import ReviewsPage from './components/Review/ReviewsPage'
+import DestinationItem from './components/ItemPage/DestinationItem'
+import HotelItem from './components/ItemPage/HotelItem'
 import AgenciesPage from './Pages/AgenciesPage'
-import AgencyItem from './ItemPage/AgencyItem'
+import AgencyItem from './components/ItemPage/AgencyItem'
 import ProtectedRoute from './components/ProtectedRoute'
 import CartPage from './CartPage/CartPage'
 import HotelsPage from './Pages/HotelsPage'
 import Checkout from './CartPage/Checkout'
 import OrderSuccessPage from './CartPage/OrderSuccessPage'
 import MyOrdersPage from './MyOrdersPage/MyOrdersPage'
-import ProfilePage from './Profile/ProfilePage'
+import ProfilePage from './components/Profile/ProfilePage'
 import AdminRoute from './components/Admin/AdminRoute'
 import AdminPanel from './components/Admin/AdminPanel'
 import AdminOrders from './components/Admin/AdminOrders'
 import AdminProducts from './components/Admin/AdminProducts'
+import AdminMetrics from './components/Admin/AdminMetrics'
 
 
 function App() {
@@ -66,7 +67,7 @@ function App() {
 
               <Route element={<AdminRoute />}>
                 <Route path="/admin" element={<AdminPanel />} />
-                {/* <Route path="/admin/categories" element={<AdminCategories />} /> */}
+                <Route path="/admin/metrics" element={<AdminMetrics />} />
                 <Route path="/admin/orders" element={<AdminOrders />} />
                 <Route path="/admin/products" element={<AdminProducts />} />
               </Route>

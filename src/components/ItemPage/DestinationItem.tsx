@@ -1,8 +1,8 @@
 import { useNavigate, useParams, Link } from "react-router-dom"
-import { useCart } from "../hooks/useCart"
+import { useCart } from "../../hooks/useCart"
 import { useEffect, useState } from "react"
-import { Destinations, Hotels, Reviews } from "../types/types"
-import api from "../utils/axios"
+import { Destinations, Hotels, Reviews } from "../../types/types"
+import api from "../../utils/axios"
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
 import "./DestinationItem.scss"
 import Slider from "react-slick"
@@ -51,6 +51,7 @@ const DestinationItem: React.FC = () => {
         price: destination.price,
         image: destination.imageUrl || "",
         quantity: 1,
+        modelType: "Destination" as const,
       }
 
       const hotelCost = selectedHotel ? selectedHotel.pricePerNight * destination.duration : 0

@@ -9,23 +9,30 @@ export type AuthAction =
 
 export interface CartItem {
   _id: string
-  name: string
   price: number
   quantity: number
   image?: string
   createdAt?: string
+  name: string
+  details?: {
+    name: string
+    image?: string
+  }
+  modelType: 'Hotel' | 'Destination'
 }
 
 export interface Order {
   _id: string
-  user: User
+  user?: {
+    email: string
+    username: string
+  }
   items: CartItem[]
   totalAmount: number
   orderDate: string
   status: string
   createdAt: string
-  userEmail: string
-  address: string
+  shippingAddress: string
 }
 
 
@@ -42,6 +49,13 @@ export interface User {
     username: string
     email: string
     role: 'user' | 'admin'
+    address?: { 
+      street?: string
+      city?: string
+      postalCode?: string
+      country?: string
+    }
+    phoneNumber?: string
     token: string
   }  
 

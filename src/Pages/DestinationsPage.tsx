@@ -4,7 +4,7 @@ import { getAllDestinations } from "../services/destinationApi"
 import { useCart } from "../hooks/useCart"
 import DestinationCard from "../components/Card/DestinationCard"
 import api from "../utils/axios"
-import SearchElement from "../SearchElement/SearchElement"
+import SearchElement from "../components/SearchElement/SearchElement"
 
 const DestinationsPage: React.FC = () => {
   const { addToCart } = useCart()
@@ -54,8 +54,7 @@ const DestinationsPage: React.FC = () => {
     if (searchTerm.trim()) {
       const lower = searchTerm.toLowerCase()
       filteredResults = filteredResults.filter(dest =>
-        dest.name.toLowerCase().includes(lower) ||
-        dest.location.toLowerCase().includes(lower)
+        dest.name.toLowerCase().includes(lower)
       )
     }
 
@@ -105,6 +104,7 @@ const DestinationsPage: React.FC = () => {
                   price: destination.price,
                   image: destination.imageUrl,
                   quantity: 1,
+                  modelType: "Destination",
                   
                 })
               }

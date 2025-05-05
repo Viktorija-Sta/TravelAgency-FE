@@ -89,7 +89,7 @@ import { User } from "../types/types";
         localStorage.setItem("token", token)
       }
   
-      setUser(user)
+     
       setIsAuthenticated(true)
     }
   

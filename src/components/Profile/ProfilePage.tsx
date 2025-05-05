@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { useAuth } from "../hooks/useAuth"
-import api from "../utils/axios"
-import { UserProfile } from "../types/types"
+import { useAuth } from "../../hooks/useAuth"
+import api from "../../utils/axios"
+import { UserProfile } from "../../types/types"
 import EditProfile from "./EditProfile";
 import './EditProfile.scss'
 
@@ -57,16 +57,26 @@ const ProfilePage = () => {
               <p><strong>Vardas:</strong> {profile.username}</p>
               <p><strong>El. paštas:</strong> {profile.email}</p>
               <p><strong>Telefono numeris:</strong> {profile.phoneNumber}</p>
-              <p><strong>Rolė:</strong> {profile.role}</p>
-              {profile.address && (
-                  <div>
-                  <p><strong>Adresas:</strong></p>
-                  <p>{profile.address.street}, {profile.address.city}</p>
-                  <p>{profile.address.postalCode}, {profile.address.country}</p>
-                  </div>
+
+              {profile.role === "admin" && (
+                <p><strong>Rolė:</strong> {profile.role}</p>
               )}
+
+              {profile.address && (
+                <div className="address-section">
+                  <p><strong>Adresas:</strong></p>
+                  <p>
+                    {profile.address.country && `${profile.address.country}, `}
+                    {profile.address.city && `${profile.address.city}, `}
+                    {profile.address.street && `${profile.address.street}, `}
+                    {profile.address.postalCode && `LT-${profile.address.postalCode}`}
+                  </p>
+                </div>
+              )}
+
               </div>
           )}
+          
           <button onClick={() => setIsModalOpen(true)}>Redaguoti profilį</button>
           {profile && (
             <EditProfile

@@ -1,5 +1,5 @@
 import { useState, FormEvent } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import { AxiosError } from "axios"
 
@@ -8,8 +8,12 @@ function Login() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+
+  const location = useLocation()
   const navigate = useNavigate()
   const { login, user } = useAuth()
+
+  const sessionExpired = new URLSearchParams(location.search).get("sessionExpired") === "true"
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -27,7 +31,6 @@ function Login() {
       } else {
         navigate("/")
       }
-
     } catch (err) {
       const axiosError = err as AxiosError<{ message: string }>
       const message = axiosError.response?.data?.message || "Prisijungimas nepavyko"
@@ -39,9 +42,17 @@ function Login() {
   }
 
   return (
-    <div>
+    <div className="login-container">
       <h1>Prisijungimas</h1>
-      {error && <div style={{ color: "red" }}>{error}</div>}
+
+      {sessionExpired && (
+        <div style={{ color: "red", marginBottom: "10px" }}>
+          ⚠️ Jūsų sesija baigėsi. Prisijunkite iš naujo.
+        </div>
+      )}
+
+      {error && <div style={{ color: "red", marginBottom: "10px" }}>{error}</div>}
+
       <form onSubmit={handleSubmit}>
         <div>
           <label>El. paštas:</label>
@@ -67,7 +78,10 @@ function Login() {
           {isLoading ? "Prisijungiama..." : "Prisijungti"}
         </button>
       </form>
-      <Link to="/register">Registruotis</Link>
+
+      <p>
+        Neturite paskyros? <Link to="/register">Registruotis</Link>
+      </p>
     </div>
   )
 }

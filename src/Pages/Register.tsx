@@ -3,11 +3,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios, { AxiosError } from 'axios'
 import api from '../utils/axios'
 import { useAuth } from '../context/AuthContext'
+import { jwtDecode } from 'jwt-decode'
+import { User } from '../types/types'
 
 function Register() {
   const navigate = useNavigate()
   const { login } = useAuth()
-  
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -28,7 +30,7 @@ function Register() {
     e.preventDefault()
 
     if (!formData.email || !formData.password || !formData.confirmPassword || !formData.username) {
-      alert('Visi laukai yra privalomi')
+      alert('Visi privalomi laukai turi būti užpildyti')
       return
     }
 
@@ -40,19 +42,34 @@ function Register() {
     try {
       setIsLoading(true)
 
-      // Pirma registracija
-      await api.post('/users/register', {
+      const res = await api.post('/users/register', {
         email: formData.email,
         password: formData.password,
-        username: formData.username,
+        username: formData.username
       })
 
-      // Tada automatinis prisijungimas
-      await login(formData.email, formData.password)
+      const { token } = res.data
+
+      const decoded = jwtDecode<{
+        id: string
+        email: string
+        username: string
+        role: string
+      }>(token)
+
+      const newUser: User = {
+        _id: decoded.id,
+        username: decoded.username,
+        email: decoded.email,
+        role: decoded.role === 'admin' ? 'admin' : 'user',
+        token,
+      }
+
+      localStorage.setItem('token', token)
+      login(newUser.email, formData.password)
 
       alert('Sėkmingai prisiregistravote ir prisijungėte!')
       navigate('/')
-
     } catch (error) {
       console.error('Registracijos klaida:', error)
 
@@ -62,7 +79,6 @@ function Register() {
       } else {
         alert('Registracijos klaida')
       }
-
     } finally {
       setIsLoading(false)
     }

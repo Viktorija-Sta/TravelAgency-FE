@@ -1,9 +1,9 @@
-import { useNavigate, useParams } from "react-router-dom"
-import { useCart } from "../hooks/useCart"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import { useCart } from "../../hooks/useCart"
 import { useEffect, useState } from "react"
-import api from "../utils/axios"
+import api from "../../utils/axios"
 import "./destinationItem.scss"
-import { Hotels, Reviews } from "../types/types"
+import { Hotels, Reviews } from "../../types/types"
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
@@ -47,6 +47,7 @@ const HotelItem: React.FC = () => {
         price: hotel.pricePerNight,
         image: hotel.image,
         quantity: 1,
+        modelType: "Hotel" 
       })
       alert(`${hotel.name} buvo pridėta į krepšelį`)
     }
@@ -92,6 +93,8 @@ const HotelItem: React.FC = () => {
   return (
     <div className="detail-page">
       <h1>{hotel.name}</h1>
+      <Link to={`/agencies/${hotel.agency?._id}`} className="agency-link">
+      <p>Agentūra: {hotel.agency?.name || "Nenurodyta"}</p></Link>
       <p>
         Įvertinimas: {renderStars(averageRating)} ({reviews.length}){" "}
         <button onClick={() => setShowReviews((prev) => !prev)} className="ml-2 text-blue-600 underline">

@@ -26,8 +26,6 @@ const SearchElement: React.FC<SearchElementProps> = ({
     onFilterChange(selectedValues, searchTerm)
   }, [selectedOptions, searchTerm])
 
-  
-
   return (
     <div className="search-element">
       <input
@@ -46,12 +44,12 @@ const SearchElement: React.FC<SearchElementProps> = ({
       <Select
         className="search-element-select"
         classNamePrefix="react-select"
-       
         options={options}
         value={selectedOptions}
         onChange={(selected) => setSelectedOptions(selected as OptionType[])}
         isMulti
         placeholder="Pasirinkite kryptis..."
+        noOptionsMessage={() => "Duomenų nerasta"}
       />
     </div>
   )

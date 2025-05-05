@@ -3,7 +3,7 @@ import { useCart } from "../hooks/useCart"
 import { Destinations, Hotels, Reviews } from "../types/types"
 import api from "../utils/axios"
 import HotelCard from "../components/Card/HotelCard"
-import SearchElement from "../SearchElement/SearchElement"
+import SearchElement from "../components/SearchElement/SearchElement"
 
 const HotelsPage: React.FC = () => {
   const { addToCart } = useCart()
@@ -65,9 +65,8 @@ const HotelsPage: React.FC = () => {
 
       if (searchTerm.trim()) {
         const lower = searchTerm.toLowerCase()
-        filtered = filtered.filter((hotel) =>
-          hotel.name.toLowerCase().includes(lower) ||
-          hotel.location.toLowerCase().includes(lower)
+        filtered = filtered.filter(hotel =>
+          hotel.name.toLowerCase().includes(lower)
         )
       }
 
@@ -106,6 +105,7 @@ const HotelsPage: React.FC = () => {
                 price: hotel.pricePerNight,
                 image: hotel.image,
                 quantity: 1,
+                modelType: "Hotel",
               })
             }
           />

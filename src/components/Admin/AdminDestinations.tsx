@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Agencies, Categories, Destinations, Hotels } from "../../types/types";
 import api from "../../utils/axios";
+import { Link } from "react-router";
 
 const AdminDestinations = () => {
   const [destinations, setDestinations] = useState<Destinations[]>([]);
@@ -68,14 +69,14 @@ const AdminDestinations = () => {
   const handleUpdate = async () => {
     if (!editingId) return;
     try {
-      const payload = {
-        ...newDestination,
-        hotels: Array.isArray(newDestination.hotels)
-          ? newDestination.hotels.map((h) => (typeof h === "string" ? h : h._id))
-          : [],
-        agency: typeof newDestination.agency === "string" ? newDestination.agency : newDestination.agency?._id,
-        category: typeof newDestination.category === "string" ? newDestination.category : newDestination.category?._id,
-      };
+        const payload = {
+            ...newDestination,
+            hotels: Array.isArray(newDestination.hotels)
+              ? newDestination.hotels.map((h) => (typeof h === "string" ? h : h._id))
+              : [],
+            agency: typeof newDestination.agency === "string" ? newDestination.agency : newDestination.agency?._id,
+            category: typeof newDestination.category === "string" ? newDestination.category : newDestination.category?._id,
+          };
       await api.put(`/destinations/${editingId}`, payload);
       setEditingId(null);
       setNewDestination({});
@@ -161,39 +162,39 @@ const AdminDestinations = () => {
         ))}
       </select>
 
-      {/* Viešbučių pasirinkimas (checkbox) */}
+     
       <div>
         <p>Pasirinkite viešbučius:</p>
         {hotels.map((hotel) => {
-          const hotelId = hotel._id;
-          const isChecked = Array.isArray(newDestination.hotels)
+            const hotelId = hotel._id;
+            const isChecked = Array.isArray(newDestination.hotels)
             ? newDestination.hotels.some((h) => (typeof h === "string" ? h === hotelId : h._id === hotelId))
             : false;
 
-          return (
+            return (
             <label key={hotelId} style={{ display: "block", marginBottom: "4px" }}>
-              <input
+                <input
                 type="checkbox"
                 checked={isChecked}
                 onChange={(e) => {
-                  let updatedHotels = Array.isArray(newDestination.hotels) ? [...newDestination.hotels] : [];
+                    let updatedHotels = Array.isArray(newDestination.hotels) ? [...newDestination.hotels] : [];
 
-                  if (e.target.checked) {
+                    if (e.target.checked) {
                     updatedHotels.push(hotel);
-                  } else {
+                    } else {
                     updatedHotels = updatedHotels.filter(
-                      (h) => (typeof h === "string" ? h : h._id) !== hotelId
+                        (h) => (typeof h === "string" ? h : h._id) !== hotelId
                     );
-                  }
+                    }
 
-                  setNewDestination({ ...newDestination, hotels: updatedHotels });
+                    setNewDestination({ ...newDestination, hotels: updatedHotels });
                 }}
-              />
-              {hotel.name}
+                />
+                {hotel.name}
             </label>
-          );
+            );
         })}
-      </div>
+        </div>
 
       {editingId ? (
         <button onClick={handleUpdate}>Atnaujinti</button>
@@ -201,15 +202,15 @@ const AdminDestinations = () => {
         <button onClick={handleCreate}>Sukurti</button>
       )}
 
-      <ul>
-        {destinations.map((destination) => (
-          <li key={destination._id}>
-            {destination.name} - {destination.location} - {destination.price}€
-            <button onClick={() => startEdit(destination)}>Redaguoti</button>
-            <button onClick={() => handleDelete(destination._id)}>Ištrinti</button>
-          </li>
-        ))}
-      </ul>
+    <ul>
+    {destinations.map((destination) => (
+        <li key={destination._id}>
+        <Link to={`/destinations/${destination._id}`}>{destination.name}</Link> - {destination.location} - {destination.price}€
+        <button onClick={() => startEdit(destination)}>Redaguoti</button>
+        <button onClick={() => handleDelete(destination._id)}>Ištrinti</button>
+        </li>
+    ))}
+    </ul>
     </div>
   );
 };

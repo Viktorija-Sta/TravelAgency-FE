@@ -1,6 +1,6 @@
 import { useState } from "react"
-import api from "../utils/axios"
-import { Reviews } from "../types/types"
+import api from "../../utils/axios"
+import { Reviews } from "../../types/types"
 import './ReviewForm.scss'
 
 interface ReviewFormProps {
@@ -67,13 +67,17 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
       <label>
         Įvertinimas:
-        <select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
+        <div className="star-rating">
           {[1, 2, 3, 4, 5].map((r) => (
-            <option key={r} value={r}>
-              {r} ★
-            </option>
+            <span
+              key={r}
+              className={r <= rating ? "filled" : ""}
+              onClick={() => setRating(r)}
+            >
+              ★
+            </span>
           ))}
-        </select>
+        </div>
       </label>
 
       <label>
