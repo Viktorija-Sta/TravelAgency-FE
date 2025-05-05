@@ -24,6 +24,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
       price: hotel.pricePerNight,
       quantity: 1,
       image: hotel.image,
+      modelType: "Hotel",
     })
     onAddToCart?.()
   }
