@@ -7,22 +7,34 @@ export type AuthAction =
   | { type: 'LOGOUT' }
 
 
-  export interface CartItem {
-      _id: string
-      name: string
-      price: number
-      quantity: number
-      image?: string
-      createdAt?: string
-    }
-    
-  
-    
-    export type CartAction =
-    | { type: "ADD_ITEM"; payload: CartItem }
-    | { type: "REMOVE_ITEM"; payload: string }
-    | { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } }
-    | { type: "CLEAR_CART" }      
+export interface CartItem {
+  _id: string
+  name: string
+  price: number
+  quantity: number
+  image?: string
+  createdAt?: string
+}
+
+export interface Order {
+  _id: string
+  user: User
+  items: CartItem[]
+  totalAmount: number
+  orderDate: string
+  status: string
+  createdAt: string
+  userEmail: string
+  address: string
+}
+
+
+
+export type CartAction =
+| { type: "ADD_ITEM"; payload: CartItem }
+| { type: "REMOVE_ITEM"; payload: string }
+| { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } }
+| { type: "CLEAR_CART" }      
 
 
 export interface User {
@@ -33,21 +45,21 @@ export interface User {
     token: string
   }  
 
-  export interface UserProfile {
-    _id: string  
-    username: string
-    email: string
-    phoneNumber: string
-    role: string
-    profilePicture: string
-    address?: {
-      street?: string  
-      city?: string
-      postalCode?: string
-      country?: string
-    }  
-    orders?: string[]
+export interface UserProfile {
+  _id: string  
+  username: string
+  email: string
+  phoneNumber: string
+  role: string
+  profilePicture: string
+  address?: {
+    street?: string  
+    city?: string
+    postalCode?: string
+    country?: string
   }  
+  orders?: string[]
+}  
   
 
 export interface Destinations {
@@ -67,6 +79,7 @@ export interface Destinations {
     reviewCount?: number
     averageRating?: number
     reviews?: Reviews[]
+    hotels?: Hotels[]
 }
 
 export interface Categories {
@@ -135,12 +148,4 @@ export interface Reviews {
 }
 
 
-export interface Order {
-    _id: string
-    user: User
-    items: CartItem[]
-    totalAmount: number
-    orderDate: string
-    status: string
-    createdAt: string
-  }
+

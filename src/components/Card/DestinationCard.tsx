@@ -13,13 +13,19 @@ const DestinationCard: React.FC<DestinationProps> = ({
   destination,
   averageRating,
   reviewCount,
-  onAddToCart,
+ 
 }) => {
   const { addToCart } = useCart()
 
   const handleAddToCart = () => {
-    addToCart({ ...destination, quantity: 1,  })
-    onAddToCart()
+    addToCart({ 
+      _id: destination._id,
+      name: destination.name,
+      price: destination.price,
+      image: destination.imageUrl,
+      quantity: 1  
+    })
+    
   }
 
   const renderStars = (rating: number) => {
@@ -40,7 +46,7 @@ const DestinationCard: React.FC<DestinationProps> = ({
       <p>{destination.description}</p>
       <p>€{destination.price}</p>
 
-      <div className="mt-2 mb-2 text-sm text-gray-600">
+      <div >
         {renderStars(averageRating || 0)} ({reviewCount || 0} atsiliepimai)
       </div>
 

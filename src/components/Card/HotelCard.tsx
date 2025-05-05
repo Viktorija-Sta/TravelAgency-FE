@@ -1,25 +1,31 @@
-import { Link } from "react-router"
-import { useCart } from "../../hooks/useCart"
 import { Hotels } from "../../types/types"
+import { useCart } from "../../hooks/useCart"
+import { Link } from "react-router-dom"
 
-interface HotelProps {
+interface HotelCardProps {
   hotel: Hotels
-  reviewCount: number
   averageRating: number
-  onAddToCart: () => void
+  reviewCount: number
+  onAddToCart?: () => void
 }
 
-const HotelCard: React.FC<HotelProps> = ({
+const HotelCard: React.FC<HotelCardProps> = ({
   hotel,
-  reviewCount,
   averageRating,
-  onAddToCart
+  reviewCount,
+  onAddToCart,
 }) => {
   const { addToCart } = useCart()
 
   const handleAddToCart = () => {
-    addToCart({ ...hotel, price: hotel.pricePerNight, quantity: 1 })
-    onAddToCart()
+    addToCart({
+      _id: hotel._id,
+      name: hotel.name,
+      price: hotel.pricePerNight,
+      quantity: 1,
+      image: hotel.image,
+    })
+    onAddToCart?.()
   }
 
   const renderStars = (rating: number) => {
@@ -28,27 +34,15 @@ const HotelCard: React.FC<HotelProps> = ({
   }
 
   return (
-    <div key={hotel._id} className="hotel">
-      <img
-        style={{ width: "30%" }}
-        src={hotel.image}
-        alt={hotel.name}
-        className="main-image"
-      />
+    <div className="hotel-card">
+      <img src={hotel.image} alt={hotel.name} style={{ width: "300px"}} />
       <h3>{hotel.name}</h3>
-      <p>{hotel.location}</p>
-      <p>€{hotel.pricePerNight}/naktis</p>
+      <p>Vieta: {hotel.location}</p>
+      <p>Kaina už naktį: {hotel.pricePerNight.toFixed(2)} €</p>
+      <p>{renderStars(averageRating)} ({reviewCount} atsiliepimai)</p>
 
-      <div className="mt-2 mb-2 text-sm text-gray-600">
-        {renderStars(averageRating)} ({reviewCount} atsiliepimai)
-      </div>
-
-      <button onClick={handleAddToCart} className="add-to-cart">
-        Į krepšelį
-      </button>
-
-
-      <Link to={`/hotels/${hotel._id}`}>Plačiau</Link>
+      <button onClick={handleAddToCart}>Į krepšelį</button>
+      <Link to={`/hotels/${hotel._id}`}>Peržiūrėti</Link>
     </div>
   )
 }

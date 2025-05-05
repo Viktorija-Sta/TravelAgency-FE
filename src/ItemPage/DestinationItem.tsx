@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, Link } from "react-router-dom"
 import { useCart } from "../hooks/useCart"
 import { useEffect, useState } from "react"
 import { Destinations, Hotels, Reviews } from "../types/types"
@@ -8,7 +8,7 @@ import "./DestinationItem.scss"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
-import HotelCard from "../components/Card/HotelCard"
+// import HotelCard from "../components/Card/HotelCard"
 import ReviewForm from "../Review/ReviewForm"
 
 const DestinationItem: React.FC = () => {
@@ -18,6 +18,7 @@ const DestinationItem: React.FC = () => {
 
   const [destination, setDestination] = useState<Destinations | null>(null)
   const [hotels, setHotels] = useState<Hotels[]>([])
+  const [selectedHotel, setSelectedHotel] = useState<Hotels | null>(null)
   const [reviews, setReviews] = useState<Reviews[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -30,8 +31,8 @@ const DestinationItem: React.FC = () => {
         const { destination, hotels, reviews } = res.data
 
         setHotels(hotels || [])
-        setDestination(destination || [])
-        setReviews(reviews || []) 
+        setDestination(destination || null)
+        setReviews(reviews || [])
       } catch {
         setError("Nepavyko gauti kelionės")
       } finally {
@@ -44,14 +45,22 @@ const DestinationItem: React.FC = () => {
 
   const addToCartHandler = () => {
     if (destination) {
-      addToCart({
+      const baseItem = {
         _id: destination._id,
         name: destination.name,
         price: destination.price,
         image: destination.imageUrl || "",
         quantity: 1,
-        
-      })
+      }
+
+      const hotelCost = selectedHotel ? selectedHotel.pricePerNight * destination.duration : 0
+
+      const fullItem = {
+        ...baseItem,
+        price: baseItem.price + hotelCost,
+      }
+
+      addToCart(fullItem)
       alert(`${destination.name} buvo pridėta į krepšelį`)
     }
   }
@@ -96,11 +105,12 @@ const DestinationItem: React.FC = () => {
       <h1>{destination.name}</h1>
       <p>
         Įvertinimas: {renderStars(averageRating)} ({reviews.length}){" "}
-        <button onClick={() => setShowReviews((prev) => !prev)} >
+        <button onClick={() => setShowReviews((prev) => !prev)}>
           {showReviews ? "Slėpti atsiliepimus" : "Rodyti atsiliepimus"}
         </button>
       </p>
-
+      <Link to={`/agencies/${destination.agency?._id}`} className="agency-link">
+        <p>Agentūra: {destination.agency?.name || "Nenurodyta"}</p></Link>
       {showReviews && (
         <div className="reviews-section">
           {reviews.length === 0 ? (
@@ -114,11 +124,11 @@ const DestinationItem: React.FC = () => {
                   <p>{review.comment}</p>
                 </div>
               ))}
-              <ReviewForm 
-                 destinationId={destination._id}
-                 onReviewSubmitted={(newReview) => {
-                   setReviews((prev) => [...prev, newReview])
-                 }}
+              <ReviewForm
+                destinationId={destination._id}
+                onReviewSubmitted={(newReview) => {
+                  setReviews((prev) => [...prev, newReview])
+                }}
               />
             </>
           )}
@@ -130,7 +140,7 @@ const DestinationItem: React.FC = () => {
       <p>Aprašymas: {destination.fullDescription}</p>
       <p>Išvykimo data: {destination.departureDate}</p>
       <p>Trukmė: {destination.duration} dienos</p>
-      <p>Kaina: {typeof destination.price === "number" ? destination.price.toFixed(2) : "Nenurodyta"} €</p>
+      <p>Kaina: {destination.price.toFixed(2)} €</p>
 
       <div className="carousel-wrapper">
         <Slider {...settings}>
@@ -151,16 +161,36 @@ const DestinationItem: React.FC = () => {
 
       {hotels.length > 0 && (
         <>
-          <h2>Viešbučiai siūlomi šios agentūros:</h2>
-          {hotels.map((hotel) => (
-            <HotelCard
-              key={hotel._id}
-              hotel={hotel}
-              reviewCount={hotel.reviewsCount || 0}
-              averageRating={hotel.rating || 0}
-              onAddToCart={() => console.log("Įdėta į krepšelį")}
-            />
-          ))}
+          <h2>Pasirinkite viešbutį (neprivaloma):</h2>
+          <select
+            value={selectedHotel?._id || ""}
+            onChange={(e) => {
+              const selected = hotels.find((h) => h._id === e.target.value)
+              setSelectedHotel(selected || null)
+            }}
+          >
+            <option value="">- Be viešbučio -</option>
+            {hotels.map((hotel) => (
+              <option key={hotel._id} value={hotel._id}>
+                {hotel.name} (+{(hotel.pricePerNight * destination.duration).toFixed(2)} €)
+              </option>
+            ))}
+          </select>
+
+          {selectedHotel && (
+            <div className="selected-hotel-card" style={{ border: "1px solid #ccc", marginTop: "1rem", padding: "1rem" }}>
+              <h3>{selectedHotel.name}</h3>
+              <p>Vieta: {selectedHotel.location}</p>
+              <p>
+                Kaina: {selectedHotel.pricePerNight.toFixed(2)} € / naktis x {destination.duration} naktys ={" "}
+                {(selectedHotel.pricePerNight * destination.duration).toFixed(2)} €
+              </p>
+              <img src={selectedHotel.image} alt={selectedHotel.name} style={{ width: "300px", marginTop: "1rem" }} />
+              <button onClick={() => navigate(`/hotels/${selectedHotel._id}`)} style={{ marginTop: "0.5rem" }}>
+                Peržiūrėti viešbučio puslapį
+              </button>
+            </div>
+          )}
         </>
       )}
 

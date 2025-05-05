@@ -19,6 +19,10 @@ import Checkout from './CartPage/Checkout'
 import OrderSuccessPage from './CartPage/OrderSuccessPage'
 import MyOrdersPage from './MyOrdersPage/MyOrdersPage'
 import ProfilePage from './Profile/ProfilePage'
+import AdminRoute from './components/Admin/AdminRoute'
+import AdminPanel from './components/Admin/AdminPanel'
+import AdminOrders from './components/Admin/AdminOrders'
+import AdminProducts from './components/Admin/AdminProducts'
 
 
 function App() {
@@ -59,6 +63,13 @@ function App() {
                   <MyOrdersPage />
                 </ProtectedRoute>
               } />
+
+              <Route element={<AdminRoute />}>
+                <Route path="/admin" element={<AdminPanel />} />
+                {/* <Route path="/admin/categories" element={<AdminCategories />} /> */}
+                <Route path="/admin/orders" element={<AdminOrders />} />
+                <Route path="/admin/products" element={<AdminProducts />} />
+              </Route>
 
                
               </Route>

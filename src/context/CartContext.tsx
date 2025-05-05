@@ -21,17 +21,12 @@ export { CartContext };
 
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, { items: [] });
-
-  useEffect(() => {
+  const initCart = (): CartState => {
     const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-      const parsedCart = JSON.parse(savedCart);
-      parsedCart.forEach((item: CartItem) => {
-        dispatch({ type: "ADD_ITEM", payload: item });
-      });
-    }
-  }, []);
+    return savedCart ? { items: JSON.parse(savedCart) } : { items: [] };
+  };
+
+  const [state, dispatch] = useReducer(cartReducer, { items: [] }, initCart);
 
   useEffect(() => {
     if (state.items.length > 0) {
@@ -78,6 +73,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     </CartContext.Provider>
   );
 }
+
 
  export const useCart = () => {
     const context = useContext(CartContext)

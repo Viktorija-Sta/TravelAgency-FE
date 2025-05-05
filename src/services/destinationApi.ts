@@ -30,23 +30,5 @@ export const getDestinationById = async (id: string) => {
     }
 }
 
-// export const createDestination = async (destinationData: any) => {
-//     try {
-//         const response = await api.post("/destinations", destinationData)
-//         return response.data
-//     } catch (error) {
-//         console.error("Error creating destination:", error)
-//         return null
-//     }
-// }
 
-// export const updateDestination = async (id: string, destinationData: any) => {
-//     try {
-//         const response = await api.put(`/destinations/${id}`, destinationData)
-//         return response.data
-//     } catch (error) {
-//         console.error("Error updating destination:", error)
-//         return null
-//     }
-// }
 

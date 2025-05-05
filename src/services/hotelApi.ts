@@ -1,3 +1,4 @@
+import { Hotels } from "../types/types"
 import api from "../utils/axios"
 
 export const getHotelsByDestination = async (destinationId: string) => {
@@ -30,3 +31,25 @@ export const getHotelById = async (id: string) => {
     }
 }
 
+
+
+export const createHotel = async (hotelData: Hotels) => {
+    try {
+        const response = await api.post("/hotels", hotelData)
+        console.log("🚀 ~ createHotel ~ response.data:", response.data)
+        return response.data
+    } catch (error) {
+        console.error("Error creating hotel:", error)
+        return null
+    }
+}
+
+export const updateHotel = async (id: string, hotelData: Hotels) => {
+    try {
+        const response = await api.put(`/hotels/${id}`, hotelData)
+        return response.data
+    } catch (error) {
+        console.error("Error updating hotel:", error)
+        return null
+    }
+}
