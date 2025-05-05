@@ -96,19 +96,19 @@ const DestinationItem: React.FC = () => {
       <h1>{destination.name}</h1>
       <p>
         Įvertinimas: {renderStars(averageRating)} ({reviews.length}){" "}
-        <button onClick={() => setShowReviews((prev) => !prev)} className="ml-2 text-blue-600 underline">
+        <button onClick={() => setShowReviews((prev) => !prev)} >
           {showReviews ? "Slėpti atsiliepimus" : "Rodyti atsiliepimus"}
         </button>
       </p>
 
       {showReviews && (
-        <div className="bg-gray-100 p-4 mt-2 rounded">
+        <div className="reviews-section">
           {reviews.length === 0 ? (
             <p>Nėra atsiliepimų apie šią kelionę.</p>
           ) : (
             <>
               {reviews.map((review) => (
-                <div key={review._id} className="mb-2 border-b pb-2">
+                <div key={review._id} className="review-card">
                   <p className="font-semibold">{review.user?.username || "Anonimas"}</p>
                   <p>{renderStars(review.rating)}</p>
                   <p>{review.comment}</p>
