@@ -9,6 +9,7 @@ import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import ReviewForm from "../Review/ReviewForm"
+import { toast } from "sonner"
 
 const DestinationItem: React.FC = () => {
   const { id } = useParams()
@@ -43,26 +44,33 @@ const DestinationItem: React.FC = () => {
   }, [id])
 
   const addToCartHandler = () => {
-    if (destination) {
-      const baseItem = {
-        _id: destination._id,
-        name: destination.name,
-        price: destination.price,
-        image: destination.imageUrl || "",
+    if (!destination) return
+
+    // Įdedam kelionę
+    addToCart({
+      _id: destination._id,
+      name: destination.name,
+      price: destination.price,
+      image: destination.imageUrl || "",
+      quantity: 1,
+      modelType: "Destination",
+    })
+
+    // Jei pasirinktas viešbutis – įdedam atskirai
+    if (selectedHotel) {
+      addToCart({
+        _id: selectedHotel._id,
+        name: selectedHotel.name,
+        price: selectedHotel.pricePerNight * destination.duration,
+        image: selectedHotel.image,
         quantity: 1,
-        modelType: "Destination" as const,
-      }
-
-      const hotelCost = selectedHotel ? selectedHotel.pricePerNight * destination.duration : 0
-
-      const fullItem = {
-        ...baseItem,
-        price: baseItem.price + hotelCost,
-      }
-
-      addToCart(fullItem)
-      alert(`${destination.name} buvo pridėta į krepšelį`)
+        modelType: "Hotel",
+      })
     }
+
+    toast.success(`${destination.name} pridėta į krepšelį`, {
+      description: selectedHotel ? `Su viešbučiu: ${selectedHotel.name}` : undefined,
+    })
   }
 
   const renderStars = (rating: number) => {
@@ -110,29 +118,31 @@ const DestinationItem: React.FC = () => {
         </button>
       </p>
       <Link to={`/agencies/${destination.agency?._id}`} className="agency-link">
-        <p>Agentūra: {destination.agency?.name || "Nenurodyta"}</p></Link>
-        {showReviews && (
-          <div className="reviews-section">
-            {reviews.length === 0 ? (
-              <p>Nėra atsiliepimų apie šią kelionę.</p>
-            ) : (
-              reviews.map((review) => (
-                <div key={review._id} className="review-card">
-                  <p className="font-semibold">{review.user?.username || "Anonimas"}</p>
-                  <p>{renderStars(review.rating)}</p>
-                  <p>{review.comment}</p>
-                </div>
-              ))
-            )}
+        <p>Agentūra: {destination.agency?.name || "Nenurodyta"}</p>
+      </Link>
 
-            <ReviewForm
-              destinationId={destination._id}
-              onReviewSubmitted={(newReview) => {
-                setReviews((prev) => [...prev, newReview])
-              }}
-            />
-          </div>
-        )}
+      {showReviews && (
+        <div className="reviews-section">
+          {reviews.length === 0 ? (
+            <p>Nėra atsiliepimų apie šią kelionę.</p>
+          ) : (
+            reviews.map((review) => (
+              <div key={review._id} className="review-card">
+                <p className="font-semibold">{review.user?.username || "Anonimas"}</p>
+                <p>{renderStars(review.rating)}</p>
+                <p>{review.comment}</p>
+              </div>
+            ))
+          )}
+
+          <ReviewForm
+            destinationId={destination._id}
+            onReviewSubmitted={(newReview) => {
+              setReviews((prev) => [...prev, newReview])
+            }}
+          />
+        </div>
+      )}
 
       <p>Kategorija: {destination.category?.name || "Nenurodyta"}</p>
       <p>{destination.description}</p>

@@ -9,7 +9,7 @@ interface HotelCardProps {
   onAddToCart?: () => void
 }
 
-const HotelCard: React.FC<HotelCardProps> = ({ hotel, averageRating, reviewCount, onAddToCart }) => {
+const HotelCard: React.FC<HotelCardProps> = ({ hotel, averageRating, reviewCount }) => {
   const { addToCart } = useCart()
 
   const handleAddToCart = () => {
@@ -21,7 +21,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, averageRating, reviewCount
       image: hotel.image,
       modelType: "Hotel",
     })
-    onAddToCart?.()
+    
   }
 
   const renderStars = (rating: number) => {
