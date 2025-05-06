@@ -1,45 +1,61 @@
-import { useNavigate } from "react-router"
+import { useNavigate, Link } from "react-router-dom"
 import { useCart } from "../hooks/useCart"
+import { toast } from "sonner"
+import { CartItem } from "../types/types"
 
 const CartPage: React.FC = () => {
   const { items, removeFromCart, updateQuantity, getTotal, clearCart } = useCart()
   const navigate = useNavigate()
 
-    const removeItemHandler = (itemId: string) => {
-        removeFromCart(itemId)
-        alert("Prekė pašalinta iš krepšelio")
-    }
-    const updateQuantityHandler = (itemId: string, quantity: number) => {
-        if (quantity < 1) return
-        updateQuantity(itemId, quantity)
-        
-    }
-    const checkoutHandler = () => {
-        if (items.length === 0) {
-            alert("Krepšelis tuščias")
-            return
-        }
-        navigate("/checkout")
-    }
-    const continueShoppingHandler = () => {
-        navigate("/")
-    }
+  const removeItemHandler = (itemId: string) => {
+    removeFromCart(itemId)
+    toast.success("Prekė pašalinta iš krepšelio")
+  }
+
+  const updateQuantityHandler = (itemId: string, quantity: number) => {
+    if (quantity < 1) return
+    updateQuantity(itemId, quantity)
+  }
+
+  const checkoutHandler = () => {
     if (items.length === 0) {
-        return (
-            <div className="empty-cart">
-                <h2>Krepšelis tuščias</h2>
-                <button onClick={continueShoppingHandler}>Tęsti apsipirkimą</button>
-            </div>
-        )
+      toast.error("Krepšelis tuščias")
+      return
     }
+    navigate("/checkout")
+  }
 
-    const clearCartHandler = () => {
-        clearCart()
-        alert("Krepšelis išvalytas")
-    }
+  const continueShoppingHandler = () => {
+    navigate("/")
+  }
 
+  const clearCartHandler = () => {
+    clearCart()
+    toast.success("Krepšelis išvalytas")
+  }
 
+  const renderRelatedHotel = (destinationItem: CartItem) => {
+    return items.find(
+      (item) =>
+        item.modelType === "Hotel" &&
+        item.details?.name?.toLowerCase().includes(destinationItem.name.toLowerCase())
+    )
+  }
 
+  const getItemLink = (item: CartItem) => {
+    if (item.modelType === "Destination") return `/destinations/${item._id}`
+    if (item.modelType === "Hotel") return `/hotels/${item._id}`
+    return "/"
+  }
+
+  if (items.length === 0) {
+    return (
+      <div className="empty-cart">
+        <h2>Krepšelis tuščias</h2>
+        <button onClick={continueShoppingHandler}>Tęsti apsipirkimą</button>
+      </div>
+    )
+  }
 
   return (
     <div className="cart-page">
@@ -48,6 +64,7 @@ const CartPage: React.FC = () => {
         {items.map((item) => {
           const isDestination = item.modelType === "Destination"
           const relatedHotel = isDestination ? renderRelatedHotel(item) : null
+          const itemLink = getItemLink(item)
 
           return (
             <div key={item._id + item.modelType} className="cart-item" style={{ marginBottom: "2rem" }}>
@@ -58,7 +75,11 @@ const CartPage: React.FC = () => {
                 className="cart-item-image"
               />
               <div className="cart-item-details">
-                <h2>{item.name}</h2>
+                <h2>
+                  <Link to={itemLink} style={{ textDecoration: "underline", color: "#0077cc" }}>
+                    {item.name}
+                  </Link>
+                </h2>
                 <p>Kaina: {item.price.toFixed(2)} €</p>
                 <label>
                   Kiekis:
@@ -74,7 +95,11 @@ const CartPage: React.FC = () => {
                 {isDestination && relatedHotel && (
                   <div className="related-hotel" style={{ marginTop: "1rem", borderTop: "1px solid #ccc", paddingTop: "1rem" }}>
                     <h3>Pasirinktas viešbutis:</h3>
-                    <p>{relatedHotel.name}</p>
+                    <p>
+                      <Link to={`/hotels/${relatedHotel._id}`} style={{ textDecoration: "underline", color: "#0077cc" }}>
+                        {relatedHotel.name}
+                      </Link>
+                    </p>
                     <p>Kaina: {relatedHotel.price.toFixed(2)} €</p>
                     <img
                       src={relatedHotel.image || "/fallback.jpg"}

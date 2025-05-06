@@ -1,7 +1,6 @@
 import { Hotels } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
 import { Link } from "react-router-dom"
-import { toast } from "sonner"
 
 interface HotelCardProps {
   hotel: Hotels
@@ -22,7 +21,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, averageRating, reviewCount
       image: hotel.image,
       modelType: "Hotel",
     })
-    onAddToCart?.()
+   
   }
 
   const renderStars = (rating: number) => {
