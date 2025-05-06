@@ -21,7 +21,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, averageRating, reviewCount
       image: hotel.image,
       modelType: "Hotel",
     })
-    
+   
   }
 
   const renderStars = (rating: number) => {

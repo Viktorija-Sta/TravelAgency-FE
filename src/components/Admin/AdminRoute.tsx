@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom"
 import { useEffect } from "react"
 import { useAuth } from "../../hooks/useAuth"
+import { toast } from "sonner"
 
 const AdminRoute: React.FC = () => {
     const { user, isAuthenticated } = useAuth()
@@ -11,7 +12,7 @@ const AdminRoute: React.FC = () => {
         
         if (isAuthenticated && user && user.role !== "admin") {
             console.log("AdminRoute - User role:", user.role)
-            alert("Neturite teisių peržiūrėti šį puslapį")
+            toast.error("Neturite teisių peržiūrėti šį puslapį")
         }
     }, [isAuthenticated, user])
 

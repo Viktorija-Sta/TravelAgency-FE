@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router"
+import { useNavigate, Link } from "react-router-dom"
 import { useCart } from "../hooks/useCart"
 import { toast } from "sonner"
 import { CartItem } from "../types/types"
@@ -42,6 +42,12 @@ const CartPage: React.FC = () => {
     )
   }
 
+  const getItemLink = (item: CartItem) => {
+    if (item.modelType === "Destination") return `/destinations/${item._id}`
+    if (item.modelType === "Hotel") return `/hotels/${item._id}`
+    return "/"
+  }
+
   if (items.length === 0) {
     return (
       <div className="empty-cart">
@@ -58,6 +64,7 @@ const CartPage: React.FC = () => {
         {items.map((item) => {
           const isDestination = item.modelType === "Destination"
           const relatedHotel = isDestination ? renderRelatedHotel(item) : null
+          const itemLink = getItemLink(item)
 
           return (
             <div key={item._id + item.modelType} className="cart-item" style={{ marginBottom: "2rem" }}>
@@ -68,7 +75,11 @@ const CartPage: React.FC = () => {
                 className="cart-item-image"
               />
               <div className="cart-item-details">
-                <h2>{item.name}</h2>
+                <h2>
+                  <Link to={itemLink} style={{ textDecoration: "underline", color: "#0077cc" }}>
+                    {item.name}
+                  </Link>
+                </h2>
                 <p>Kaina: {item.price.toFixed(2)} €</p>
                 <label>
                   Kiekis:
@@ -84,7 +95,11 @@ const CartPage: React.FC = () => {
                 {isDestination && relatedHotel && (
                   <div className="related-hotel" style={{ marginTop: "1rem", borderTop: "1px solid #ccc", paddingTop: "1rem" }}>
                     <h3>Pasirinktas viešbutis:</h3>
-                    <p>{relatedHotel.name}</p>
+                    <p>
+                      <Link to={`/hotels/${relatedHotel._id}`} style={{ textDecoration: "underline", color: "#0077cc" }}>
+                        {relatedHotel.name}
+                      </Link>
+                    </p>
                     <p>Kaina: {relatedHotel.price.toFixed(2)} €</p>
                     <img
                       src={relatedHotel.image || "/fallback.jpg"}

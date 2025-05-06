@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import api from "../../utils/axios"
 import { UserProfile } from "../../types/types"
+import { toast } from "sonner"
 
 interface Props {
   isOpen: boolean
@@ -52,8 +53,10 @@ const EditProfile: React.FC<Props> = ({ isOpen, onClose, userData, onUpdate }) =
       const response = await api.put(`/users/${userData._id}`, formData)
       onUpdate(response.data.data)
       onClose()
+      
+      toast.success("Profilis atnaujintas sėkmingai")
     } catch {
-      alert("Nepavyko atnaujinti profilio")
+      toast.error("Nepavyko atnaujinti profilio")
     }
   }
 

@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext"
 import { Order } from "../../types/types"
 import api from "../../utils/axios"
 import Breadcrumb from "../Breadcrumb/Breadcrumb"
+import { toast } from "sonner"
 
 interface OrderRowProps {
     order: Order
@@ -68,9 +69,9 @@ const AdminOrders: React.FC = () => {
                     order._id === orderId ? { ...order, status: newStatus } : order
                 )
             )
-            alert("Užsakymo būsena atnaujinta")
+            toast.success("Užsakymo būsena atnaujinta")
         } catch {
-            alert("Nepavyko atnaujinti užsakymo būsenos")
+            toast.error("Nepavyko atnaujinti užsakymo būsenos")
         }
     }
 

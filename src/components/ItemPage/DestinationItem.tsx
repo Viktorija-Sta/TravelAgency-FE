@@ -46,7 +46,6 @@ const DestinationItem: React.FC = () => {
   const addToCartHandler = () => {
     if (!destination) return
 
-    // Įdedam kelionę
     addToCart({
       _id: destination._id,
       name: destination.name,
@@ -56,7 +55,6 @@ const DestinationItem: React.FC = () => {
       modelType: "Destination",
     })
 
-    // Jei pasirinktas viešbutis – įdedam atskirai
     if (selectedHotel) {
       addToCart({
         _id: selectedHotel._id,

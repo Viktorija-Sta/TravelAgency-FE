@@ -2,6 +2,7 @@ import { useState, FormEvent } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import { AxiosError } from "axios"
+import { toast } from "sonner"
 
 function Login() {
   const { login, user } = useAuth()
@@ -27,7 +28,7 @@ function Login() {
 
       setEmail("")
       setPassword("")
-      alert("Prisijungta!")
+      toast.success("Prisijungta!")
 
       if (user?.role === "admin") {
         navigate("/admin")
@@ -37,8 +38,9 @@ function Login() {
     } catch (err) {
       const axiosError = err as AxiosError<{ message: string }>
       const message = axiosError.response?.data?.message || "Prisijungimas nepavyko"
+
+      toast.error(message)
       
-      alert(message)
       setError(message)
     } finally {
       setIsLoading(false)

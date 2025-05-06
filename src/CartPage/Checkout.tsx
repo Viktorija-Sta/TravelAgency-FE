@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import api from "../utils/axios"
 import { useCart } from "../context/CartContext"
+import { toast } from "sonner"
 
 const Checkout: React.FC = () => {
   const { items, getTotal, clearCart } = useCart()
@@ -20,12 +21,12 @@ const Checkout: React.FC = () => {
     const { street, city, postalCode, country } = address
 
     if (!street || !city || !postalCode || !country) {
-      alert("Užpildykite visus pristatymo adreso laukus")
+      toast.error("Užpildykite visus pristatymo adreso laukus")
       return
     }
 
     if (items.length === 0) {
-      alert("Krepšelis tuščias")
+      toast.error("Krepšelis tuščias")
       return
     }
 
