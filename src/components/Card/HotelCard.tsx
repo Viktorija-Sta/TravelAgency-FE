@@ -1,6 +1,7 @@
 import { Hotels } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
 import { Link } from "react-router-dom"
+import "./HotelCard.scss"
 
 interface HotelCardProps {
   hotel: Hotels
@@ -31,7 +32,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, averageRating, reviewCount
 
   return (
     <div className="hotel-card">
-      <img src={hotel.image} alt={hotel.name} style={{ width: "300px"}} />
+      <img src={hotel.image} alt={hotel.name}  />
       <h3>{hotel.name}</h3>
       <p>Vieta: {hotel.location}</p>
       <p>Kaina už naktį: {hotel.pricePerNight.toFixed(2)} €</p>
