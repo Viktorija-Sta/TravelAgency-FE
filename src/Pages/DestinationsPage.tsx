@@ -5,6 +5,8 @@ import { useCart } from "../hooks/useCart"
 import DestinationCard from "../components/Card/DestinationCard"
 import api from "../utils/axios"
 import SearchElement from "../components/SearchElement/SearchElement"
+import { Container, Grid, Typography } from "@mui/material"
+// import "./DestinationsPage.scss"
 
 const DestinationsPage: React.FC = () => {
   const { addToCart } = useCart()
@@ -66,8 +68,10 @@ const DestinationsPage: React.FC = () => {
   if (error) return <div>{error}</div>
 
   return (
-    <div className="destinations-page">
-      <h1>Kelionių sąrašas</h1>
+    <Container className="destinations-page" maxWidth="lg" sx={{ paddingX: { xs: 2, sm: 3, md: 4 }, paddingY: 4 }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Kelionių sąrašas
+      </Typography>
 
       <SearchElement
         options={categories.map(cat => ({
@@ -78,7 +82,7 @@ const DestinationsPage: React.FC = () => {
         placeholder="Ieškoti kelionės..."
       />
 
-      <div className="destination-list">
+      <Grid container spacing={3} className="destination-list" marginTop={2}>
         {filtered.map(destination => {
           const relatedReviews = reviews.filter(review => {
             const destId = typeof review.destination === "string"
@@ -93,27 +97,28 @@ const DestinationsPage: React.FC = () => {
               : 0
 
           return (
-            <DestinationCard
-              key={destination._id}
-              destination={destination}
-              averageRating={avgRating}
-              reviewCount={relatedReviews.length}
-              onAddToCart={() =>
-                addToCart({
-                  _id: destination._id,
-                  name: destination.name,
-                  price: destination.price,
-                  image: destination.imageUrl,
-                  quantity: 1,
-                  modelType: "Destination",
-                  
-                })
-              }
-            />
+            <Grid  key={destination._id} size={{ xs: 9, sm: 6, md: 4, lg: 3}}
+            >
+              <DestinationCard
+                destination={destination}
+                averageRating={avgRating}
+                reviewCount={relatedReviews.length}
+                onAddToCart={() =>
+                  addToCart({
+                    _id: destination._id,
+                    name: destination.name,
+                    price: destination.price,
+                    image: destination.imageUrl,
+                    quantity: 1,
+                    modelType: "Destination"
+                  })
+                }
+              />
+            </Grid>
           )
         })}
-      </div>
-    </div>
+      </Grid>
+    </Container>
   )
 }
 

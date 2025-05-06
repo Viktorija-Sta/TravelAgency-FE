@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import './App.css'
+// import './App.css'
 
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
