@@ -1,14 +1,15 @@
 import { Outlet } from "react-router-dom"
-import NavBar from "../components/NavBar"
+import NavBar from "../components/NavBar/NavBar"
 import Footer from "../components/Footer/Footer"
+import "./MainLayout.scss"
 
 function MainLayout() {
  
   return (
     <div>
       <header>
-          <h1>Kelionių svetainė</h1>
         <nav>
+          <h1>Kelionių svetainė</h1>
           <NavBar />
         </nav>
       </header>

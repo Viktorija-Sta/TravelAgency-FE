@@ -1,0 +1,57 @@
+.home-page {
+    
+  
+    section {
+      margin: 3rem;
+  
+      h2 {
+        width: 100%;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        color: #333;
+        padding: 2rem;
+        border-bottom: 1px solid #bebebe;
+      }
+
+//       .destination-cards{
+//         width: 300px; // arba max-width: 300px
+//   flex: 0 0 auto;
+//       }
+  
+      .cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+      
+        > * {
+          flex: 0 0 auto;
+          max-width: 300px;
+        }
+      }
+  
+      a {
+        display: inline-block;
+        margin-top: 1rem;
+        color: #5a63ea;
+        font-weight: 600;
+        text-decoration: none;
+  
+        
+      }
+
+      .more {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content:flex-end;
+      }
+    }
+  
+    @media (max-width: 768px) {
+      .cards {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  }
+  
