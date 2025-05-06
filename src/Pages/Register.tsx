@@ -5,6 +5,7 @@ import api from '../utils/axios'
 import { useAuth } from '../context/AuthContext'
 import { jwtDecode } from 'jwt-decode'
 import { User } from '../types/types'
+import { toast } from 'sonner'
 
 function Register() {
   const { login } = useAuth()
@@ -31,12 +32,12 @@ function Register() {
     e.preventDefault()
 
     if (!formData.email || !formData.password || !formData.confirmPassword || !formData.username) {
-      alert('Visi privalomi laukai turi būti užpildyti')
+      toast.info('Visi privalomi laukai turi būti užpildyti')
       return
     }
 
     if (formData.password !== formData.confirmPassword) {
-      alert('Slaptažodžiai nesutampa')
+      toast.error('Slaptažodžiai nesutampa')
       return
     }
 
@@ -69,7 +70,7 @@ function Register() {
       localStorage.setItem('token', token)
       login(newUser.email, formData.password)
 
-      alert('Sėkmingai prisiregistravote ir prisijungėte!')
+      toast.success('Sėkmingai prisiregistravote ir prisijungėte!')
 
       navigate('/')
     } catch (error) {
@@ -77,10 +78,10 @@ function Register() {
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<{ message: string }>
-        
-        alert(axiosError.response?.data?.message || 'Registracijos klaida')
+
+        toast.error(axiosError.response?.data?.message || 'Registracijos klaida')
       } else {
-        alert('Registracijos klaida')
+        toast.error('Registracijos klaida')
       }
     } finally {
       setIsLoading(false)
