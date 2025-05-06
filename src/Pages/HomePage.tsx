@@ -104,9 +104,9 @@ const HomePage: React.FC = () => {
     <div className="home-page">
       <section>
         <Typography variant="h4" component="h2">Top 3 Kelionės</Typography>
-        <Grid container spacing={3} justifyContent="center">
+        <Grid container spacing={{ xs: 1, md: 3,  }} columns={{ xs: 1, sm: 8, md: 12 }} justifyContent="center">
           {destinations.map((destination) => (
-            <Grid  key={destination._id} size={{xs: 12, sm: 6, md: 4}}>
+            <Grid  key={destination._id} rowSpacing={1} size={{ xs: 2, sm: 4, md: 4 }}>
               <DestinationCard
                 destination={destination}
                 reviewCount={destination.reviewCount || 0}
@@ -132,9 +132,9 @@ const HomePage: React.FC = () => {
 
       <section>
         <Typography variant="h4" component="h2">Top 3 Viešbučiai</Typography>
-        <Grid container spacing={3} justifyContent="center">
+        <Grid container spacing={{ xs: 1, md: 3,  }} columns={{ xs: 1, sm: 8, md: 12 }}>
           {hotels.map((hotel) => (
-            <Grid key={hotel._id} size={{xs: 12, sm: 6, md: 4}}>
+            <Grid key={hotel._id} rowSpacing={1} size={{ xs: 2, sm: 4, md: 4 }}>
               <HotelCard
                 hotel={hotel}
                 reviewCount={hotel.reviewsCount || 0}
@@ -160,9 +160,9 @@ const HomePage: React.FC = () => {
 
       <section>
         <Typography variant="h4" component="h2">Top 3 Agentūros</Typography>
-        <Grid container spacing={3} justifyContent="center">
+        <Grid container spacing={{ xs: 1, md: 3,  }} columns={{ xs: 1, sm: 8, md: 12 }}>
           {agencies.map((agency) => (
-            <Grid key={agency._id} size={{xs: 12, sm: 6, md: 4}}>
+            <Grid key={agency._id} rowSpacing={1} size={{ xs: 2, sm: 4, md: 4 }}>
               <AgencyCard
                 agency={agency}
                 averageRating={agency.averageRating || 0}
