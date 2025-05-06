@@ -32,6 +32,7 @@ const AgenciesPage: React.FC = () => {
     const fetchReviews = async () => {
       try {
         const response = await api.get("/reviews")
+        
         setReviews(response.data)
       } catch {
         setError("Nepavyko gauti atsiliepimų")

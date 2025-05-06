@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
 import api from "../../utils/axios"
 import { UserProfile } from "../../types/types"
-import EditProfile from "./EditProfile";
+import EditProfile from "./EditProfile"
 import './EditProfile.scss'
 
 const ProfilePage = () => {
@@ -13,34 +13,33 @@ const ProfilePage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
   
     useEffect(() => {
-        
-      
         if (!user) {
-          setError("Turite būti prisijungęs norėdami matyti profilį");
-          setLoading(false);
-          return;
+          setError("Turite būti prisijungęs norėdami matyti profilį")
+          setLoading(false)
+          return
         }
       
         const fetchProfile = async () => {
           try {
-            const response = await api.get("/users/me");
-            setProfile(response.data);
+            const response = await api.get("/users/me")
+
+            setProfile(response.data)
           } catch {
-            setError("Nepavyko gauti naudotojo informacijos");
+            setError("Nepavyko gauti naudotojo informacijos")
           } finally {
-            setLoading(false);
+            setLoading(false)
           }
-        };
+        }
       
-        fetchProfile();
+        fetchProfile()
       }, [user, loading])
 
-      const handleProfileUpdate = (updated: UserProfile) => {
+      const profileUpdateHandler = (updated: UserProfile) => {
         setProfile(updated)
       }
   
-    if (loading) return <div>Kraunama...</div>;
-    if (error) return <div>{error}</div>;
+    if (loading) return <div>Kraunama...</div>
+    if (error) return <div>{error}</div>
   
     return (
       <>
@@ -83,14 +82,14 @@ const ProfilePage = () => {
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
               userData={profile}
-              onUpdate={handleProfileUpdate}
+              onUpdate={profileUpdateHandler}
             />
           )}
   
           </div>
       </>
-    );
-  };
+    )
+  }
   
-  export default ProfilePage;
+  export default ProfilePage
   

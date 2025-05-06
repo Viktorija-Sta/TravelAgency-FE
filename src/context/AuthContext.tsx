@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import axiosInstance from "../utils/axios";
-import { jwtDecode } from "jwt-decode";
-import { User } from "../types/types";
+import { createContext, useContext, useEffect, useState } from "react"
+import axiosInstance from "../utils/axios"
+import { jwtDecode } from "jwt-decode"
+import { User } from "../types/types"
 
   
   interface DecodedToken {
@@ -44,7 +44,9 @@ import { User } from "../types/types";
         try {
           const decoded = jwtDecode<DecodedToken>(savedToken)
           console.log("🚀 ~ useEffect ~ decoded:", decoded)
-          setToken(savedToken);
+
+          setToken(savedToken)
+
           setUser({
             _id: decoded.id,
             username: decoded.username,
@@ -52,9 +54,11 @@ import { User } from "../types/types";
             role: decoded.role === "user" || decoded.role === "admin" ? decoded.role : "user",
             token: savedToken,
           })
+
           setIsAuthenticated(true)
         } catch (err) {
           console.error("Klaida dekoduojant tokeną:", err)
+
           logout()
         }
       }
@@ -66,11 +70,14 @@ import { User } from "../types/types";
         email,
         password,
       })
+
       console.log("🚀 ~ login ~ response:", response.data)
   
       const { token } = response.data
       const decoded = jwtDecode<DecodedToken>(token)
+
       console.log("🚀 ~ login ~ decoded:", decoded)
+
       const user: User = {
         _id: decoded.id,
         username: decoded.username,
@@ -79,11 +86,11 @@ import { User } from "../types/types";
         token: token,
       }
 
-      console.log("🚀 ~ login ~ user:", user);
+      console.log("🚀 ~ login ~ user:", user)
 
       setToken(token)
       setUser(user)
-      setIsAuthenticated(true);
+      setIsAuthenticated(true)
   
       if (token) {
         localStorage.setItem("token", token)
@@ -95,9 +102,11 @@ import { User } from "../types/types";
   
     const logout = () => {
       localStorage.removeItem("token")
+
       setToken(null)
       setUser(null)
       setIsAuthenticated(false)
+      
       console.log("👋 Vartotojas atsijungė")
       alert(" Atsijungėte")
     }

@@ -42,6 +42,7 @@ const AdminOrders: React.FC = () => {
         try {
             setLoading(true) 
             const res = await api.get<Order[]>('/admin/orders')
+            
             setOrders(res.data || [])
             setError(null)
         } catch {

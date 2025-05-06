@@ -35,10 +35,12 @@ const HomePage: React.FC = () => {
               ? r.destination === dest._id
               : r.destination?._id === dest._id
           )
+
           const reviewCount = destReviews.length
           const averageRating = reviewCount
             ? destReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
             : 0
+
           return { ...dest, reviewCount, averageRating }
         })
   
@@ -52,6 +54,7 @@ const HomePage: React.FC = () => {
           const averageRating = reviewCount
             ? hotelReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
             : 0
+
           return { ...hotel, reviewsCount: reviewCount, averageRating }
         })
   
@@ -65,6 +68,7 @@ const HomePage: React.FC = () => {
           const averageRating = reviewCount
             ? agencyReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
             : 0
+
           return { ...agency, reviewCount, averageRating }
         })
   
@@ -73,6 +77,7 @@ const HomePage: React.FC = () => {
         setAgencies(agencies)
       } catch (error) {
         console.error("Klaida gaunant duomenis:", error)
+
         setError("Nepavyko gauti duomenų")
       } finally {
         setLoading(false)
@@ -102,7 +107,8 @@ const HomePage: React.FC = () => {
                   name: destination.name,
                   price: destination.price,
                   image: destination.imageUrl,
-                  quantity: 1
+                  quantity: 1,
+                  modelType: "Destination"
                 })
               }
             />
@@ -127,7 +133,9 @@ const HomePage: React.FC = () => {
                   _id: hotel._id,
                   name: hotel.name,
                   price: hotel.pricePerNight,
-                  quantity: 1
+                  quantity: 1,
+                  image: hotel.image,
+                  modelType: "Hotel"
                 })
               }
             />

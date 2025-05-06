@@ -27,6 +27,7 @@ const HotelsPage: React.FC = () => {
         const hotelsWithReviews = hotels.map((hotel: Hotels) => {
           const related = reviews.filter((r: Reviews) => {
             const hId = typeof r.hotel === "string" ? r.hotel : r.hotel?._id
+
             return hId === hotel._id
           })
           const avg = related.length
@@ -53,7 +54,7 @@ const HotelsPage: React.FC = () => {
     fetchData()
   }, [])
 
-  const handleFilterChange = useCallback(
+  const filterChangeHandler = useCallback(
     (selectedDestIds: string[], searchTerm: string) => {
       let filtered = [...allHotels]
 
@@ -74,6 +75,7 @@ const HotelsPage: React.FC = () => {
     },
     [allHotels]
   )
+  
 
   if (loading) return <div>Kraunama...</div>
   if (error) return <div>{error}</div>
@@ -87,7 +89,7 @@ const HotelsPage: React.FC = () => {
           label: d.name,
           value: d._id,
         }))}
-        onFilterChange={handleFilterChange}
+        onFilterChange={filterChangeHandler}
         placeholder="Ieškoti viešbučio..."
       />
 

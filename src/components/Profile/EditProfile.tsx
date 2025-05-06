@@ -16,23 +16,26 @@ interface Props {
       setFormData(userData)
     }, [userData])
   
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target
+
       if (name.startsWith("address.")) {
         const key = name.split(".")[1]
         setFormData((prev) => ({
           ...prev,
           address: { ...prev.address, [key]: value }
         }))
+
       } else {
         setFormData((prev) => ({ ...prev, [name]: value }))
       }
     }
   
-    const handleSubmit = async (e: React.FormEvent) => {
+    const submitHandler = async (e: React.FormEvent) => {
       e.preventDefault()
       try {
         const response = await api.put(`/users/${userData._id}`, formData)
+        
         onUpdate(response.data.data)
         onClose()
       } catch {
@@ -46,14 +49,14 @@ interface Props {
       <div className="modal-backdrop">
         <div className="modal">
           <h2>Redaguoti profilį</h2>
-          <form onSubmit={handleSubmit}>
-            <input name="username" value={formData.username} onChange={handleChange} placeholder="Vardas" />
-            <input name="email" value={formData.email} onChange={handleChange} placeholder="El. paštas" />
-            <input name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} placeholder="Telefono numeris" />
-            <input name="address.street" value={formData.address?.street || ""} onChange={handleChange} placeholder="Gatvė" />
-            <input name="address.city" value={formData.address?.city || ""} onChange={handleChange} placeholder="Miestas" />
-            <input name="address.postalCode" value={formData.address?.postalCode || ""} onChange={handleChange} placeholder="Pašto kodas" />
-            <input name="address.country" value={formData.address?.country || ""} onChange={handleChange} placeholder="Šalis" />
+          <form onSubmit={submitHandler}>
+            <input name="username" value={formData.username} onChange={changeHandler} placeholder="Vardas" />
+            <input name="email" value={formData.email} onChange={changeHandler} placeholder="El. paštas" />
+            <input name="phoneNumber" value={formData.phoneNumber} onChange={changeHandler} placeholder="Telefono numeris" />
+            <input name="address.street" value={formData.address?.street || ""} onChange={changeHandler} placeholder="Gatvė" />
+            <input name="address.city" value={formData.address?.city || ""} onChange={changeHandler} placeholder="Miestas" />
+            <input name="address.postalCode" value={formData.address?.postalCode || ""} onChange={changeHandler} placeholder="Pašto kodas" />
+            <input name="address.country" value={formData.address?.country || ""} onChange={changeHandler} placeholder="Šalis" />
             <button type="submit">Išsaugoti</button>
             <button type="button" onClick={onClose}>Atšaukti</button>
           </form>

@@ -38,9 +38,11 @@ const Checkout: React.FC = () => {
 
       await api.post("/orders", orderData)
       clearCart()
+
       navigate("/order-success")
     } catch (err) {
       console.error("Užsakymo klaida:", err)
+      
       setError("Nepavyko pateikti užsakymo. Bandykite dar kartą.")
     } finally {
       setLoading(false)

@@ -7,8 +7,9 @@ import { jwtDecode } from 'jwt-decode'
 import { User } from '../types/types'
 
 function Register() {
-  const navigate = useNavigate()
   const { login } = useAuth()
+
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     email: '',
@@ -69,12 +70,14 @@ function Register() {
       login(newUser.email, formData.password)
 
       alert('Sėkmingai prisiregistravote ir prisijungėte!')
+
       navigate('/')
     } catch (error) {
       console.error('Registracijos klaida:', error)
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<{ message: string }>
+        
         alert(axiosError.response?.data?.message || 'Registracijos klaida')
       } else {
         alert('Registracijos klaida')

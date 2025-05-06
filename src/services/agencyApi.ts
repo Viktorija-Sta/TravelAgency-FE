@@ -3,6 +3,7 @@ import api from "../utils/axios"
 export const getAgencies = async () => {
     try {
         const response = await api.get("/agencies")
+
         return { data: response.data }
     } catch (error) {
         console.error("Error fetching all agencies:", error)
@@ -13,6 +14,7 @@ export const getAgencies = async () => {
 export const getAgencyById = async (id: string) => {
     try {
         const response = await api.get(`/agencies/${id}`)
+
         return response.data
     } catch (error) {
         console.error("Error fetching agency by ID:", error)
@@ -23,6 +25,7 @@ export const getAgencyById = async (id: string) => {
 export const getAgencyByHotels = async (hotelId: string) => {
     try {
         const response = await api.get(`/agencies?hotel=${hotelId}`)
+
         return response.data
     } catch (error) {
         console.error("Error fetching agency by hotel:", error)
@@ -33,6 +36,7 @@ export const getAgencyByHotels = async (hotelId: string) => {
 export const getAgencyByDestination = async (destinationId: string) => {
     try {
         const response = await api.get(`/agencies?destination=${destinationId}`)
+        
         return response.data
     } catch (error) {
         console.error("Error fetching agency by destination:", error)

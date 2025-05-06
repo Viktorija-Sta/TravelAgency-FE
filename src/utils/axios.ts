@@ -8,7 +8,6 @@ const api = axios.create({
   },
 })
 
-// Patikrina, ar tokenas pasibaigęs
 const isTokenExpired = (token: string): boolean => {
   try {
     const { exp } = jwtDecode<{ exp: number }>(token)
@@ -19,7 +18,6 @@ const isTokenExpired = (token: string): boolean => {
   }
 }
 
-// Prideda tokeną prie visų request
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token")
@@ -39,7 +37,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Reaguoja į 401/403 ir nukreipia į prisijungimo puslapį
 api.interceptors.response.use(
   (response) => response,
   (error) => {

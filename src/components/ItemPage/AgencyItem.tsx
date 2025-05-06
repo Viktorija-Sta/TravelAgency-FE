@@ -30,6 +30,7 @@ const AgencyItem: React.FC = () => {
         setReviews(reviews)
       } catch (err) {
         console.error("Klaida gaunant agentūros duomenis:", err)
+        
         setError("Nepavyko gauti agentūros informacijos")
       } finally {
         setLoading(false)

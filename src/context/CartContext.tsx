@@ -1,62 +1,62 @@
-import { createContext, useReducer, useEffect, ReactNode, useContext } from "react";
-import { CartItem } from "../types/types";
+import { createContext, useReducer, useEffect, ReactNode, useContext } from "react"
+import { CartItem } from "../types/types"
 
 export interface CartState {
-  items: CartItem[];
+  items: CartItem[]
 }
-import { cartReducer } from "../reducer/cartReducer";
+import { cartReducer } from "../reducer/cartReducer"
 
 interface CartContextType {
-  items: CartItem[];
-  addToCart: (item: CartItem) => void;
-  removeFromCart: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
-  clearCart: () => void;
-  getTotal: () => number;
+  items: CartItem[]
+  addToCart: (item: CartItem) => void
+  removeFromCart: (id: string) => void
+  updateQuantity: (id: string, quantity: number) => void
+  clearCart: () => void
+  getTotal: () => number
 }
 
-const CartContext = createContext<CartContextType | undefined>(undefined);
+const CartContext = createContext<CartContextType | undefined>(undefined)
 
-export { CartContext };
+export { CartContext }
 
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const initCart = (): CartState => {
-    const savedCart = localStorage.getItem("cart");
-    return savedCart ? { items: JSON.parse(savedCart) } : { items: [] };
-  };
+    const savedCart = localStorage.getItem("cart")
+    return savedCart ? { items: JSON.parse(savedCart) } : { items: [] }
+  }
 
-  const [state, dispatch] = useReducer(cartReducer, { items: [] }, initCart);
+  const [state, dispatch] = useReducer(cartReducer, { items: [] }, initCart)
 
   useEffect(() => {
     if (state.items.length > 0) {
-      localStorage.setItem("cart", JSON.stringify(state.items));
+      localStorage.setItem("cart", JSON.stringify(state.items))
     } else {
-      localStorage.removeItem("cart");
+      localStorage.removeItem("cart")
     }
-  }, [state.items]);
+  }, [state.items])
 
   const addToCart = (item: CartItem) => {
-    dispatch({ type: "ADD_ITEM", payload: item });
-    alert("Prekė pridėta į krepšelį")
-  };
+    dispatch({ type: "ADD_ITEM", payload: item })
+  }
 
   const removeFromCart = (id: string) => {
-    dispatch({ type: "REMOVE_ITEM", payload: id });
-    alert("Prekė pašalinta iš krepšelio")
-  };
+    dispatch({ type: "REMOVE_ITEM", payload: id })
+
+    
+  }
 
   const updateQuantity = (id: string, quantity: number) => {
-    dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity } });
-  };
+    dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity } })
+  }
 
   const clearCart = () => {
-    dispatch({ type: "CLEAR_CART" });
-  };
+    dispatch({ type: "CLEAR_CART" })
+  }
 
   const getTotal = () => {
-    return state.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  };
+    return state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  }
 
   return (
     <CartContext.Provider
@@ -71,7 +71,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     >
       {children}
     </CartContext.Provider>
-  );
+  )
 }
 
 

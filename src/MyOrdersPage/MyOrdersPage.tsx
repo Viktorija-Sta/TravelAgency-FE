@@ -17,6 +17,7 @@ const MyOrdersPage: React.FC = () => {
                         Authorization: `Bearer ${token}`
                     }
                 })
+                
                 setOrders(response.data)
             } catch {
                 setError("Nepavyko gauti užsakymų")

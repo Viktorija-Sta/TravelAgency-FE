@@ -1,95 +1,101 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Agencies, Hotels } from "../../types/types";
-import api from "../../utils/axios";
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+import { Agencies, Hotels } from "../../types/types"
+import api from "../../utils/axios"
 
 const AdminHotels = () => {
-  const [hotels, setHotels] = useState<Hotels[]>([]);
-  const [agencies, setAgencies] = useState<Agencies[]>([]);
-  const [newHotel, setNewHotel] = useState<Partial<Hotels>>({});
-  const [editingHotelId, setEditingHotelId] = useState<string | null>(null);
+  const [hotels, setHotels] = useState<Hotels[]>([])
+  const [agencies, setAgencies] = useState<Agencies[]>([])
+  const [newHotel, setNewHotel] = useState<Partial<Hotels>>({})
+  const [editingHotelId, setEditingHotelId] = useState<string | null>(null)
 
   const fetchHotels = async () => {
     try {
-      const res = await api.get("/hotels");
-      setHotels(res.data);
+      const res = await api.get("/hotels")
+
+      setHotels(res.data)
     } catch (err) {
-      console.error("Klaida gaunant viešbučius:", err);
+      console.error("Klaida gaunant viešbučius:", err)
     }
-  };
+  }
 
   const fetchAgencies = async () => {
     try {
-      const res = await api.get("/agencies");
-      setAgencies(res.data);
+      const res = await api.get("/agencies")
+
+      setAgencies(res.data)
     } catch (err) {
-      console.error("Klaida gaunant agentūras:", err);
+      console.error("Klaida gaunant agentūras:", err)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchHotels();
-    fetchAgencies();
-  }, []);
+    fetchHotels()
+    fetchAgencies()
+  }, [])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewHotel({ ...newHotel, [e.target.name]: e.target.value });
-  };
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewHotel({ ...newHotel, [e.target.name]: e.target.value })
+  }
 
   const handleCreate = async () => {
     try {
-      await api.post("/hotels", newHotel);
-      setNewHotel({});
-      fetchHotels();
-    } catch (err) {
-      console.error("Nepavyko sukurti:", err);
-    }
-  };
+      await api.post("/hotels", newHotel)
 
-  const handleUpdate = async () => {
-    if (!editingHotelId) return;
-    try {
-      await api.put(`/hotels/${editingHotelId}`, newHotel);
-      setNewHotel({});
-      setEditingHotelId(null);
-      fetchHotels();
+      setNewHotel({})
+      fetchHotels()
     } catch (err) {
-      console.error("Nepavyko atnaujinti:", err);
+      console.error("Nepavyko sukurti:", err)
     }
-  };
+  }
 
-  const handleDelete = async (id: string) => {
+  const updateHandler = async () => {
+    if (!editingHotelId) return
     try {
-      await api.delete(`/hotels/${id}`);
-      fetchHotels();
+      await api.put(`/hotels/${editingHotelId}`, newHotel)
+
+      setNewHotel({})
+      setEditingHotelId(null)
+
+      fetchHotels()
     } catch (err) {
-      console.error("Nepavyko ištrinti:", err);
+      console.error("Nepavyko atnaujinti:", err)
     }
-  };
+  }
+
+  const deleteHandler = async (id: string) => {
+    try {
+      await api.delete(`/hotels/${id}`)
+
+      fetchHotels()
+    } catch (err) {
+      console.error("Nepavyko ištrinti:", err)
+    }
+  }
 
   const startEdit = (hotel: Hotels) => {
-    setEditingHotelId(hotel._id);
-    setNewHotel(hotel);
-  };
+    setEditingHotelId(hotel._id)
+    setNewHotel(hotel)
+  }
 
   return (
     <div>
       <h2>Viešbučių valdymas</h2>
 
       <label>Pavadinimas:
-        <input name="name" value={newHotel.name || ""} onChange={handleChange} />
+        <input name="name" value={newHotel.name || ""} onChange={changeHandler} />
       </label>
 
       <label>Vieta:
-        <input name="location" value={newHotel.location || ""} onChange={handleChange} />
+        <input name="location" value={newHotel.location || ""} onChange={changeHandler} />
       </label>
 
       <label>Kaina už naktį:
-        <input name="pricePerNight" type="number" value={newHotel.pricePerNight || ""} onChange={handleChange} />
+        <input name="pricePerNight" type="number" value={newHotel.pricePerNight || ""} onChange={changeHandler} />
       </label>
 
       <label>Nuotraukos URL:
-        <input name="image" value={newHotel.image || ""} onChange={handleChange} />
+        <input name="image" value={newHotel.image || ""} onChange={changeHandler} />
       </label>
 
       <label>Galerijos URL (atskirti kableliais):
@@ -106,7 +112,7 @@ const AdminHotels = () => {
       </label>
 
       <label>Aprašymas:
-        <input name="description" value={newHotel.description || ""} onChange={handleChange} />
+        <input name="description" value={newHotel.description || ""} onChange={changeHandler} />
       </label>
 
       <label>Agentūra:
@@ -114,8 +120,8 @@ const AdminHotels = () => {
           name="agency"
           value={typeof newHotel.agency === "string" ? newHotel.agency : (newHotel.agency as Agencies)?._id || ""}
           onChange={(e) => {
-            const selectedAgency = agencies.find(a => a._id === e.target.value);
-            setNewHotel({ ...newHotel, agency: selectedAgency || undefined });
+            const selectedAgency = agencies.find(a => a._id === e.target.value)
+            setNewHotel({ ...newHotel, agency: selectedAgency || undefined })
           }}
         >
           <option value="">Pasirinkite agentūrą</option>
@@ -128,7 +134,7 @@ const AdminHotels = () => {
       </label>
 
       {editingHotelId ? (
-        <button onClick={handleUpdate}>Atnaujinti</button>
+        <button onClick={updateHandler}>Atnaujinti</button>
       ) : (
         <button onClick={handleCreate}>Sukurti</button>
       )}
@@ -138,12 +144,12 @@ const AdminHotels = () => {
           <li key={hotel._id}>
             <Link to={`/hotels/${hotel._id}`}>{hotel.name}</Link> - {hotel.location} - {hotel.pricePerNight} €
             <button onClick={() => startEdit(hotel)}>Redaguoti</button>
-            <button onClick={() => handleDelete(hotel._id)}>Ištrinti</button>
+            <button onClick={() => deleteHandler(hotel._id)}>Ištrinti</button>
           </li>
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default AdminHotels;
+export default AdminHotels

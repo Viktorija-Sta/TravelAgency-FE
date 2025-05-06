@@ -13,16 +13,13 @@ interface SearchElementProps {
   placeholder?: string
 }
 
-const SearchElement: React.FC<SearchElementProps> = ({
-  onFilterChange,
-  options,
-  placeholder = "Ieškoti..."
-}) => {
+const SearchElement: React.FC<SearchElementProps> = ({ onFilterChange, options, placeholder = "Ieškoti..." }) => {
   const [selectedOptions, setSelectedOptions] = useState<OptionType[]>([])
   const [searchTerm, setSearchTerm] = useState<string>("")
 
   useEffect(() => {
     const selectedValues = selectedOptions.map((opt) => opt.value)
+
     onFilterChange(selectedValues, searchTerm)
   }, [selectedOptions, searchTerm])
 

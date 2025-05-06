@@ -1,11 +1,11 @@
 import { Destinations } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
-import { Link } from "react-router";
+import { Link } from "react-router"
 
 interface DestinationProps {
   destination: Destinations
-  averageRating: number;
-  reviewCount: number;
+  averageRating: number
+  reviewCount: number
   onAddToCart: () => void
 }
 
@@ -17,7 +17,7 @@ const DestinationCard: React.FC<DestinationProps> = ({
 }) => {
   const { addToCart } = useCart()
 
-  const handleAddToCart = () => {
+  const addToCartHandler = () => {
     addToCart({ 
       _id: destination._id,
       name: destination.name,
@@ -51,7 +51,7 @@ const DestinationCard: React.FC<DestinationProps> = ({
         {renderStars(averageRating || 0)} ({reviewCount || 0} atsiliepimai)
       </div>
 
-      <button onClick={handleAddToCart} className="add-to-cart">
+      <button onClick={addToCartHandler} className="add-to-cart">
         Į krepšelį
       </button>
 

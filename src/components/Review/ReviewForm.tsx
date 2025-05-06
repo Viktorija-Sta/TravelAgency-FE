@@ -10,18 +10,13 @@ interface ReviewFormProps {
   onReviewSubmitted?: (newReview: Reviews) => void
 }
 
-const ReviewForm: React.FC<ReviewFormProps> = ({
-  destinationId,
-  hotelId,
-  agencyId,
-  onReviewSubmitted
-}) => {
+const ReviewForm: React.FC<ReviewFormProps> = ({ destinationId, hotelId, agencyId, onReviewSubmitted }) => {
   const [rating, setRating] = useState<number>(5)
   const [comment, setComment] = useState<string>("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!rating || rating < 1 || rating > 5) {
@@ -62,7 +57,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="review-form">
+    <form onSubmit={submitHandler} className="review-form">
       <h3>Parašykite atsiliepimą</h3>
 
       <label>

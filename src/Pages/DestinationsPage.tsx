@@ -23,24 +23,25 @@ const DestinationsPage: React.FC = () => {
           getAllDestinations(),
           api.get("/reviews"),
           api.get("/categories"),
-        ]);
+        ])
   
-        const allDest = res1.data || res1;
-        setDestinations(allDest);
-        setFiltered(allDest);
-        setReviews(res2.data);
-        setCategories(res3.data);
+        const allDest = res1.data || res1
+        
+        setDestinations(allDest)
+        setFiltered(allDest)
+        setReviews(res2.data)
+        setCategories(res3.data)
       } catch {
         
-          setError("Įvyko netikėta klaida.");
+          setError("Įvyko netikėta klaida.")
         
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
   
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   const handleFilterChange = (selectedCategoryIds: string[], searchTerm: string) => {
     let filteredResults = destinations

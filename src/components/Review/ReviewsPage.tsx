@@ -13,6 +13,7 @@ const ReviewsPage: React.FC = () => {
     const fetchReviews = async () => {
       try {
         const response = await api.get("/reviews")
+
         setReviews(response.data)
       } catch {
         setError("Nepavyko gauti atsiliepimų")
@@ -28,12 +29,14 @@ const ReviewsPage: React.FC = () => {
     if (filter === "hotels") return !!review.hotel
     if (filter === "destinations") return !!review.destination
     if (filter === "agencies") return !!review.agency
+
     return true
   })
 
   const renderStars = (rating: number) => {
     const full = "★".repeat(Math.round(rating))
     const empty = "☆".repeat(5 - Math.round(rating))
+    
     return full + empty
   }
 

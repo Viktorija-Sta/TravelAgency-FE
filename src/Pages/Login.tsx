@@ -4,6 +4,8 @@ import { useAuth } from "../context/AuthContext"
 import { AxiosError } from "axios"
 
 function Login() {
+  const { login, user } = useAuth()
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -11,17 +13,18 @@ function Login() {
 
   const location = useLocation()
   const navigate = useNavigate()
-  const { login, user } = useAuth()
 
   const sessionExpired = new URLSearchParams(location.search).get("sessionExpired") === "true"
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     setError("")
     setIsLoading(true)
 
     try {
       await login(email, password)
+
       setEmail("")
       setPassword("")
       alert("Prisijungta!")
@@ -34,6 +37,7 @@ function Login() {
     } catch (err) {
       const axiosError = err as AxiosError<{ message: string }>
       const message = axiosError.response?.data?.message || "Prisijungimas nepavyko"
+      
       alert(message)
       setError(message)
     } finally {
@@ -53,7 +57,7 @@ function Login() {
 
       {error && <div style={{ color: "red", marginBottom: "10px" }}>{error}</div>}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={submitHandler}>
         <div>
           <label>El. paštas:</label>
           <input

@@ -25,6 +25,7 @@ const HotelItem: React.FC = () => {
     const fetchData = async () => {
       try {
         const res = await api.get(`/hotels/${id}`)
+        
         setHotel(res.data.hotel || res.data)
         setReviews(res.data.reviews || [])
       } catch {
