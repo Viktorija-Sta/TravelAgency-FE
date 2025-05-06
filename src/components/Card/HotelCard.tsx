@@ -10,7 +10,7 @@ interface HotelCardProps {
   onAddToCart?: () => void
 }
 
-const HotelCard: React.FC<HotelCardProps> = ({ hotel, averageRating, reviewCount, onAddToCart }) => {
+const HotelCard: React.FC<HotelCardProps> = ({ hotel, averageRating, reviewCount }) => {
   const { addToCart } = useCart()
 
   const handleAddToCart = () => {
@@ -23,7 +23,6 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, averageRating, reviewCount
       modelType: "Hotel",
     })
     onAddToCart?.()
-    toast.success(`${hotel.name} buvo pridėta į krepšelį`)
   }
 
   const renderStars = (rating: number) => {
