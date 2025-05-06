@@ -9,6 +9,7 @@ import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import ReviewForm from "../Review/ReviewForm"
+import { toast } from "sonner"
 
 const HotelItem: React.FC = () => {
   const { id } = useParams()
@@ -25,7 +26,7 @@ const HotelItem: React.FC = () => {
     const fetchData = async () => {
       try {
         const res = await api.get(`/hotels/${id}`)
-        
+
         setHotel(res.data.hotel || res.data)
         setReviews(res.data.reviews || [])
       } catch {
@@ -50,7 +51,7 @@ const HotelItem: React.FC = () => {
         quantity: 1,
         modelType: "Hotel" 
       })
-      alert(`${hotel.name} buvo pridėta į krepšelį`)
+      toast.success(`${hotel.name} buvo pridėta į krepšelį`)
     }
   }
 

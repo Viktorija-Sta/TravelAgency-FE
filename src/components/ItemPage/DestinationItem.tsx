@@ -9,6 +9,7 @@ import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import ReviewForm from "../Review/ReviewForm"
+import { toast } from "sonner"
 
 const DestinationItem: React.FC = () => {
   const { id } = useParams()
@@ -61,7 +62,7 @@ const DestinationItem: React.FC = () => {
       }
 
       addToCart(fullItem)
-      alert(`${destination.name} buvo pridėta į krepšelį`)
+      toast.success(`${destination.name} buvo pridėta į krepšelį`)
     }
   }
 

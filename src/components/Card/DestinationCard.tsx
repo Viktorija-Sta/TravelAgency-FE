@@ -1,6 +1,7 @@
 import { Destinations } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
 import { Link } from "react-router"
+import { toast } from "sonner"
 
 interface DestinationProps {
   destination: Destinations
@@ -26,6 +27,7 @@ const DestinationCard: React.FC<DestinationProps> = ({
       quantity: 1  ,
       modelType: "Destination",
     })
+    toast.success(`${destination.name} buvo pridėta į krepšelį`)
     
   }
 

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router"
 import { useCart } from "../hooks/useCart"
+import { toast } from "sonner"
 
 const CartPage: React.FC = () => {
     const { items, removeFromCart, updateQuantity, getTotal, clearCart } = useCart()
@@ -7,7 +8,7 @@ const CartPage: React.FC = () => {
 
     const removeItemHandler = (itemId: string) => {
         removeFromCart(itemId)
-        alert("Prekė pašalinta iš krepšelio")
+        toast.warning("Prekė pašalinta iš krepšelio")
     }
     const updateQuantityHandler = (itemId: string, quantity: number) => {
         if (quantity < 1) return
@@ -16,7 +17,7 @@ const CartPage: React.FC = () => {
     }
     const checkoutHandler = () => {
         if (items.length === 0) {
-            alert("Krepšelis tuščias")
+            toast.error("Krepšelis tuščias")
             return
         }
         navigate("/checkout")
@@ -35,7 +36,7 @@ const CartPage: React.FC = () => {
 
     const clearCartHandler = () => {
         clearCart()
-        alert("Krepšelis išvalytas")
+        toast.success("Krepšelis išvalytas")
     }
 
 

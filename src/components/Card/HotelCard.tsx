@@ -1,6 +1,7 @@
 import { Hotels } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
 import { Link } from "react-router-dom"
+import { toast } from "sonner"
 
 interface HotelCardProps {
   hotel: Hotels
@@ -22,6 +23,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, averageRating, reviewCount
       modelType: "Hotel",
     })
     onAddToCart?.()
+    toast.success(`${hotel.name} buvo pridėta į krepšelį`)
   }
 
   const renderStars = (rating: number) => {
