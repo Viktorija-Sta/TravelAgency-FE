@@ -86,7 +86,7 @@ const NavBar: React.FC = () => {
 
   return (
     <>
-      <nav>
+      <nav className="navbar">
         <div className="mobile-menu-icon">
           <IconButton
             color="inherit"

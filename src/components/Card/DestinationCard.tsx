@@ -2,6 +2,7 @@ import { Destinations } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
 import { Link } from "react-router"
 import { toast } from "sonner"
+import "./DestinationCard.scss"
 
 interface DestinationProps {
   destination: Destinations
@@ -38,9 +39,8 @@ const DestinationCard: React.FC<DestinationProps> = ({
   }
 
   return (
-    <div className="destination">
+    <div className="destination-card">
       <img
-        style={{ width: "30%" }}
         src={destination.imageUrl}
         alt={destination.name}
         className="main-image"

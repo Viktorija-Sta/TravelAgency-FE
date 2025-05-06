@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import { Agencies } from "../../types/types"
+import "./AgencyCard.scss"
 
 interface AgencyProps {
   agency: Agencies
@@ -16,11 +17,10 @@ const AgencyCard: React.FC<AgencyProps> = ({ agency, averageRating, reviewCount 
   }
 
   return (
-    <div key={agency._id} className="agency border rounded p-4 shadow-md">
+    <div key={agency._id} className="agency-card">
       <img
         src={agency.logo}
         alt={`${agency.name} logotipas`}
-        style={{ width: "100%", maxHeight: "150px", objectFit: "contain", marginBottom: "1rem" }}
       />
       <h3>{agency.name}</h3>
       <p>{agency.location}</p>
