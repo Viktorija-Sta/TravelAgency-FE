@@ -2,6 +2,7 @@ import { useNavigate, Link } from "react-router-dom"
 import { useCart } from "../hooks/useCart"
 import { toast } from "sonner"
 import { CartItem } from "../types/types"
+import { CardContent } from "@mui/material";
 
 const CartPage: React.FC = () => {
   const { items, removeFromCart, updateQuantity, getTotal, clearCart } = useCart()
@@ -60,7 +61,7 @@ const CartPage: React.FC = () => {
   return (
     <div className="cart-page">
       <h1>Jūsų krepšelis</h1>
-      <div className="cart-items">
+      <CardContent className="cart-items">
         {items.map((item) => {
           const isDestination = item.modelType === "Destination"
           const relatedHotel = isDestination ? renderRelatedHotel(item) : null
@@ -112,7 +113,7 @@ const CartPage: React.FC = () => {
             </div>
           )
         })}
-      </div>
+      </CardContent>
 
       <div className="cart-total">
         <h2>Iš viso: {getTotal().toFixed(2)} €</h2>

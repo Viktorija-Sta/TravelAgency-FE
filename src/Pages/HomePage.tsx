@@ -6,6 +6,7 @@ import DestinationCard from "../components/Card/DestinationCard"
 import HotelCard from "../components/Card/HotelCard"
 import AgencyCard from "../components/Card/AgencyCard"
 import { useCart } from "../hooks/useCart"
+import "./HomePage.scss"
 
 const HomePage: React.FC = () => {
   const { addToCart } = useCart()
@@ -123,7 +124,7 @@ const HomePage: React.FC = () => {
           ))}
         </div>
         <div>
-          <Link to="/destinations">Žiūrėti visas keliones</Link>
+          <Link to="/destinations" className="more">Žiūrėti visas keliones {'>>>'}</Link>
         </div>
       </section>
 
@@ -150,7 +151,7 @@ const HomePage: React.FC = () => {
           ))}
         </div>
         <div>
-          <Link to="/hotels">Žiūrėti visus viešbučius</Link>
+          <Link to="/hotels" className="more">Žiūrėti visus viešbučius {'>>>'}</Link>
         </div>
       </section>
 
@@ -167,7 +168,7 @@ const HomePage: React.FC = () => {
           ))}
         </div>
         <div>
-          <Link to="/agencies">Žiūrėti visas agentūras</Link>
+          <Link to="/agencies" className="more">Žiūrėti visas agentūras {'>>>'}</Link>
         </div>
       </section>
     </div>
