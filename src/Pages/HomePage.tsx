@@ -29,48 +29,56 @@ const HomePage: React.FC = () => {
   
         const allReviews = reviewRes.data
   
-        const destinations = destinationRes.data.slice(0, 3).map((dest: Destinations) => {
-          const destReviews = allReviews.filter((r: Reviews) =>
-            typeof r.destination === "string"
-              ? r.destination === dest._id
-              : r.destination?._id === dest._id
-          )
+        const destinations = destinationRes.data
+          .map((dest: Destinations) => {
+            const destReviews = allReviews.filter((r: Reviews) =>
+              typeof r.destination === "string"
+                ? r.destination === dest._id
+                : r.destination?._id === dest._id
+            )
+            const reviewCount = destReviews.length
+            const averageRating = reviewCount
+              ? destReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
+              : 0
 
-          const reviewCount = destReviews.length
-          const averageRating = reviewCount
-            ? destReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
-            : 0
-
-          return { ...dest, reviewCount, averageRating }
-        })
+            return { ...dest, reviewCount, averageRating }
+          })
+          .sort((a: Destinations, b: Destinations) => (b.averageRating || 0) - (a.averageRating || 0)) 
+          .slice(0, 3)
   
-        const hotels = hotelRes.data.slice(0, 3).map((hotel: Hotels) => {
-          const hotelReviews = allReviews.filter((r: Reviews) =>
-            typeof r.hotel === "string"
-              ? r.hotel === hotel._id
-              : r.hotel?._id === hotel._id
-          )
-          const reviewCount = hotelReviews.length
-          const averageRating = reviewCount
-            ? hotelReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
-            : 0
-
-          return { ...hotel, reviewsCount: reviewCount, averageRating }
-        })
+          const hotels = hotelRes.data
+          .map((hotel: Hotels) => {
+            const hotelReviews = allReviews.filter((r: Reviews) =>
+              typeof r.hotel === "string"
+                ? r.hotel === hotel._id
+                : r.hotel?._id === hotel._id
+            )
+            const reviewCount = hotelReviews.length
+            const averageRating = reviewCount
+              ? hotelReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
+              : 0
+        
+            return { ...hotel, reviewsCount: reviewCount, averageRating }
+          })
+          .sort((a: Hotels, b: Hotels) => b.averageRating - a.averageRating)
+          .slice(0, 3)
   
-        const agencies = agencyRes.data.slice(0, 3).map((agency: Agencies) => {
-          const agencyReviews = allReviews.filter((r: Reviews) =>
-            typeof r.agency === "string"
-              ? r.agency === agency._id
-              : r.agency?._id === agency._id
-          )
-          const reviewCount = agencyReviews.length
-          const averageRating = reviewCount
-            ? agencyReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
-            : 0
-
-          return { ...agency, reviewCount, averageRating }
-        })
+          const agencies = agencyRes.data
+            .map((agency: Agencies) => {
+              const agencyReviews = allReviews.filter((r: Reviews) =>
+                typeof r.agency === "string"
+                  ? r.agency === agency._id
+                  : r.agency?._id === agency._id
+              )
+              const reviewCount = agencyReviews.length
+              const averageRating = reviewCount
+                ? agencyReviews.reduce((sum: number, r: Reviews) => sum + r.rating, 0) / reviewCount
+                : 0
+          
+              return { ...agency, reviewCount, averageRating }
+            })
+            .sort((a: Agencies, b: Agencies) => (b.averageRating || 0) - (a.averageRating || 0))
+            .slice(0, 3)
   
         setDestinations(destinations)
         setHotels(hotels)

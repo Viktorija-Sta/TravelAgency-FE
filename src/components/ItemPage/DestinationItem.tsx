@@ -111,29 +111,28 @@ const DestinationItem: React.FC = () => {
       </p>
       <Link to={`/agencies/${destination.agency?._id}`} className="agency-link">
         <p>Agentūra: {destination.agency?.name || "Nenurodyta"}</p></Link>
-      {showReviews && (
-        <div className="reviews-section">
-          {reviews.length === 0 ? (
-            <p>Nėra atsiliepimų apie šią kelionę.</p>
-          ) : (
-            <>
-              {reviews.map((review) => (
+        {showReviews && (
+          <div className="reviews-section">
+            {reviews.length === 0 ? (
+              <p>Nėra atsiliepimų apie šią kelionę.</p>
+            ) : (
+              reviews.map((review) => (
                 <div key={review._id} className="review-card">
                   <p className="font-semibold">{review.user?.username || "Anonimas"}</p>
                   <p>{renderStars(review.rating)}</p>
                   <p>{review.comment}</p>
                 </div>
-              ))}
-              <ReviewForm
-                destinationId={destination._id}
-                onReviewSubmitted={(newReview) => {
-                  setReviews((prev) => [...prev, newReview])
-                }}
-              />
-            </>
-          )}
-        </div>
-      )}
+              ))
+            )}
+
+            <ReviewForm
+              destinationId={destination._id}
+              onReviewSubmitted={(newReview) => {
+                setReviews((prev) => [...prev, newReview])
+              }}
+            />
+          </div>
+        )}
 
       <p>Kategorija: {destination.category?.name || "Nenurodyta"}</p>
       <p>{destination.description}</p>
