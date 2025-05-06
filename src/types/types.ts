@@ -32,7 +32,12 @@ export interface Order {
   orderDate: string
   status: string
   createdAt: string
-  shippingAddress: string
+  shippingAddress: { 
+    street?: string
+    city?: string
+    postalCode?: string
+    country?: string
+  }
 }
 
 

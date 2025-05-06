@@ -10,25 +10,28 @@ interface OrderRowProps {
 }
 
 const OrderRow: React.FC<OrderRowProps> = ({ order, statusChangeHandler }) => {
-
+    const address = order.shippingAddress
+  
     return (
-        <tr key={order._id}>
-            <td>{order._id}</td>
-            <td>{order.user?.email}</td>
-            <td>{order.items.map(item => item.details?.name || "N/A").join(", ")}</td>
-            <td>{order.totalAmount} €</td>
-            <td>{order.shippingAddress}</td>
-            <td>
-                <select value={order.status} onChange={(e) => statusChangeHandler(order._id, e.target.value)}>
-                    <option value="pending">Laukiama</option>
-                    <option value="shipped">Išsiųsta</option>
-                    <option value="delivered">Pristatyta</option>
-                </select>
-            </td>
-            <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-        </tr>
+      <tr key={order._id}>
+        <td>{order._id}</td>
+        <td>{order.user?.email}</td>
+        <td>{order.items.map(item => item.details?.name || "N/A").join(", ")}</td>
+        <td>{order.totalAmount} €</td>
+        <td>
+          {address?.street}, {address?.city}, {address?.postalCode}, {address?.country}
+        </td>
+        <td>
+          <select value={order.status} onChange={(e) => statusChangeHandler(order._id, e.target.value)}>
+            <option value="pending">Laukiama</option>
+            <option value="shipped">Išsiųsta</option>
+            <option value="delivered">Pristatyta</option>
+          </select>
+        </td>
+        <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+      </tr>
     )
-}
+  }
 
 const AdminOrders: React.FC = () => {
     const { user } = useAuth()
@@ -42,7 +45,7 @@ const AdminOrders: React.FC = () => {
         try {
             setLoading(true) 
             const res = await api.get<Order[]>('/admin/orders')
-            
+
             setOrders(res.data || [])
             setError(null)
         } catch {

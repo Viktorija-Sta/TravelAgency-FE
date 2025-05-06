@@ -5,14 +5,22 @@ import { useCart } from "../context/CartContext"
 
 const Checkout: React.FC = () => {
   const { items, getTotal, clearCart } = useCart()
-  const [shippingAddress, setShippingAddress] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [address, setAddress] = useState({
+    street: '',
+    city: '',
+    postalCode: '',
+    country: '',
+  })
+
   const navigate = useNavigate()
 
   const orderSubmitHandler = async () => {
-    if (!shippingAddress.trim()) {
-      alert("Prašome įvesti pristatymo adresą")
+    const { street, city, postalCode, country } = address
+
+    if (!street || !city || !postalCode || !country) {
+      alert("Užpildykite visus pristatymo adreso laukus")
       return
     }
 
@@ -30,19 +38,17 @@ const Checkout: React.FC = () => {
           productId: item._id,
           quantity: item.quantity,
           price: item.price,
-          modelType: item.modelType, 
+          modelType: item.modelType,
         })),
         totalAmount: getTotal(),
-        shippingAddress,
+        shippingAddress: address,
       }
 
       await api.post("/orders", orderData)
       clearCart()
-
       navigate("/order-success")
     } catch (err) {
       console.error("Užsakymo klaida:", err)
-      
       setError("Nepavyko pateikti užsakymo. Bandykite dar kartą.")
     } finally {
       setLoading(false)
@@ -69,14 +75,11 @@ const Checkout: React.FC = () => {
       <h2>Bendra suma: {getTotal().toFixed(2)} €</h2>
 
       <div className="address-input">
-        <label htmlFor="address">Pristatymo adresas:</label>
-        <input
-          type="text"
-          id="address"
-          value={shippingAddress}
-          onChange={(e) => setShippingAddress(e.target.value)}
-          placeholder="Įveskite savo pristatymo adresą"
-        />
+        <label>Pristatymo adresas:</label>
+        <input type="text" placeholder="Šalis" value={address.country} onChange={(e) => setAddress({ ...address, country: e.target.value })} />
+        <input type="text" placeholder="Miestas" value={address.city} onChange={(e) => setAddress({ ...address, city: e.target.value })} />
+        <input type="text" placeholder="Gatvė" value={address.street} onChange={(e) => setAddress({ ...address, street: e.target.value })} />
+        <input type="text" placeholder="Pašto kodas" value={address.postalCode} onChange={(e) => setAddress({ ...address, postalCode: e.target.value })} />
       </div>
 
       {error && <p className="error">{error}</p>}

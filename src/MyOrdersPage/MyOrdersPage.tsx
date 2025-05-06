@@ -17,7 +17,7 @@ const MyOrdersPage: React.FC = () => {
                         Authorization: `Bearer ${token}`
                     }
                 })
-                
+
                 setOrders(response.data)
             } catch {
                 setError("Nepavyko gauti užsakymų")
@@ -40,12 +40,14 @@ const MyOrdersPage: React.FC = () => {
             ) : (
                 <ul>
                     {orders.map((order) => (
-                        <li key={order._id}>
-                            <h2>Užsakymas ID: {order._id}</h2>
-                            <p>Data: {new Date(order.orderDate).toLocaleDateString()}</p>
-                            <p>Bendra suma: {order.totalAmount} EUR</p>
-                            <p>Statusas: {order.status}</p>
-                        </li>
+                        
+                            <li key={order._id}>
+                                <h2>Užsakymo ID: {order._id}</h2>
+                                <p>Data: {new Date(order.orderDate).toLocaleDateString()}</p>
+                                <p>Bendra suma: {order.totalAmount} EUR</p>
+                                <p>Statusas: {order.status}</p>
+                            </li>
+                        
                     ))}
                 </ul>
             )}

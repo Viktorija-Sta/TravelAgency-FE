@@ -3,23 +3,13 @@ import { Agencies, Categories, Destinations, Hotels } from "../../types/types"
 import api from "../../utils/axios"
 import { Link } from "react-router"
 
-const AdminDestinations = () => {
+const AdminDestinations: React.FC = () => {
   const [destinations, setDestinations] = useState<Destinations[]>([])
   const [newDestination, setNewDestination] = useState<Partial<Destinations>>({})
   const [editingId, setEditingId] = useState<string | null>(null)
   const [agencies, setAgencies] = useState<Agencies[]>([])
   const [categories, setCategories] = useState<Categories[]>([])
   const [hotels, setHotels] = useState<Hotels[]>([])
-
-  const fetchDestinations = async () => {
-    try {
-      const res = await api.get("/destinations")
-
-      setDestinations(res.data)
-    } catch (err) {
-      console.error("Nepavyko gauti kelionių:", err)
-    }
-  }
 
   useEffect(() => {
     const fetchExtras = async () => {
@@ -41,6 +31,16 @@ const AdminDestinations = () => {
     fetchDestinations()
     fetchExtras()
   }, [])
+  const fetchDestinations = async () => {
+    try {
+      const res = await api.get("/destinations")
+
+      setDestinations(res.data)
+    } catch (err) {
+      console.error("Nepavyko gauti kelionių:", err)
+    }
+  }
+
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -113,97 +113,135 @@ const AdminDestinations = () => {
     <div>
       <h2>Kelionių valdymas</h2>
 
-      <input name="name" placeholder="Pavadinimas" value={newDestination.name || ""} onChange={changeHandler} />
-      <input name="location" placeholder="Vieta" value={newDestination.location || ""} onChange={changeHandler} />
-      <input name="price" placeholder="Kaina" type="number" value={newDestination.price || ""} onChange={changeHandler} />
-      <input name="description" type="text" placeholder="Aprašymas" value={newDestination.description || ""} onChange={changeHandler} />
-      <input type="date" name="departureDate" placeholder="Išvykimo data" value={newDestination.departureDate || ""} onChange={changeHandler} />
-      <textarea name="fullDescription" value={newDestination.fullDescription || ""} onChange={changeHandler} />
-      <input name="imageUrl" placeholder="Nuotraukos URL" value={newDestination.imageUrl || ""} onChange={changeHandler} />
-      <input
-        name="gallery"
-        placeholder="Galerijos URL (atskirti kableliais)"
-        value={Array.isArray(newDestination.gallery) ? newDestination.gallery.join(", ") : ""}
-        onChange={(e) =>
-          setNewDestination({
-            ...newDestination,
-            gallery: e.target.value.split(",").map((url) => url.trim()),
-          })
-        }
-      />
-      <input
-        name="duration"
-        placeholder="Trukmė (dienos)"
-        type="number"
-        value={newDestination.duration || ""}
-        onChange={changeHandler}
-      />
+      <label>
+        Pavadinimas:
+        <input name="name" placeholder="Pavadinimas" value={newDestination.name || ""} onChange={changeHandler} />
+      </label>
 
-      <select
-        name="agency"
-        value={typeof newDestination.agency === "string" ? newDestination.agency : newDestination.agency?._id || ""}
-        onChange={(e) => {
-          const selectedAgency = agencies.find((a) => a._id === e.target.value)
-          setNewDestination({ ...newDestination, agency: selectedAgency || undefined })
-        }}
-      >
-        <option value="">Pasirinkite agentūrą</option>
-        {agencies.map((a) => (
-          <option key={a._id} value={a._id}>
-            {a.name}
-          </option>
-        ))}
-      </select>
+      <label>
+        Vieta:
+        <input name="location" placeholder="Vieta" value={newDestination.location || ""} onChange={changeHandler} />
+      </label>
 
-      <select
-        name="category"
-        value={typeof newDestination.category === "string" ? newDestination.category : newDestination.category?._id || ""}
-        onChange={(e) => {
-          const selectedCategory = categories.find((c) => c._id === e.target.value)
-          setNewDestination({ ...newDestination, category: selectedCategory || undefined })
-        }}
-      >
-        <option value="">Pasirinkite kategoriją</option>
-        {categories.map((c) => (
-          <option key={c._id} value={c._id}>
-            {c.name}
-          </option>
-        ))}
-      </select>
+      <label>
+        Kaina:
+        <input name="price" placeholder="Kaina" type="number" value={newDestination.price || ""} onChange={changeHandler} />
+      </label>
 
-     
+      <label>
+        Aprašymas:
+        <input name="description" type="text" placeholder="Aprašymas" value={newDestination.description || ""} onChange={changeHandler} />
+      </label>
+
+      <label>
+        Išvykimo data:
+        <input type="date" name="departureDate" value={newDestination.departureDate || ""} onChange={changeHandler} />
+      </label>
+
+      <label>
+        Pilnas aprašymas:
+        <textarea name="fullDescription" value={newDestination.fullDescription || ""} onChange={changeHandler} />
+      </label>
+
+      <label>
+        Pagrindinė nuotrauka:
+        <input name="imageUrl" placeholder="Nuotraukos URL" value={newDestination.imageUrl || ""} onChange={changeHandler} />
+      </label>
+
+      <label>
+        Galerijos nuotraukos (atskirti kableliais):
+        <input
+          name="gallery"
+          placeholder="Galerijos URL (atskirti kableliais)"
+          value={Array.isArray(newDestination.gallery) ? newDestination.gallery.join(", ") : ""}
+          onChange={(e) =>
+            setNewDestination({
+              ...newDestination,
+              gallery: e.target.value.split(",").map((url) => url.trim()),
+            })
+          }
+        />
+      </label>
+
+      <label>
+        Trukmė (dienomis):
+        <input
+          name="duration"
+          type="number"
+          placeholder="Trukmė"
+          value={newDestination.duration || ""}
+          onChange={changeHandler}
+        />
+      </label>
+
+      <label>
+        Agentūra:
+        <select
+          name="agency"
+          value={typeof newDestination.agency === "string" ? newDestination.agency : newDestination.agency?._id || ""}
+          onChange={(e) => {
+            const selectedAgency = agencies.find((a) => a._id === e.target.value)
+            setNewDestination({ ...newDestination, agency: selectedAgency || undefined })
+          }}
+        >
+          <option value="">Pasirinkite agentūrą</option>
+          {agencies.map((a) => (
+            <option key={a._id} value={a._id}>{a.name}</option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+        Kategorija:
+        <select
+          name="category"
+          value={typeof newDestination.category === "string" ? newDestination.category : newDestination.category?._id || ""}
+          onChange={(e) => {
+            const selectedCategory = categories.find((c) => c._id === e.target.value)
+            setNewDestination({ ...newDestination, category: selectedCategory || undefined })
+          }}
+        >
+          <option value="">Pasirinkite kategoriją</option>
+          {categories.map((c) => (
+            <option key={c._id} value={c._id}>{c.name}</option>
+          ))}
+        </select>
+      </label>
+
       <div>
         <p>Pasirinkite viešbučius:</p>
         {hotels.map((hotel) => {
-            const hotelId = hotel._id
-            const isChecked = Array.isArray(newDestination.hotels)
+          const hotelId = hotel._id
+          const isChecked = Array.isArray(newDestination.hotels)
             ? newDestination.hotels.some((h) => (typeof h === "string" ? h === hotelId : h._id === hotelId))
             : false
 
-            return (
+            
+
+          return (
             <label key={hotelId} style={{ display: "block", marginBottom: "4px" }}>
-                <input
+              <input
                 type="checkbox"
                 checked={isChecked}
                 onChange={(e) => {
-                    let updatedHotels = Array.isArray(newDestination.hotels) ? [...newDestination.hotels] : []
+                  let updatedHotels = Array.isArray(newDestination.hotels) ? [...newDestination.hotels] : []
 
-                    if (e.target.checked) {
+                  if (e.target.checked) {
                     updatedHotels.push(hotel)
-                    } else {
+                  } else {
                     updatedHotels = updatedHotels.filter(
-                        (h) => (typeof h === "string" ? h : h._id) !== hotelId
+                      (h) => (typeof h === "string" ? h : h._id) !== hotelId
                     )
-                    }
+                  }
 
-                    setNewDestination({ ...newDestination, hotels: updatedHotels })
+                  setNewDestination({ ...newDestination, hotels: updatedHotels })
                 }}
-                />
-                {hotel.name}
+              />
+              {hotel.name}
             </label>
-            )
+          )
         })}
-        </div>
+      </div>
 
       {editingId ? (
         <button onClick={updateHandler}>Atnaujinti</button>
@@ -211,15 +249,15 @@ const AdminDestinations = () => {
         <button onClick={createHandler}>Sukurti</button>
       )}
 
-    <ul>
-    {destinations.map((destination) => (
-        <li key={destination._id}>
-        <Link to={`/destinations/${destination._id}`}>{destination.name}</Link> - {destination.location} - {destination.price}€
-        <button onClick={() => startEdit(destination)}>Redaguoti</button>
-        <button onClick={() => deleteHandler(destination._id)}>Ištrinti</button>
-        </li>
-    ))}
-    </ul>
+      <ul>
+        {destinations.map((destination) => (
+          <li key={destination._id}>
+            <Link to={`/destinations/${destination._id}`}>{destination.name}</Link> - {destination.location} - {destination.price}€
+            <button onClick={() => startEdit(destination)}>Redaguoti</button>
+            <button onClick={() => deleteHandler(destination._id)}>Ištrinti</button>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
