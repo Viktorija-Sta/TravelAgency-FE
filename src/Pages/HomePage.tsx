@@ -104,7 +104,7 @@ const HomePage: React.FC = () => {
     <div className="home-page">
       <section>
         <Typography variant="h4" component="h2">Top 3 Kelionės</Typography>
-        <Grid container spacing={{ xs: 1, md: 3,  }} columns={{ xs: 1, sm: 8, md: 12 }} justifyContent="center">
+        <Grid container spacing={{ xs: 1, md: 3,  }} columns={{ xs: 1, sm: 8, md: 12 }} >
           {destinations.map((destination) => (
             <Grid  key={destination._id} rowSpacing={1} size={{ xs: 2, sm: 4, md: 4 }}>
               <DestinationCard

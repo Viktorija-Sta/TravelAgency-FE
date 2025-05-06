@@ -93,7 +93,7 @@ const NavBar: React.FC = () => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ display: { sm: "none" } }}
+            sx={{ display: { md: "none" } }}
           >
             <MenuIcon style={{ color: "white" }} />
           </IconButton>
