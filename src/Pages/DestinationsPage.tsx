@@ -6,7 +6,7 @@ import DestinationCard from "../components/Card/DestinationCard"
 import api from "../utils/axios"
 import SearchElement from "../components/SearchElement/SearchElement"
 import { Container, Grid, Typography } from "@mui/material"
-// import "./DestinationsPage.scss"
+import "./DestinationsPage.scss"
 
 const DestinationsPage: React.FC = () => {
   const { addToCart } = useCart()
@@ -97,7 +97,7 @@ const DestinationsPage: React.FC = () => {
               : 0
 
           return (
-            <Grid  key={destination._id} size={{ xs: 9, sm: 6, md: 4, lg: 3}}
+            <Grid  key={destination._id} size={{ xs: 12, sm: 6, md: 4, lg: 4}}
             >
               <DestinationCard
                 destination={destination}

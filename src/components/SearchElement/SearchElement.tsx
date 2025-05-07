@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import Select from "react-select"
-import './SearchElement.scss'
+import { TextField, Box, Autocomplete } from "@mui/material"
+import "./SearchElement.scss"
 
 interface OptionType {
   label: string
@@ -19,36 +19,32 @@ const SearchElement: React.FC<SearchElementProps> = ({ onFilterChange, options, 
 
   useEffect(() => {
     const selectedValues = selectedOptions.map((opt) => opt.value)
-
     onFilterChange(selectedValues, searchTerm)
   }, [selectedOptions, searchTerm])
 
   return (
-    <div className="search-element">
-      <input
-        type="text"
+    <Box className="search-element" sx={{ display: "flex", flexDirection: "column", gap: 2, width: "50%" }}>
+      <TextField
+        variant="outlined"
         placeholder={placeholder}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        style={{
-          marginBottom: "10px",
-          padding: "6px",
-          width: "80%",
-          boxSizing: "border-box"
-        }}
+        fullWidth
+        sx={{ mb: 1 }}
       />
 
-      <Select
-        className="search-element-select"
-        classNamePrefix="react-select"
+      <Autocomplete
+        multiple
         options={options}
+        getOptionLabel={(option) => option.label}
         value={selectedOptions}
-        onChange={(selected) => setSelectedOptions(selected as OptionType[])}
-        isMulti
-        placeholder="Pasirinkite kryptis..."
-        noOptionsMessage={() => "Duomenų nerasta"}
+        onChange={(event, newValue) => setSelectedOptions(newValue)}
+        renderInput={(params) => (
+          <TextField {...params} variant="outlined" placeholder="Pasirinkite kryptis..." />
+        )}
+        sx={{ width: "100%" }}
       />
-    </div>
+    </Box>
   )
 }
 

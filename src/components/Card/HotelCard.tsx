@@ -2,6 +2,7 @@ import { Hotels } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
 import { Link } from "react-router-dom"
 import "./HotelCard.scss"
+import { Rating } from "@mui/material"
 
 interface HotelCardProps {
   hotel: Hotels
@@ -25,18 +26,23 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, averageRating, reviewCount
    
   }
 
-  const renderStars = (rating: number) => {
-    const fullStars = Math.round(rating)
-    return "★".repeat(fullStars) + "☆".repeat(5 - fullStars)
-  }
-
   return (
     <div className="hotel-card">
       <img src={hotel.image} alt={hotel.name}  />
       <h3>{hotel.name}</h3>
       <p>Vieta: {hotel.location}</p>
       <p>Kaina už naktį: {hotel.pricePerNight.toFixed(2)} €</p>
-      <p>{renderStars(averageRating)} ({reviewCount} atsiliepimai)</p>
+
+      <div className="hotel-rating">
+        <Rating
+          name="hotel-rating"
+          value={averageRating || 0}
+          readOnly
+          precision={0.5}
+          size="small"
+        />
+        <span>({reviewCount || 0} atsiliepimai)</span>
+      </div>
 
       <button onClick={handleAddToCart}>Į krepšelį</button>
       <Link to={`/hotels/${hotel._id}`}>Peržiūrėti</Link>

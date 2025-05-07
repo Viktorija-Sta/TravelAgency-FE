@@ -4,6 +4,8 @@ import { Destinations, Hotels, Reviews } from "../types/types"
 import api from "../utils/axios"
 import HotelCard from "../components/Card/HotelCard"
 import SearchElement from "../components/SearchElement/SearchElement"
+import { Container, Grid, Typography } from "@mui/material"
+import "./HotelsPage.scss"
 
 const HotelsPage: React.FC = () => {
   const { addToCart } = useCart()
@@ -81,39 +83,48 @@ const HotelsPage: React.FC = () => {
   if (error) return <div>{error}</div>
 
   return (
-    <div>
-      <h1>Viešbučių sąrašas</h1>
+    <Container className="hotels-page" maxWidth="lg" sx={{ paddingX: { xs: 2, sm: 3, md: 4 }, paddingY: 4 }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Viešbučių sąrašas
+      </Typography>
 
-      <SearchElement
-        options={destinations.map((d) => ({
-          label: d.name,
-          value: d._id,
-        }))}
-        onFilterChange={filterChangeHandler}
-        placeholder="Ieškoti viešbučio..."
-      />
+      
+      <Grid size={{ xs: 9, sm: 6, md: 4, lg: 4 }}>
+        <SearchElement
+          options={destinations.map((d) => ({
+            label: d.name,
+            value: d._id,
+          }))}
+          onFilterChange={filterChangeHandler}
+          placeholder="Ieškoti viešbučio..."
+        />
+      </Grid>
+    
 
-      <div>
+
+      <Grid container spacing={2}>
         {filteredHotels.map((hotel) => (
-          <HotelCard
-            key={hotel._id}
-            hotel={hotel}
-            reviewCount={hotel.reviewsCount || 0}
-            averageRating={hotel.rating || 0}
-            onAddToCart={() =>
-              addToCart({
-                _id: hotel._id,
-                name: hotel.name,
-                price: hotel.pricePerNight,
-                image: hotel.image,
-                quantity: 1,
-                modelType: "Hotel",
-              })
-            }
-          />
+          <Grid  key={hotel._id} size={{ xs: 9, sm: 6, md: 4, lg: 4}}>
+            <HotelCard
+              hotel={hotel}
+              reviewCount={hotel.reviewsCount || 0}
+              averageRating={hotel.rating || 0}
+              onAddToCart={() =>
+                addToCart({
+                  _id: hotel._id,
+                  name: hotel.name,
+                  price: hotel.pricePerNight,
+                  image: hotel.image,
+                  quantity: 1,
+                  modelType: "Hotel",
+                })
+              }
+            />
+          </Grid>
         ))}
-      </div>
-    </div>
+      </Grid>
+        </Container>
+    
   )
 }
 

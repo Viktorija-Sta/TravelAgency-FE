@@ -1,7 +1,15 @@
 import { useState } from "react"
 import api from "../../utils/axios"
 import { Reviews } from "../../types/types"
-import './ReviewForm.scss'
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+  Alert,
+  Rating
+} from "@mui/material"
 
 interface ReviewFormProps {
   destinationId?: string
@@ -27,8 +35,6 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ destinationId, hotelId, agencyI
     try {
       setLoading(true)
       setError(null)
-
-      console.log({ destinationId, hotelId, agencyId })
 
       const response = await api.post("/reviews", {
         rating,
@@ -57,39 +63,62 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ destinationId, hotelId, agencyI
   }
 
   return (
-    <form onSubmit={submitHandler} className="review-form">
-      <h3>Parašykite atsiliepimą</h3>
+    <Box
+      component="form"
+      onSubmit={submitHandler}
+      sx={{ 
+        display: "flex", 
+        flexDirection: "column", 
+        gap: 2,  
+        margin: "auto", 
+        padding: 3, 
+        border: "1px solid #ddd", 
+        borderRadius: 2 
+      }}
+    >
+      <Typography variant="h6" gutterBottom>Parašykite atsiliepimą</Typography>
 
-      <label>
-        Įvertinimas:
-        <div className="star-rating">
-          {[1, 2, 3, 4, 5].map((r) => (
-            <span
-              key={r}
-              className={r <= rating ? "filled" : ""}
-              onClick={() => setRating(r)}
-            >
-              ★
-            </span>
-          ))}
-        </div>
-      </label>
+      {error && (
+        <Alert severity="error" sx={{ marginBottom: 2 }}>
+          {error}
+        </Alert>
+      )}
 
-      <label>
-        Komentaras:
-        <textarea
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          placeholder="Pasidalinkite įspūdžiais..."
-          rows={3}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Typography variant="body1">Įvertinimas:</Typography>
+        <Rating
+          name="review-rating"
+          value={rating}
+          onChange={(event, newValue) => setRating(newValue || 5)}
         />
-      </label>
+      </Box>
 
-      {error && <p className="error">{error}</p>}
-      <button type="submit" disabled={loading}>
-        {loading ? "Siunčiama..." : "Pateikti"}
-      </button>
-    </form>
+      <TextField
+        label="Komentaras"
+        multiline
+        rows={4}
+        variant="outlined"
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+        placeholder="Pasidalinkite įspūdžiais..."
+        fullWidth
+      />
+
+      <Button 
+        type="submit" 
+        variant="contained" 
+        color="primary" 
+        disabled={loading}
+        fullWidth
+        sx={{ marginTop: 2 }}
+      >
+        {loading ? (
+          <CircularProgress size={24} color="inherit" />
+        ) : (
+          "Pateikti"
+        )}
+      </Button>
+    </Box>
   )
 }
 

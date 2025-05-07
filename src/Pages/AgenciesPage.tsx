@@ -3,6 +3,7 @@ import { Agencies, Reviews } from "../types/types"
 import api from "../utils/axios"
 import AgencyCard from "../components/Card/AgencyCard"
 import { Container, Grid, Typography } from "@mui/material"
+import "./AgenciesPage.scss"
 
 const AgenciesPage: React.FC = () => {
   const [agencies, setAgencies] = useState<Agencies[]>([])
@@ -56,7 +57,7 @@ const AgenciesPage: React.FC = () => {
               : 0
 
           return (
-            <Grid  key={agency._id} size={{ xs: 9, sm: 6, md: 4, lg: 3}}>
+            <Grid  key={agency._id} size={{ xs: 9, sm: 6, md: 4, lg: 4}}>
               <AgencyCard
                 agency={agency}
                 averageRating={averageRating}
