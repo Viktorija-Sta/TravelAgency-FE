@@ -16,8 +16,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ destinationId, hotelId, agencyI
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const submitHandler = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const submitHandler = async (_e: React.FormEvent) => {
+    _e.preventDefault()
 
     if (!rating || rating < 1 || rating > 5) {
       setError("Įvertinimas turi būti nuo 1 iki 5")
