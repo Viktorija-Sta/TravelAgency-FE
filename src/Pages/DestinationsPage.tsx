@@ -5,7 +5,7 @@ import { useCart } from "../hooks/useCart"
 import DestinationCard from "../components/Card/DestinationCard"
 import api from "../utils/axios"
 import SearchElement from "../components/SearchElement/SearchElement"
-import { Container, Grid, Typography } from "@mui/material"
+import { CircularProgress, Container, Grid, Typography } from "@mui/material"
 import "./DestinationsPage.scss"
 
 const DestinationsPage: React.FC = () => {
@@ -64,8 +64,13 @@ const DestinationsPage: React.FC = () => {
     setFiltered(filteredResults)
   }
 
-  if (loading) return <div>Kraunama...</div>
-  if (error) return <div>{error}</div>
+  if (loading) return (
+      <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+        <CircularProgress />
+        <Typography variant="h6" sx={{ marginTop: 2 }}>Kraunama...</Typography>
+      </Container>
+    )
+    if (error) return <Typography color="error">{error}</Typography>
 
   return (
     <Container className="destinations-page" maxWidth="lg" sx={{ paddingX: { xs: 2, sm: 3, md: 4 }, paddingY: 4 }}>
@@ -97,7 +102,7 @@ const DestinationsPage: React.FC = () => {
               : 0
 
           return (
-            <Grid  key={destination._id} size={{ xs: 12, sm: 6, md: 4, lg: 4}}
+            <Grid  key={destination._id} size={{ xs: 11, sm: 6, md: 4, lg: 4}}
             >
               <DestinationCard
                 destination={destination}

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react"
 import axiosInstance from "../utils/axios"
 import { jwtDecode } from "jwt-decode"
 import { User } from "../types/types"
+import { toast } from "sonner"
 
   
   interface DecodedToken {
@@ -108,7 +109,7 @@ import { User } from "../types/types"
       setIsAuthenticated(false)
       
       console.log("👋 Vartotojas atsijungė")
-      alert(" Atsijungėte")
+      toast.info(" Atsijungėte")
     }
   
     return (

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Agencies, Reviews } from "../types/types"
 import api from "../utils/axios"
 import AgencyCard from "../components/Card/AgencyCard"
-import { Container, Grid, Typography } from "@mui/material"
+import { CircularProgress, Container, Grid, Typography } from "@mui/material"
 import "./AgenciesPage.scss"
 
 const AgenciesPage: React.FC = () => {
@@ -31,8 +31,13 @@ const AgenciesPage: React.FC = () => {
     fetchData()
   }, [])
 
-  if (loading) return <div>Kraunama...</div>
-  if (error) return <div className="text-red-500">{error}</div>
+  if (loading) return (
+    <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+      <CircularProgress />
+      <Typography variant="h6" sx={{ marginTop: 2 }}>Kraunama...</Typography>
+    </Container>
+  )
+  if (error) return <Typography color="error">{error}</Typography>
 
   return (
     <Container className="agencies-page" maxWidth="lg" sx={{ paddingX: { xs: 2, sm: 3, md: 4 }, paddingY: 4 }}>
@@ -40,7 +45,7 @@ const AgenciesPage: React.FC = () => {
         Kelionių Agentūrų Sąrašas
       </Typography>
 
-      <Grid container spacing={3} className="destination-list" marginTop={2}>
+      <Grid container spacing={1} className="destination-list" marginTop={2}>
         {agencies.map((agency) => {
           const relatedReviews = reviews.filter((review) => {
             const reviewAgencyId =
@@ -57,7 +62,7 @@ const AgenciesPage: React.FC = () => {
               : 0
 
           return (
-            <Grid  key={agency._id} size={{ xs: 9, sm: 6, md: 4, lg: 4}}>
+            <Grid  key={agency._id} size={{ xs: 11, sm: 6, md: 4, lg: 4}}>
               <AgencyCard
                 agency={agency}
                 averageRating={averageRating}

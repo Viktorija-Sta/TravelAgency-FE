@@ -1,32 +1,72 @@
 import { Link, useNavigate } from "react-router"
+import { 
+    Container, Typography, Button, Grid, Box, Paper 
+} from "@mui/material"
 
 const AdminPanel: React.FC = () => {
     const navigate = useNavigate()
 
     return (
-        <div className="admin-panel">
-            <h1>Administravimo puslapis</h1>
+        <Container maxWidth="sm" sx={{ m: 10, textAlign: 'center' }}>
+            <Typography variant="h4" gutterBottom>Administravimo puslapis</Typography>
 
-            <div className="admin-buttons">
-                <div className="admin-button-wrapper">
-                    <Link to='/admin/products' className="admin-button">
-                        Valdyti duomenis
-                    </Link>
-                </div>
-                
-                <div className="admin-button-wrapper">
-                    <Link to='/admin/orders' className="admin-button">
-                        Valdyti užsakymus
-                    </Link>
-                </div>
-                <div className="admin-button-wrapper">
-                    <Link to='/admin/metrics' className="admin-button">
-                        Užsakymų statistika
-                    </Link>
-                </div>
-            </div>
-            <button className="button" onClick={() => navigate('/')}>GrĮžti į pagrindinį puslapį</button>
-        </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', m: 10 }}>
+                <Grid container spacing={2} justifyContent="center">
+                    <Grid size={{xs: 12}}>
+                        <Paper elevation={3} >
+                            <Button 
+                                component={Link} 
+                                to="/admin/products" 
+                                variant="contained" 
+                                fullWidth
+                                sx={{ height: 60 }}
+                            >
+                                Valdyti duomenis
+                            </Button>
+                        </Paper>
+                    </Grid>
+                    <Grid size={{xs: 12}}>
+                        <Paper elevation={3} >
+                            <Button 
+                                component={Link} 
+                                to="/admin/orders" 
+                                variant="contained" 
+                                color="primary" 
+                                fullWidth
+                                sx={{ height: 60 }}
+                            >
+                                Valdyti užsakymus
+                            </Button>
+                        </Paper>
+                    </Grid>
+                    <Grid  size={{xs: 12}}>
+                        <Paper elevation={3} >
+                            <Button 
+                                component={Link} 
+                                to="/admin/metrics" 
+                                variant="contained" 
+                                color="secondary" 
+                                fullWidth
+                                sx={{ height: 60 }}
+                            >
+                                Užsakymų statistika
+                            </Button>
+                        </Paper>
+                    </Grid>
+                </Grid>
+            </Box>
+
+            <Box sx={{ mt: 4 }}>
+                <Button 
+                    variant="outlined" 
+                    onClick={() => navigate('/')}
+                    color="inherit"
+                    sx={{ mt: 2 }}
+                >
+                    Grįžti į pagrindinį puslapį
+                </Button>
+            </Box>
+        </Container>
     )
 }
 

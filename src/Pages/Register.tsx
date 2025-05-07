@@ -103,7 +103,6 @@ function Register() {
           padding: 3,
           borderRadius: 2,
           boxShadow: 3,
-          backgroundColor: '#f9f9f9',
           marginBottom: '30px',
         }}
       >

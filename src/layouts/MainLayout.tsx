@@ -8,7 +8,7 @@ function MainLayout() {
     <div className="layout-container">
       <header>
         <nav>
-          <h1>Kelionių svetainė</h1>
+          
           <NavBar />
         </nav>
       </header>
