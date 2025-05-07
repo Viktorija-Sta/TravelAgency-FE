@@ -126,6 +126,8 @@ const AdminHotels = () => {
             onChange={(e) => setNewHotel({ ...newHotel, gallery: e.target.value.split(",").map((url) => url.trim()) })} 
             size="small" 
             fullWidth 
+            multiline 
+          rows={4} 
             sx={{ mt: 2 }}
           />
           <TextField 
