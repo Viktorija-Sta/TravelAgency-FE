@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useAuth } from "../hooks/useAuth"
 import { Order } from "../types/types"
 import api from "../utils/axios"
+import { Alert, Card, CardContent, CircularProgress, Container, List, Typography } from "@mui/material"
 
 const MyOrdersPage: React.FC = () => {
     const { token, userId } = useAuth()
@@ -29,29 +30,45 @@ const MyOrdersPage: React.FC = () => {
         fetchOrders()
     }, [token, userId])
 
-    if (loading) return <div>Kraunama...</div>
-    if (error) return <div>{error}</div>
+    if (loading) return (
+        <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+            <CircularProgress />
+            <Typography variant="h6" sx={{ marginTop: 2 }}>Kraunama...</Typography>
+        </Container>
+    )
+
+    if (error) return (
+        <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+            <Alert severity="error">{error}</Alert>
+        </Container>
+    )
 
     return (
-        <div>
-            <h1>Mano užsakymai</h1>
+        <Container maxWidth="md" sx={{ marginTop: 4 }}>
+            <Typography variant="h4" gutterBottom>Mano užsakymai</Typography>
             {orders.length === 0 ? (
-                <p>Jūs neturite jokių užsakymų.</p>
+                <Typography variant="body1" color="text.secondary">Jūs neturite jokių užsakymų.</Typography>
             ) : (
-                <ul>
+                <List>
                     {orders.map((order) => (
-                        
-                            <li key={order._id}>
-                                <h2>Užsakymo ID: {order._id}</h2>
-                                <p>Data: {new Date(order.orderDate).toLocaleDateString()}</p>
-                                <p>Bendra suma: {order.totalAmount} EUR</p>
-                                <p>Statusas: {order.status}</p>
-                            </li>
-                        
+                        <Card key={order._id} sx={{ marginBottom: 2 }}>
+                            <CardContent>
+                                <Typography variant="h6">Užsakymo ID: {order._id}</Typography>
+                                <Typography variant="body1">
+                                    Data: {new Date(order.orderDate).toLocaleDateString()}
+                                </Typography>
+                                <Typography variant="body1">
+                                    Bendra suma: {order.totalAmount} EUR
+                                </Typography>
+                                <Typography variant="body1">
+                                    Statusas: {order.status}
+                                </Typography>
+                            </CardContent>
+                        </Card>
                     ))}
-                </ul>
+                </List>
             )}
-        </div>
+        </Container>
     )
 }
 

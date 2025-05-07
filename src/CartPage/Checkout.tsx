@@ -2,6 +2,10 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import api from "../utils/axios"
 import { useCart } from "../context/CartContext"
+import { toast } from "sonner"
+import { 
+  Container, TextField, Button, Typography, Box, Card, CardContent, Grid, CircularProgress, Alert 
+} from "@mui/material"
 
 const Checkout: React.FC = () => {
   const { items, getTotal, clearCart } = useCart()
@@ -20,12 +24,12 @@ const Checkout: React.FC = () => {
     const { street, city, postalCode, country } = address
 
     if (!street || !city || !postalCode || !country) {
-      alert("Užpildykite visus pristatymo adreso laukus")
+      toast.error("Užpildykite visus pristatymo adreso laukus")
       return
     }
 
     if (items.length === 0) {
-      alert("Krepšelis tuščias")
+      toast.error("Krepšelis tuščias")
       return
     }
 
@@ -47,6 +51,7 @@ const Checkout: React.FC = () => {
       await api.post("/orders", orderData)
       clearCart()
       navigate("/order-success")
+      toast.success("Užsakymas sėkmingai pateiktas!")
     } catch (err) {
       console.error("Užsakymo klaida:", err)
       setError("Nepavyko pateikti užsakymo. Bandykite dar kartą.")
@@ -56,38 +61,92 @@ const Checkout: React.FC = () => {
   }
 
   return (
-    <div className="checkout-container">
-      <h1>Užsakymo apžvalga</h1>
+    <Container maxWidth="md" sx={{ marginTop: 4 }}>
+      <Typography variant="h4" gutterBottom>Užsakymo apžvalga</Typography>
 
-      <div className="checkout-items">
+      {error && (
+        <Alert severity="error" sx={{ marginBottom: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      <Grid container spacing={2}>
         {items.map((item) => (
-          <div key={item._id} className="checkout-item">
-            <img style={{ width: "300px" }} src={item.image} alt={item.name} />
-            <div className="checkout-item-details">
-              <h2>{item.name}</h2>
-              <p>Kaina: {item.price.toFixed(2)} €</p>
-              <p>Kiekis: {item.quantity}</p>
-            </div>
-          </div>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item._id}>
+            <Card sx={{ height: "100%" }}>
+              <CardContent sx={{ textAlign: "center" }}>
+                <img 
+                  src={item.image || "/fallback.jpg"} 
+                  alt={item.name} 
+                  style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "8px" }} 
+                />
+                <Typography variant="h6" gutterBottom>{item.name}</Typography>
+                <Typography variant="body1">Kaina: {item.price.toFixed(2)} €</Typography>
+                <Typography variant="body2">Kiekis: {item.quantity}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-      </div>
+      </Grid>
 
-      <h2>Bendra suma: {getTotal().toFixed(2)} €</h2>
+      <Typography variant="h5" sx={{ marginTop: 3, marginBottom: 2 }}>
+        Bendra suma: {getTotal().toFixed(2)} €
+      </Typography>
 
-      <div className="address-input">
-        <label>Pristatymo adresas:</label>
-        <input type="text" placeholder="Šalis" value={address.country} onChange={(e) => setAddress({ ...address, country: e.target.value })} />
-        <input type="text" placeholder="Miestas" value={address.city} onChange={(e) => setAddress({ ...address, city: e.target.value })} />
-        <input type="text" placeholder="Gatvė" value={address.street} onChange={(e) => setAddress({ ...address, street: e.target.value })} />
-        <input type="text" placeholder="Pašto kodas" value={address.postalCode} onChange={(e) => setAddress({ ...address, postalCode: e.target.value })} />
-      </div>
+      <Box 
+        component="form" 
+        sx={{ 
+          display: "flex", 
+          flexDirection: "column", 
+          gap: 2, 
+          marginTop: 2, 
+          padding: 2, 
+          border: "1px solid #ddd", 
+          borderRadius: 2 
+        }}
+      >
+        <Typography variant="h6">Pristatymo adresas</Typography>
 
-      {error && <p className="error">{error}</p>}
+        <TextField
+          label="Šalis"
+          value={address.country}
+          onChange={(e) => setAddress({ ...address, country: e.target.value })}
+          fullWidth
+          required
+        />
+        <TextField
+          label="Miestas"
+          value={address.city}
+          onChange={(e) => setAddress({ ...address, city: e.target.value })}
+          fullWidth
+          required
+        />
+        <TextField
+          label="Gatvė"
+          value={address.street}
+          onChange={(e) => setAddress({ ...address, street: e.target.value })}
+          fullWidth
+          required
+        />
+        <TextField
+          label="Pašto kodas"
+          value={address.postalCode}
+          onChange={(e) => setAddress({ ...address, postalCode: e.target.value })}
+          fullWidth
+          required
+        />
 
-      <button onClick={orderSubmitHandler} disabled={loading}>
-        {loading ? "Vykdoma..." : "Patvirtinti užsakymą"}
-      </button>
-    </div>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={orderSubmitHandler} 
+          disabled={loading}
+          sx={{ marginTop: 2 }}
+        >
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Patvirtinti užsakymą"}
+        </Button>
+      </Box>
+    </Container>
   )
 }
 

@@ -3,93 +3,92 @@ import { useAuth } from "../../hooks/useAuth"
 import api from "../../utils/axios"
 import { UserProfile } from "../../types/types"
 import EditProfile from "./EditProfile"
-import './EditProfile.scss'
+import { Container, Typography, Button, Avatar, CircularProgress, Alert, Box } from "@mui/material"
 
-const ProfilePage = () => {
+const ProfilePage: React.FC = () => {
     const { user } = useAuth()
     const [profile, setProfile] = useState<UserProfile | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
-  
+
     useEffect(() => {
         if (!user) {
-          setError("Turite būti prisijungęs norėdami matyti profilį")
-          setLoading(false)
-          return
-        }
-      
-        const fetchProfile = async () => {
-          try {
-            const response = await api.get("/users/me")
-
-            setProfile(response.data)
-          } catch {
-            setError("Nepavyko gauti naudotojo informacijos")
-          } finally {
+            setError("Turite būti prisijungęs norėdami matyti profilį")
             setLoading(false)
-          }
+            return
         }
-      
+
+        const fetchProfile = async () => {
+            try {
+                const response = await api.get("/users/me")
+                setProfile(response.data)
+            } catch {
+                setError("Nepavyko gauti naudotojo informacijos")
+            } finally {
+                setLoading(false)
+            }
+        }
+
         fetchProfile()
-      }, [user, loading])
+    }, [user])
 
-      const profileUpdateHandler = (updated: UserProfile) => {
+    const profileUpdateHandler = (updated: UserProfile) => {
         setProfile(updated)
-      }
-  
-    if (loading) return <div>Kraunama...</div>
-    if (error) return <div>{error}</div>
-  
-    return (
-      <>
-          
-          <div className="profile-page">
-          <h2>Naudotojo profilis</h2>
-          {profile && (
-              <div className="profile-card">
-              <img
-                  src={profile.profilePicture}
-                  alt="Profilio nuotrauka"
-                  className="profile-image"
-              />
-              <p><strong>Vardas:</strong> {profile.username}</p>
-              <p><strong>El. paštas:</strong> {profile.email}</p>
-              <p><strong>Telefono numeris:</strong> {profile.phoneNumber}</p>
+    }
 
-              {profile.role === "admin" && (
-                <p><strong>Rolė:</strong> {profile.role}</p>
-              )}
-
-              {profile.address && (
-                <div className="address-section">
-                  <p><strong>Adresas:</strong></p>
-                  <p>
-                    {profile.address.country && `${profile.address.country}, `}
-                    {profile.address.city && `${profile.address.city}, `}
-                    {profile.address.street && `${profile.address.street}, `}
-                    {profile.address.postalCode && `LT-${profile.address.postalCode}`}
-                  </p>
-                </div>
-              )}
-
-              </div>
-          )}
-          
-          <button onClick={() => setIsModalOpen(true)}>Redaguoti profilį</button>
-          {profile && (
-            <EditProfile
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              userData={profile}
-              onUpdate={profileUpdateHandler}
-            />
-          )}
-  
-          </div>
-      </>
+    if (loading) return (
+        <Box sx={{ textAlign: "center", marginTop: 4 }}>
+            <CircularProgress />
+            <Typography variant="h6" sx={{ marginTop: 2 }}>Kraunama...</Typography>
+        </Box>
     )
-  }
-  
-  export default ProfilePage
-  
+
+    if (error) return (
+        <Container maxWidth="sm" sx={{ textAlign: "center", marginTop: 4 }}>
+            <Alert severity="error">{error}</Alert>
+        </Container>
+    )
+
+    return (
+      <Container maxWidth="sm" sx={{ marginTop: 4, pb: 4 }}>
+      <Typography variant="h4" gutterBottom>Naudotojo profilis</Typography>
+      {loading ? (
+          <Box sx={{ textAlign: "center", mt: 4 }}>
+              <CircularProgress />
+              <Typography variant="h6" sx={{ mt: 2 }}>Kraunama...</Typography>
+          </Box>
+      ) : error ? (
+          <Alert severity="error">{error}</Alert>
+      ) : profile && (
+          <Box sx={{ textAlign: "center", mb: 3 }}>
+              <Avatar src={profile.profilePicture} alt="Profilio nuotrauka" sx={{ width: 100, height: 100, mx: "auto", mb: 2 }} />
+              <Typography variant="h6">{profile.username}</Typography>
+              <Typography>Email: {profile.email}</Typography>
+              <Typography>Telefono numeris: {profile.phoneNumber || "Nenurodytas"}</Typography>
+              {profile.role === "admin" && (
+                  <Typography>Rolė: {profile.role}</Typography>
+              )}
+              {profile.address && (
+                  <Typography>
+                      Adresas: {profile.address.street}, {profile.address.city}, {profile.address.country}, LT-{profile.address.postalCode}
+                  </Typography>
+              )}
+              <Button variant="contained" onClick={() => setIsModalOpen(true)} sx={{ mt: 2 }}>
+                  Redaguoti profilį
+              </Button>
+              {profile && (
+                  <EditProfile
+                      isOpen={isModalOpen}
+                      onClose={() => setIsModalOpen(false)}
+                      userData={profile}
+                      onUpdate={profileUpdateHandler}
+                  />
+              )}
+          </Box>
+      )}
+  </Container>
+)
+}
+
+export default ProfilePage

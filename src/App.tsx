@@ -31,62 +31,66 @@ import AdminPanel from './components/Admin/AdminPanel'
 import AdminOrders from './components/Admin/AdminOrders'
 import AdminProducts from './components/Admin/AdminProducts'
 import AdminMetrics from './components/Admin/AdminMetrics'
+import { Toaster } from 'sonner'
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <BrowserRouter>
-          <Routes>
+    <>
+    <Toaster richColors position="top-right" />
+      <AuthProvider>
+        <CartProvider>
+          <BrowserRouter>
+            <Routes>
 
-            <Route element={<MainLayout />}>
+              <Route element={<MainLayout />}>
 
-              <Route path="/" element={<Navigate to="/home" replace />} />
-              <Route path="/home" element={<HomePage />} />
+                <Route path="/" element={<Navigate to="/home" replace />} />
+                <Route path="/home" element={<HomePage />} />
 
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
-              <Route path="/destinations" element={<DestinationsPage />} />
-              <Route path="/destinations/:id" element={<DestinationItem />} />
+                <Route path="/destinations" element={<DestinationsPage />} />
+                <Route path="/destinations/:id" element={<DestinationItem />} />
 
-              <Route path="/hotels" element={<HotelsPage />} />
-              <Route path="/hotels/:id" element={<HotelItem />} />
+                <Route path="/hotels" element={<HotelsPage />} />
+                <Route path="/hotels/:id" element={<HotelItem />} />
 
-              <Route path="/agencies" element={<AgenciesPage />} />
-              <Route path="/agencies/:id" element={<AgencyItem />} />
+                <Route path="/agencies" element={<AgenciesPage />} />
+                <Route path="/agencies/:id" element={<AgencyItem />} />
 
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/order-success" element={<OrderSuccessPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/order-success" element={<OrderSuccessPage />} />
 
-              <Route path="/reviews" element={<ReviewsPage />} />
+                <Route path="/reviews" element={<ReviewsPage />} />
 
-              <Route path="/profile" element={
-                  <ProtectedRoute>
-                    <ProfilePage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/my-orders" element={
-                  <ProtectedRoute>
-                    <MyOrdersPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route path="/profile" element={
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/my-orders" element={
+                    <ProtectedRoute>
+                      <MyOrdersPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route element={<AdminRoute />}>
-                <Route path="/admin" element={<AdminPanel />} />
-                <Route path="/admin/metrics" element={<AdminMetrics />} />
-                <Route path="/admin/orders" element={<AdminOrders />} />
-                <Route path="/admin/products" element={<AdminProducts />} />
+                <Route element={<AdminRoute />}>
+                  <Route path="/admin" element={<AdminPanel />} />
+                  <Route path="/admin/metrics" element={<AdminMetrics />} />
+                  <Route path="/admin/orders" element={<AdminOrders />} />
+                  <Route path="/admin/products" element={<AdminProducts />} />
+                </Route>
+
               </Route>
-
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </CartProvider>
-    </AuthProvider>
+            </Routes>
+          </BrowserRouter>
+        </CartProvider>
+      </AuthProvider>
+    </>
   )
 }
 

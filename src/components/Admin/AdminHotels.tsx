@@ -2,6 +2,9 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { Agencies, Hotels } from "../../types/types"
 import api from "../../utils/axios"
+import { 
+  Container, TextField, Button, Typography, Box, Grid, Card, CardContent, Select, MenuItem, InputLabel, FormControl 
+} from "@mui/material"
 
 const AdminHotels = () => {
   const [hotels, setHotels] = useState<Hotels[]>([])
@@ -12,7 +15,6 @@ const AdminHotels = () => {
   const fetchHotels = async () => {
     try {
       const res = await api.get("/hotels")
-
       setHotels(res.data)
     } catch (err) {
       console.error("Klaida gaunant viešbučius:", err)
@@ -22,7 +24,6 @@ const AdminHotels = () => {
   const fetchAgencies = async () => {
     try {
       const res = await api.get("/agencies")
-
       setAgencies(res.data)
     } catch (err) {
       console.error("Klaida gaunant agentūras:", err)
@@ -41,7 +42,6 @@ const AdminHotels = () => {
   const handleCreate = async () => {
     try {
       await api.post("/hotels", newHotel)
-
       setNewHotel({})
       fetchHotels()
     } catch (err) {
@@ -53,10 +53,8 @@ const AdminHotels = () => {
     if (!editingHotelId) return
     try {
       await api.put(`/hotels/${editingHotelId}`, newHotel)
-
       setNewHotel({})
       setEditingHotelId(null)
-
       fetchHotels()
     } catch (err) {
       console.error("Nepavyko atnaujinti:", err)
@@ -66,7 +64,6 @@ const AdminHotels = () => {
   const deleteHandler = async (id: string) => {
     try {
       await api.delete(`/hotels/${id}`)
-
       fetchHotels()
     } catch (err) {
       console.error("Nepavyko ištrinti:", err)
@@ -79,44 +76,75 @@ const AdminHotels = () => {
   }
 
   return (
-    <div>
-      <h2>Viešbučių valdymas</h2>
+    <Container maxWidth="md" sx={{ mt: 4,pb: 3}}>
+      <Typography variant="h4" gutterBottom>Viešbučių valdymas</Typography>
 
-      <label>Pavadinimas:
-        <input name="name" value={newHotel.name || ""} onChange={changeHandler} />
-      </label>
+      <Grid container spacing={2} sx={{ mb: 4 }}>
+        <Grid size={{ xs: 12, sm: 6}}>
+          <TextField 
+            label="Pavadinimas" 
+            name="name" 
+            value={newHotel.name || ""} 
+            onChange={changeHandler} 
+            size="small" 
+            fullWidth 
+          />
+          <TextField 
+            label="Vieta" 
+            name="location" 
+            value={newHotel.location || ""} 
+            onChange={changeHandler} 
+            size="small" 
+            fullWidth 
+            sx={{ mt: 2 }}
+          />
+          <TextField 
+            label="Kaina už naktį" 
+            name="pricePerNight" 
+            type="number" 
+            value={newHotel.pricePerNight || ""} 
+            onChange={changeHandler} 
+            size="small" 
+            fullWidth 
+            sx={{ mt: 2 }}
+          />
+        </Grid>
 
-      <label>Vieta:
-        <input name="location" value={newHotel.location || ""} onChange={changeHandler} />
-      </label>
+        <Grid size={{ xs: 12, sm: 6}}>
+          <TextField 
+            label="Nuotraukos URL" 
+            name="image" 
+            value={newHotel.image || ""} 
+            onChange={changeHandler} 
+            size="small" 
+            fullWidth 
+          />
+          <TextField 
+            label="Galerijos URL (atskirti kableliais)" 
+            name="gallery" 
+            value={Array.isArray(newHotel.gallery) ? newHotel.gallery.join(", ") : ""} 
+            onChange={(e) => setNewHotel({ ...newHotel, gallery: e.target.value.split(",").map((url) => url.trim()) })} 
+            size="small" 
+            fullWidth 
+            sx={{ mt: 2 }}
+          />
+          <TextField 
+            label="Aprašymas" 
+            name="description" 
+            value={newHotel.description || ""} 
+            onChange={changeHandler} 
+            size="small" 
+            fullWidth 
+            multiline 
+            rows={2}
+            sx={{ mt: 2 }}
+          />
+        </Grid>
+      </Grid>
 
-      <label>Kaina už naktį:
-        <input name="pricePerNight" type="number" value={newHotel.pricePerNight || ""} onChange={changeHandler} />
-      </label>
-
-      <label>Nuotraukos URL:
-        <input name="image" value={newHotel.image || ""} onChange={changeHandler} />
-      </label>
-
-      <label>Galerijos URL (atskirti kableliais):
-        <input
-          name="gallery"
-          value={Array.isArray(newHotel.gallery) ? newHotel.gallery.join(", ") : ""}
-          onChange={(e) =>
-            setNewHotel({
-              ...newHotel,
-              gallery: e.target.value.split(",").map((url) => url.trim()),
-            })
-          }
-        />
-      </label>
-
-      <label>Aprašymas:
-        <input name="description" value={newHotel.description || ""} onChange={changeHandler} />
-      </label>
-
-      <label>Agentūra:
-        <select
+      <FormControl size="small" fullWidth sx={{ mb: 2 }}>
+        <InputLabel>Agentūra</InputLabel>
+        <Select
           name="agency"
           value={typeof newHotel.agency === "string" ? newHotel.agency : (newHotel.agency as Agencies)?._id || ""}
           onChange={(e) => {
@@ -124,31 +152,44 @@ const AdminHotels = () => {
             setNewHotel({ ...newHotel, agency: selectedAgency || undefined })
           }}
         >
-          <option value="">Pasirinkite agentūrą</option>
+          <MenuItem value="">Pasirinkite agentūrą</MenuItem>
           {agencies.map(agency => (
-            <option key={agency._id} value={agency._id}>
+            <MenuItem key={agency._id} value={agency._id}>
               {agency.name}
-            </option>
+            </MenuItem>
           ))}
-        </select>
-      </label>
+        </Select>
+      </FormControl>
 
-      {editingHotelId ? (
-        <button onClick={updateHandler}>Atnaujinti</button>
-      ) : (
-        <button onClick={handleCreate}>Sukurti</button>
-      )}
+      <Button variant="contained" onClick={editingHotelId ? updateHandler : handleCreate} size="small">
+        {editingHotelId ? "Atnaujinti" : "Sukurti"}
+      </Button>
 
-      <ul>
+      <Grid container spacing={2} sx={{ mt: 3 }}>
         {hotels.map(hotel => (
-          <li key={hotel._id}>
-            <Link to={`/hotels/${hotel._id}`}>{hotel.name}</Link> - {hotel.location} - {hotel.pricePerNight} €
-            <button onClick={() => startEdit(hotel)}>Redaguoti</button>
-            <button onClick={() => deleteHandler(hotel._id)}>Ištrinti</button>
-          </li>
+          <Grid size={{ xs: 12, sm: 6}} key={hotel._id}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6">
+                  <Link to={`/hotels/${hotel._id}`} style={{ textDecoration: "none", color: "#1976d2" }}>
+                    {hotel.name}
+                  </Link>
+                </Typography>
+                <Typography variant="body1">{hotel.location} - {hotel.pricePerNight} €</Typography>
+                <Box sx={{ mt: 1 }}>
+                  <Button variant="outlined" color="primary" onClick={() => startEdit(hotel)} size="small" sx={{ mr: 1 }}>
+                    Redaguoti
+                  </Button>
+                  <Button variant="outlined" color="error" onClick={() => deleteHandler(hotel._id)} size="small">
+                    Ištrinti
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-      </ul>
-    </div>
+      </Grid>
+    </Container>
   )
 }
 

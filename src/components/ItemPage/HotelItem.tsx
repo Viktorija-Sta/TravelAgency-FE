@@ -2,13 +2,22 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import { useCart } from "../../hooks/useCart"
 import { useEffect, useState } from "react"
 import api from "../../utils/axios"
-import "./destinationItem.scss"
 import { Hotels, Reviews } from "../../types/types"
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
+import ReviewForm from "../Review/ReviewForm"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
-import ReviewForm from "../Review/ReviewForm"
+import { toast } from "sonner"
+import {
+  Box,
+  Typography,
+  Button,
+  Container,
+  Rating,
+  CircularProgress,
+} from "@mui/material"
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
+import "./HotelItem.scss"
 
 const HotelItem: React.FC = () => {
   const { id } = useParams()
@@ -25,7 +34,6 @@ const HotelItem: React.FC = () => {
     const fetchData = async () => {
       try {
         const res = await api.get(`/hotels/${id}`)
-        
         setHotel(res.data.hotel || res.data)
         setReviews(res.data.reviews || [])
       } catch {
@@ -35,9 +43,7 @@ const HotelItem: React.FC = () => {
       }
     }
 
-    if (id) {
-      fetchData()
-    }
+    if (id) fetchData()
   }, [id])
 
   const addToCartHandler = () => {
@@ -48,125 +54,139 @@ const HotelItem: React.FC = () => {
         price: hotel.pricePerNight,
         image: hotel.image,
         quantity: 1,
-        modelType: "Hotel" 
+        modelType: "Hotel",
       })
-      alert(`${hotel.name} buvo pridėta į krepšelį`)
+      toast.success(`${hotel.name} buvo pridėta į krepšelį`)
     }
   }
 
-  
-  const renderStars = (rating: number) => {
-    const fullStars = Math.round(rating)
-    return "★".repeat(fullStars) + "☆".repeat(5 - fullStars)
-  }
-
-  const averageRating = reviews.length
-    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-    : 0
+  const averageRating =
+    reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : 0
 
   const imageList =
-      hotel?.gallery?.length === 1
-        ? [hotel.gallery[0], hotel.gallery[0]]
-        : hotel?.gallery || []
-  
-    const Arrow = ({ direction, onClick }: { direction: "next" | "prev"; onClick?: () => void }) => (
-      <div className={`custom-arrow ${direction}`} onClick={onClick}>
-        {direction === "next" ? <FiChevronRight /> : <FiChevronLeft />}
-      </div>
-    )
-  
-    const settings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      adaptiveHeight: true,
-      nextArrow: <Arrow direction="next" />,
-      prevArrow: <Arrow direction="prev" />,
-    }
-  
+    hotel?.gallery?.length === 1
+      ? [hotel.gallery[0], hotel.gallery[0]]
+      : hotel?.gallery || []
 
-  if (loading) return <div className="text-center py-10">🔄 Kraunama...</div>
-  if (error) return <div className="text-center py-10 text-red-500">{error}</div>
-  if (!hotel) return <div className="text-center py-10">Viešbutis nerasta</div>
+  const Arrow = ({ direction, onClick }: { direction: "next" | "prev"; onClick?: () => void }) => (
+    <div className={`custom-arrow ${direction}`} onClick={onClick}>
+      {direction === "next" ? <FiChevronRight /> : <FiChevronLeft />}
+    </div>
+  )
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    adaptiveHeight: true,
+    nextArrow: <Arrow direction="next" />,
+    prevArrow: <Arrow direction="prev" />,
+  }
+
+  if (loading) return (
+    <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+      <CircularProgress />
+      <Typography variant="h6" sx={{ marginTop: 2 }}>Kraunama...</Typography>
+    </Container>
+  )
+  if (error) return <Typography color="error">{error}</Typography>
+
+  if (!hotel) return <div style={{ textAlign: "center" }}>Viešbutis nerasta</div>
 
   return (
-    <div className="detail-page">
-      <h1>{hotel.name}</h1>
-      <Link to={`/agencies/${hotel.agency?._id}`} className="agency-link">
-      <p>Agentūra: {hotel.agency?.name || "Nenurodyta"}</p></Link>
-      <p>
-        Įvertinimas: {renderStars(averageRating)} ({reviews.length}){" "}
-        <button onClick={() => setShowReviews((prev) => !prev)} className="ml-2 text-blue-600 underline">
+    <Container className="detail-page" maxWidth="md" sx={{ py: 4 }}>
+      <Typography variant="h4" gutterBottom>{hotel.name}</Typography>
+
+      <Link to={`/agencies/${hotel.agency?._id}`}>
+        <Typography variant="subtitle1">Agentūra: {hotel.agency?.name || "Nenurodyta"}
+        </Typography>
+      </Link>
+
+      <Box display="flex" alignItems="center" gap={2} flexDirection={{ xs: "column", sm: "row" }}>
+        <Rating value={averageRating} precision={0.5} readOnly />
+        <Typography sx={{ ml: 1 }}>({reviews.length})</Typography>
+
+        <Button onClick={() => setShowReviews((prev) => !prev)} sx={{ mt: { xs: 1, sm: 0 } }} variant="outlined"   size="small">
           {showReviews ? "Slėpti atsiliepimus" : "Rodyti atsiliepimus"}
-        </button>
-      </p>
+        </Button>
+      </Box>
 
       {showReviews && (
-        <div className="bg-gray-100 p-4 mt-2 rounded">
+        <Box sx={{ mt: 3 }}>
           {reviews.length === 0 ? (
-            <p>Nėra atsiliepimų apie šį viešbutį.</p>
+            <Typography>Nėra atsiliepimų apie šį viešbutį.</Typography>
+
           ) : (
             reviews.map((review) => (
-              <div key={review._id} className="mb-2 border-b pb-2">
-                <p className="font-semibold">{review.user?.username || "Anonimas"}</p>
-                <p>{renderStars(review.rating)}</p>
-                <p>{review.comment}</p>
-              </div>
+              <Box key={review._id} sx={{ borderBottom: "1px solid #ccc", mb: 2, pb: 2 }}>
+
+                <Typography variant="subtitle2">
+                  {review.user?.username || "Anonimas"}
+                </Typography>
+                <Rating value={review.rating} readOnly />
+                <Typography>{review.comment}</Typography>
+
+              </Box>
             ))
           )}
           <ReviewForm
             hotelId={hotel._id}
-            onReviewSubmitted={(newReview) => {
-            setReviews((prev) => [...prev, newReview])
-          }}
-        />
-      </div>
-            )}
-
-      <p>Kategorija: {hotel.category?.name || "Nenurodyta"}</p>
-      <p>{hotel.description}</p>
-
-      {hotel.amenities && hotel.amenities.length > 0 && (
-        <div className="amenities-list">
-          <h3>Patogumai:</h3>
-          <ul>
-            {hotel.amenities.map((amenity, index) => (
-              <li key={index} className="amenity-item">{amenity}</li>
-            ))}
-          </ul>
-        </div>
+            onReviewSubmitted={(newReview) => setReviews((prev) => [...prev, newReview])}
+          />
+        </Box>
       )}
 
-      <p>Kaina: {typeof hotel.pricePerNight === "number" ? hotel.pricePerNight.toFixed(2) : "Nenurodyta"} €</p>
+      <Typography sx={{ mt: 2 }}>Kategorija: {hotel.category?.name || "Nenurodyta"}</Typography>
 
-      <div className="carousel-wrapper">
+      <Typography sx={{ my: 2 }}>{hotel.description}</Typography>
+
+      {hotel.amenities?.length > 0 && (
+        <Box sx={{ my: 2 }}>
+          <Typography variant="h6">Patogumai:</Typography>
+          <ul>
+            {hotel.amenities.map((a, i) => (
+              <li key={i}>{a}</li>
+            ))}
+          </ul>
+        </Box>
+      )}
+
+      <Typography variant="h6" sx={{ mt: 2 }}>
+        Kaina: {hotel.pricePerNight.toFixed(2)} €
+      </Typography>
+
+      <Box mt={3}>
         <Slider {...settings}>
           {imageList.map((img, i) => (
-            <div key={i} className="carousel-item">
+            <Box key={i}>
               <img
                 src={img}
                 alt={`${hotel.name} ${i + 1}`}
                 className="carousel-image"
-                onError={(e) => {
-                  e.currentTarget.src = "/fallback.jpg"
-                }}
+                onError={(e) => { e.currentTarget.src = "/fallback.jpg" }}
+                style={{ width: "100%", height: "500px", objectFit: "cover", borderRadius: "8px" }}
               />
-            </div>
+            </Box>
           ))}
         </Slider>
-      </div>
+      </Box>
 
-      <button className="add-to-cart" onClick={addToCartHandler}>
+      <Button onClick={addToCartHandler} variant="contained" color="primary" sx={{ mt: 4 }}>
         Įdėti į krepšelį
-      </button>
+      </Button>
 
-      <div className="back-button">
-        <button onClick={() => navigate(-1)} className="button">Grįžti atgal</button>
-        <button className="button" onClick={() => navigate("/")}>Grįžti į pagrindinį meniu</button>
-      </div>
-    </div>
+      <Box mt={2} display="flex" flexWrap="wrap" justifyContent="flex-end">
+          <Button variant="contained" color="secondary" sx={{ m: 2 }} onClick={() => navigate(-1)}>Grįžti atgal</Button>
+        
+        
+          <Button variant="outlined" color="inherit" sx={{ m: 2 }} onClick={() => navigate("/")}>Grįžti į pagrindinį puslapį</Button>
+        
+      </Box>
+    </Container>
   )
 }
 

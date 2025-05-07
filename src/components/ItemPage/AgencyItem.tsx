@@ -5,6 +5,16 @@ import { Agencies, Destinations, Hotels, Reviews } from "../../types/types"
 import DestinationCard from "../Card/DestinationCard"
 import HotelCard from "../Card/HotelCard"
 import ReviewForm from "../Review/ReviewForm"
+import {
+  Container,
+  Typography,
+  Grid,
+  Button,
+  Box,
+  Divider,
+  Rating,
+  CircularProgress,
+} from "@mui/material"
 
 const AgencyItem: React.FC = () => {
   const { id } = useParams()
@@ -30,7 +40,6 @@ const AgencyItem: React.FC = () => {
         setReviews(reviews)
       } catch (err) {
         console.error("Klaida gaunant agentūros duomenis:", err)
-        
         setError("Nepavyko gauti agentūros informacijos")
       } finally {
         setLoading(false)
@@ -40,103 +49,103 @@ const AgencyItem: React.FC = () => {
     if (id) fetchAgencyData()
   }, [id])
 
-  const renderStars = (rating: number) => {
-    const fullStars = Math.round(rating)
-    return "★".repeat(fullStars) + "☆".repeat(5 - fullStars)
-  }
-
   const averageRating =
     reviews.length > 0
       ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
       : 0
 
-  if (loading) return <div>Kraunama...</div>
-  if (error) return <div>{error}</div>
-  if (!agency) return <div>Agentūra nerasta</div>
+  if (loading) return (
+    <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+      <CircularProgress />
+      <Typography variant="h6" sx={{ marginTop: 2 }}>Kraunama...</Typography>
+    </Container>
+  )
+  if (error) return <Typography color="error">{error}</Typography>
+  if (!agency) return <Typography>Agentūra nerasta</Typography>
 
   return (
-    <div>
-      <h1>{agency.name}</h1>
+    <Container sx={{ m: 4 }}>
+      <Typography variant="h4" gutterBottom>{agency.name}</Typography>
 
-      <img src={agency.logo} alt={agency.name} />
-      <p>
-        Įvertinimas: {renderStars(averageRating)} ({reviews.length}){" "}
-        <button onClick={() => setShowReviews((prev) => !prev)}>
-          {showReviews ? "Slėpti atsiliepimus" : "Rodyti atsiliepimus"}
-        </button>
-      </p>
+      {agency.logo && (
+        <Box sx={{ display: "flex", justifyContent: "start", mb: 2 }}>
+
+          <img src={agency.logo} alt={agency.name} style={{ maxWidth: "30%", height: "auto", objectFit: "contain" }} />
+          
+        </Box>
+      )}
+
+      <Box display="flex" alignItems="center" gap={2} sx={{ flexDirection: { xs: "column", sm: "row" } }}>
+
+        <Rating value={averageRating} precision={0.5} readOnly />
+        <Typography variant="body1">({reviews.length} atsiliepimai)</Typography>
+        <Button onClick={() => setShowReviews((prev) => !prev)} variant="outlined" size="small">{showReviews ? "Slėpti" : "Rodyti"} atsiliepimus</Button>
+
+      </Box>
 
       {showReviews && (
-        <div>
+        <Box mt={3}>
+          <Divider sx={{ mb: 2 }} />
           {reviews.length === 0 ? (
-            <p>Nėra atsiliepimų apie šią agentūrą.</p>
+            <Typography>Nėra atsiliepimų apie šią agentūrą.</Typography>
           ) : (
             reviews.map((review) => (
-              <div key={review._id}>
-                <p><strong>{review.user?.username || "Anonimas"}</strong></p>
-                <p>{renderStars(review.rating)}</p>
-                <p>{review.comment}</p>
-              </div>
+              <Box key={review._id} sx={{ mb: 2 }}>
+                <Typography fontWeight="bold">{review.user?.username || "Anonimas"}</Typography>
+                <Rating value={review.rating} readOnly />
+                <Typography>{review.comment}</Typography>
+              </Box>
             ))
           )}
-
-          <ReviewForm
-            agencyId={agency._id}
-            onReviewSubmitted={(newReview) =>
-              setReviews((prev) => [...prev, newReview])
-            }
-          />
-        </div>
+          <ReviewForm agencyId={agency._id} onReviewSubmitted={(newReview) => setReviews((prev) => [...prev, newReview])} />
+        </Box>
       )}
-
-      <p>{agency.fullDescription}</p>
-      <p>
-        Kontaktai: {agency.contactInfo?.email}, {agency.contactInfo?.phone}
-      </p>
-      {agency.website && (
-        <p>
-          Svetainė:{" "}
-          <a href={agency.website} target="_blank" rel="noopener noreferrer">
-            {agency.website}
-          </a>
-        </p>
-      )}
-      {agency.establishedYear && <p>Įkurta: {agency.establishedYear}</p>}
 
       {destinations.length > 0 && (
-        <>
-          <h2>Kelionės siūlomos šios agentūros:</h2>
-          {destinations.map((dest) => (
-            <DestinationCard
-              key={dest._id}
-              destination={dest}
-              averageRating={dest.rating || 0}
-              reviewCount={dest.reviewCount || 0}
-              onAddToCart={() => console.log("Įdėta į krepšelį")}
-            />
-          ))}
-        </>
+        <Box mt={4}>
+          <Typography variant="h5" gutterBottom>Kelionės:</Typography>
+          <Grid container spacing={2}>
+            {destinations.map((dest) => (
+              <Grid key={dest._id} size={{ xs: 10, sm: 6, md: 4, lg: 3 }}>
+                <DestinationCard destination={dest} averageRating={dest.rating || 0} reviewCount={dest.reviewCount || 0} onAddToCart={() => {}} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       )}
 
       {hotels.length > 0 && (
-        <>
-          <h2>Viešbučiai siūlomi šios agentūros:</h2>
-          {hotels.map((hotel) => (
-            <HotelCard
-              key={hotel._id}
-              hotel={hotel}
-              reviewCount={hotel.reviewsCount || 0}
-              averageRating={hotel.rating || 0}
-              onAddToCart={() => console.log("Įdėta į krepšelį")}
-            />
-          ))}
-        </>
+        <Box mt={4}>
+          <Typography variant="h5" gutterBottom>Viešbučiai:</Typography>
+          <Grid container spacing={2}>
+            {hotels.map((hotel) => (
+              <Grid key={hotel._id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }} >
+                <HotelCard hotel={hotel} averageRating={hotel.rating || 0} reviewCount={hotel.reviewsCount || 0} onAddToCart={() => {}} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       )}
 
-      <button onClick={() => navigate(-1)}>Grįžti atgal</button>
-      <button onClick={() => navigate("/")}>Grįžti į pagrindinį</button>
-    </div>
+      <Box mt={2} display="flex" flexWrap="wrap" justifyContent="flex-end">
+        <Button 
+          variant="contained" 
+          color="secondary"  
+          sx={{ m: 2 }} 
+          onClick={() => navigate(-1)}>
+          Grįžti atgal
+        </Button>
+        
+        <Button 
+            variant="outlined" 
+            onClick={() => navigate('/')}
+            color="inherit"
+            sx={{ m: 2 }}>
+            Grįžti į pagrindinį puslapį
+        </Button>
+            
+      </Box>
+    </Container>
   )
 }
-
 export default AgencyItem

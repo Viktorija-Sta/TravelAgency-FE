@@ -1,6 +1,9 @@
 import { Destinations } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
 import { Link } from "react-router"
+import { toast } from "sonner"
+import "./DestinationCard.scss"
+import { Rating } from "@mui/material"
 
 interface DestinationProps {
   destination: Destinations
@@ -26,19 +29,13 @@ const DestinationCard: React.FC<DestinationProps> = ({
       quantity: 1  ,
       modelType: "Destination",
     })
+    toast.success(`${destination.name} buvo pridėta į krepšelį`)
     
   }
 
-  const renderStars = (rating: number) => {
-    const fullStars = Math.round(rating)
-    const totalStars = 5
-    return "★".repeat(fullStars) + "☆".repeat(totalStars - fullStars)
-  }
-
   return (
-    <div className="destination">
+    <div className="destination-card">
       <img
-        style={{ width: "30%" }}
         src={destination.imageUrl}
         alt={destination.name}
         className="main-image"
@@ -47,8 +44,15 @@ const DestinationCard: React.FC<DestinationProps> = ({
       <p>{destination.description}</p>
       <p>€{destination.price}</p>
 
-      <div >
-        {renderStars(averageRating || 0)} ({reviewCount || 0} atsiliepimai)
+      <div className="destination-rating">
+        <Rating
+          name="destination-rating"
+          value={averageRating || 0}
+          readOnly
+          precision={0.5}
+          size="small"
+        />
+        <span>({reviewCount || 0} atsiliepimai)</span>
       </div>
 
       <button onClick={addToCartHandler} className="add-to-cart">

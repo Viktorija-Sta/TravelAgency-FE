@@ -1,0 +1,14 @@
+.order-success-page {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+
+    .MuiButton-root {
+        margin: 0.5rem;
+        text-transform: none;
+    }
+}
