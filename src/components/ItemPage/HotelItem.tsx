@@ -94,19 +94,22 @@ const HotelItem: React.FC = () => {
     </Container>
   )
   if (error) return <Typography color="error">{error}</Typography>
-  
+
   if (!hotel) return <div style={{ textAlign: "center" }}>Viešbutis nerasta</div>
 
   return (
     <Container className="detail-page" maxWidth="md" sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>{hotel.name}</Typography>
+
       <Link to={`/agencies/${hotel.agency?._id}`}>
-        <Typography variant="subtitle1">Agentūra: {hotel.agency?.name || "Nenurodyta"}</Typography>
+        <Typography variant="subtitle1">Agentūra: {hotel.agency?.name || "Nenurodyta"}
+        </Typography>
       </Link>
 
       <Box display="flex" alignItems="center" gap={2} flexDirection={{ xs: "column", sm: "row" }}>
         <Rating value={averageRating} precision={0.5} readOnly />
         <Typography sx={{ ml: 1 }}>({reviews.length})</Typography>
+
         <Button onClick={() => setShowReviews((prev) => !prev)} sx={{ mt: { xs: 1, sm: 0 } }} variant="outlined"   size="small">
           {showReviews ? "Slėpti atsiliepimus" : "Rodyti atsiliepimus"}
         </Button>
@@ -116,14 +119,17 @@ const HotelItem: React.FC = () => {
         <Box sx={{ mt: 3 }}>
           {reviews.length === 0 ? (
             <Typography>Nėra atsiliepimų apie šį viešbutį.</Typography>
+
           ) : (
             reviews.map((review) => (
               <Box key={review._id} sx={{ borderBottom: "1px solid #ccc", mb: 2, pb: 2 }}>
+
                 <Typography variant="subtitle2">
                   {review.user?.username || "Anonimas"}
                 </Typography>
                 <Rating value={review.rating} readOnly />
                 <Typography>{review.comment}</Typography>
+
               </Box>
             ))
           )}
@@ -135,6 +141,7 @@ const HotelItem: React.FC = () => {
       )}
 
       <Typography sx={{ mt: 2 }}>Kategorija: {hotel.category?.name || "Nenurodyta"}</Typography>
+
       <Typography sx={{ my: 2 }}>{hotel.description}</Typography>
 
       {hotel.amenities?.length > 0 && (
