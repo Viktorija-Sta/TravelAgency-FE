@@ -117,7 +117,9 @@ const DestinationItem: React.FC = () => {
 
       <Box display="flex" alignItems="center" gap={2} flexDirection={{ xs: "column", sm: "row" }}>
       <Rating value={averageRating} precision={0.5} readOnly />
+      
       <Typography variant="body1">({reviews.length} atsiliepimai)</Typography>
+
       <Button 
         onClick={() => setShowReviews((prev) => !prev)} 
         variant="outlined" 
