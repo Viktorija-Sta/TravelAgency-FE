@@ -51,13 +51,13 @@ const EditProfile: React.FC<Props> = ({ isOpen, onClose, userData, onUpdate }) =
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: { xs: '90%', sm: '400px' },
+              width: { xs: '80%', sm: '50%' },
               bgcolor: 'background.paper',
               p: 4,
               borderRadius: 2,
               boxShadow: 24,
-              maxHeight: '90vh',
-              overflowY: 'auto'
+              maxHeight: '110vh',
+              overflowY: 'auto',
           }}
       >
           <Typography variant="h6" gutterBottom>
