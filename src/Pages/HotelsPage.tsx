@@ -4,7 +4,7 @@ import { Destinations, Hotels, Reviews } from "../types/types"
 import api from "../utils/axios"
 import HotelCard from "../components/Card/HotelCard"
 import SearchElement from "../components/SearchElement/SearchElement"
-import { Container, Grid, Typography } from "@mui/material"
+import { CircularProgress, Container, Grid, Typography } from "@mui/material"
 import "./HotelsPage.scss"
 
 const HotelsPage: React.FC = () => {
@@ -79,8 +79,13 @@ const HotelsPage: React.FC = () => {
   )
   
 
-  if (loading) return <div>Kraunama...</div>
-  if (error) return <div>{error}</div>
+  if (loading) return (
+      <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+        <CircularProgress />
+        <Typography variant="h6" sx={{ marginTop: 2 }}>Kraunama...</Typography>
+      </Container>
+    )
+    if (error) return <Typography color="error">{error}</Typography>
 
   return (
     <Container className="hotels-page" maxWidth="lg" sx={{ paddingX: { xs: 2, sm: 3, md: 4 }, paddingY: 4 }}>

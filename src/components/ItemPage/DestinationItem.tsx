@@ -1,23 +1,16 @@
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  MenuItem,
-  Rating,
-  Select,
-  Typography,
-} from "@mui/material"
 import { useNavigate, useParams, Link } from "react-router-dom"
 import { useCart } from "../../hooks/useCart"
 import { useEffect, useState } from "react"
 import { Destinations, Hotels, Reviews } from "../../types/types"
 import api from "../../utils/axios"
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
+import "./DestinationItem.scss"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import ReviewForm from "../Review/ReviewForm"
 import { toast } from "sonner"
+import { Box, Button, CircularProgress, Container, Divider, MenuItem, Rating, Select, Typography } from "@mui/material"
 
 const DestinationItem: React.FC = () => {
   const { id } = useParams()
@@ -37,6 +30,7 @@ const DestinationItem: React.FC = () => {
       try {
         const res = await api.get(`/destinations/${id}`)
         const { destination, hotels, reviews } = res.data
+
         setHotels(hotels || [])
         setDestination(destination || null)
         setReviews(reviews || [])
@@ -46,12 +40,9 @@ const DestinationItem: React.FC = () => {
         setLoading(false)
       }
     }
+
     if (id) fetchData()
   }, [id])
-
-  const averageRating = reviews.length
-    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-    : 0
 
   const addToCartHandler = () => {
     if (!destination) return
@@ -81,10 +72,20 @@ const DestinationItem: React.FC = () => {
     })
   }
 
+  const averageRating = reviews.length
+    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+    : 0
+
   const imageList =
     destination?.gallery?.length === 1
       ? [destination.gallery[0], destination.gallery[0]]
       : destination?.gallery || []
+
+  const Arrow = ({ direction, onClick }: { direction: "next" | "prev"; onClick?: () => void }) => (
+    <div className={`custom-arrow ${direction}`} onClick={onClick}>
+      {direction === "next" ? <FiChevronRight /> : <FiChevronLeft />}
+    </div>
+  )
 
   const settings = {
     dots: true,
@@ -93,9 +94,18 @@ const DestinationItem: React.FC = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     adaptiveHeight: true,
+    nextArrow: <Arrow direction="next" />,
+    prevArrow: <Arrow direction="prev" />,
   }
 
-  if (loading) return <Typography>🔄 Kraunama...</Typography>
+
+  if (loading) return (
+    <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+      <CircularProgress />
+      <Typography variant="h6" sx={{ marginTop: 2 }}>Kraunama...</Typography>
+    </Container>
+  )
+
   if (error) return <Typography color="error">{error}</Typography>
   if (!destination) return <Typography>Kelionė nerasta</Typography>
 
@@ -105,13 +115,18 @@ const DestinationItem: React.FC = () => {
         {destination.name}
       </Typography>
 
-      <Box display="flex" alignItems="center" gap={2}>
-        <Rating value={averageRating} precision={0.5} readOnly />
-        <Typography>({reviews.length} atsiliepimai)</Typography>
-        <Button onClick={() => setShowReviews((prev) => !prev)} size="small">
-          {showReviews ? "Slėpti atsiliepimus" : "Rodyti atsiliepimus"}
-        </Button>
-      </Box>
+      <Box display="flex" alignItems="center" gap={2} flexDirection={{ xs: "column", sm: "row" }}>
+      <Rating value={averageRating} precision={0.5} readOnly />
+      <Typography variant="body1">({reviews.length} atsiliepimai)</Typography>
+      <Button 
+        onClick={() => setShowReviews((prev) => !prev)} 
+        variant="outlined" 
+        size="small" 
+        sx={{ mt: { xs: 1, sm: 0 } }}
+      >
+        {showReviews ? "Slėpti" : "Rodyti"} atsiliepimus
+      </Button>
+    </Box>
 
       <Link to={`/agencies/${destination.agency?._id}`}>
         <Typography color="primary" mt={2}>
@@ -160,6 +175,7 @@ const DestinationItem: React.FC = () => {
                 src={img}
                 alt={`${destination.name} ${i + 1}`}
                 style={{ width: "100%", height: "500px", objectFit: "cover", borderRadius: "8px" }}
+                className="carousel-image"
                 onError={(e) => {
                   e.currentTarget.src = "/fallback.jpg"
                 }}
@@ -172,6 +188,8 @@ const DestinationItem: React.FC = () => {
       {hotels.length > 0 && (
         <Box mt={4} width={"50%"}>
           <Typography variant="h6">Pasirinkite viešbutį (neprivaloma):</Typography>
+
+          <Box mt={4}>
           <Select
             value={selectedHotel?._id || ""}
             onChange={(e) => {
@@ -179,7 +197,7 @@ const DestinationItem: React.FC = () => {
               setSelectedHotel(selected || null)
             }}
             fullWidth
-            sx={{ mt: 1 }}
+            sx={{ mb: 2 }}
           >
             <MenuItem value="">- Be viešbučio -</MenuItem>
             {hotels.map((hotel) => (
@@ -188,6 +206,7 @@ const DestinationItem: React.FC = () => {
               </MenuItem>
             ))}
           </Select>
+          </Box>
 
           {selectedHotel && (
             <Box mt={3} p={2} border="1px solid #ccc" borderRadius={2}>
@@ -216,12 +235,12 @@ const DestinationItem: React.FC = () => {
         </Button>
       </Box>
 
-      <Box mt={2} display="flex" justifyContent="space-between">
-        <Button variant="contained" color="secondary" onClick={() => navigate(-1)}>
+      <Box mt={2} display="flex" flexWrap="wrap" justifyContent="flex-end">
+        <Button variant="contained" color="secondary" sx={{ m: 2 }} onClick={() => navigate(-1)}>
           Grįžti atgal
         </Button>
-        <Button variant="outlined" onClick={() => navigate("/")}>
-          Grįžti į pagrindinį meniu
+        <Button variant="outlined" color="inherit" sx={{ m: 2 }} onClick={() => navigate("/")}>
+          Grįžti į pagrindinį puslapį
         </Button>
       </Box>
     </Container>

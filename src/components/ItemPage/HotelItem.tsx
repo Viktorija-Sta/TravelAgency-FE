@@ -14,6 +14,7 @@ import {
   Button,
   Container,
   Rating,
+  CircularProgress,
 } from "@mui/material"
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
 import "./HotelItem.scss"
@@ -86,8 +87,14 @@ const HotelItem: React.FC = () => {
     prevArrow: <Arrow direction="prev" />,
   }
 
-  if (loading) return <div style={{ textAlign: "center" }}>🔄 Kraunama...</div>
-  if (error) return <div style={{ color: "red", textAlign: "center" }}>{error}</div>
+  if (loading) return (
+    <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+      <CircularProgress />
+      <Typography variant="h6" sx={{ marginTop: 2 }}>Kraunama...</Typography>
+    </Container>
+  )
+  if (error) return <Typography color="error">{error}</Typography>
+  
   if (!hotel) return <div style={{ textAlign: "center" }}>Viešbutis nerasta</div>
 
   return (
@@ -97,10 +104,10 @@ const HotelItem: React.FC = () => {
         <Typography variant="subtitle1">Agentūra: {hotel.agency?.name || "Nenurodyta"}</Typography>
       </Link>
 
-      <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+      <Box display="flex" alignItems="center" gap={2} flexDirection={{ xs: "column", sm: "row" }}>
         <Rating value={averageRating} precision={0.5} readOnly />
         <Typography sx={{ ml: 1 }}>({reviews.length})</Typography>
-        <Button onClick={() => setShowReviews((prev) => !prev)} sx={{ ml: 2 }}>
+        <Button onClick={() => setShowReviews((prev) => !prev)} sx={{ mt: { xs: 1, sm: 0 } }} variant="outlined"   size="small">
           {showReviews ? "Slėpti atsiliepimus" : "Rodyti atsiliepimus"}
         </Button>
       </Box>
@@ -161,15 +168,15 @@ const HotelItem: React.FC = () => {
         </Slider>
       </Box>
 
-      <Button onClick={addToCartHandler} variant="contained" color="primary" sx={{ mb: 3 }}>
+      <Button onClick={addToCartHandler} variant="contained" color="primary" sx={{ mt: 4 }}>
         Įdėti į krepšelį
       </Button>
 
-      <Box mt={4} display="flex" gap={2}>
-          <Button variant="contained" color="secondary" onClick={() => navigate(-1)}>Grįžti atgal</Button>
+      <Box mt={2} display="flex" flexWrap="wrap" justifyContent="flex-end">
+          <Button variant="contained" color="secondary" sx={{ m: 2 }} onClick={() => navigate(-1)}>Grįžti atgal</Button>
         
         
-          <Button variant="outlined" onClick={() => navigate("/")}>Į pagrindinį</Button>
+          <Button variant="outlined" color="inherit" sx={{ m: 2 }} onClick={() => navigate("/")}>Grįžti į pagrindinį puslapį</Button>
         
       </Box>
     </Container>

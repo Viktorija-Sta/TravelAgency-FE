@@ -9,6 +9,7 @@ import { useCart } from "../hooks/useCart"
 import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
 import "./HomePage.scss"
+import { CircularProgress, Container } from "@mui/material"
 
 const HomePage: React.FC = () => {
   const { addToCart } = useCart()
@@ -97,16 +98,21 @@ const HomePage: React.FC = () => {
     fetchData()
   }, [])
 
-  if (loading) return <div>Kraunama...</div>
-  if (error) return <div>{error}</div>
+  if (loading) return (
+    <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+      <CircularProgress />
+      <Typography variant="h6" sx={{ marginTop: 2 }}>Kraunama...</Typography>
+    </Container>
+  )
+  if (error) return <Typography color="error">{error}</Typography>
 
   return (
     <div className="home-page">
       <section>
         <Typography variant="h4" component="h2">Top 3 Kelionės</Typography>
-        <Grid container spacing={{ xs: 1, md: 3,  }} columns={{ xs: 1, sm: 8, md: 12 }} >
+        <Grid container spacing={5} justifyContent="center" >
           {destinations.map((destination) => (
-            <Grid  key={destination._id} rowSpacing={1} size={{ xs: 2, sm: 4, md: 4 }}>
+            <Grid  key={destination._id} size={{ xs: 12, sm: 6, md: 4 }}>
               <DestinationCard
                 destination={destination}
                 reviewCount={destination.reviewCount || 0}
@@ -132,9 +138,9 @@ const HomePage: React.FC = () => {
 
       <section>
         <Typography variant="h4" component="h2">Top 3 Viešbučiai</Typography>
-        <Grid container spacing={{ xs: 1, md: 3,  }} columns={{ xs: 1, sm: 8, md: 12 }}>
+        <Grid container spacing={5} justifyContent="center" >
           {hotels.map((hotel) => (
-            <Grid key={hotel._id} rowSpacing={1} size={{ xs: 2, sm: 4, md: 4 }}>
+            <Grid  key={hotel._id} size={{ xs: 12, sm: 6, md: 4 }}>
               <HotelCard
                 hotel={hotel}
                 reviewCount={hotel.reviewsCount || 0}
@@ -160,9 +166,9 @@ const HomePage: React.FC = () => {
 
       <section>
         <Typography variant="h4" component="h2">Top 3 Agentūros</Typography>
-        <Grid container spacing={{ xs: 1, md: 3,  }} columns={{ xs: 1, sm: 8, md: 12 }}>
+        <Grid container spacing={5} justifyContent="center" >
           {agencies.map((agency) => (
-            <Grid key={agency._id} rowSpacing={1} size={{ xs: 2, sm: 4, md: 4 }}>
+            <Grid  key={agency._id} size={{ xs: 12, sm: 6, md: 4 }}>
               <AgencyCard
                 agency={agency}
                 averageRating={agency.averageRating || 0}

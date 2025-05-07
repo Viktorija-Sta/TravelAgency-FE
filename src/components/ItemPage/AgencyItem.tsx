@@ -13,7 +13,7 @@ import {
   Box,
   Divider,
   Rating,
-  Link as MuiLink,
+  CircularProgress,
 } from "@mui/material"
 
 const AgencyItem: React.FC = () => {
@@ -54,28 +54,33 @@ const AgencyItem: React.FC = () => {
       ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
       : 0
 
-  if (loading) return <Typography>Kraunama...</Typography>
+  if (loading) return (
+    <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+      <CircularProgress />
+      <Typography variant="h6" sx={{ marginTop: 2 }}>Kraunama...</Typography>
+    </Container>
+  )
   if (error) return <Typography color="error">{error}</Typography>
   if (!agency) return <Typography>Agentūra nerasta</Typography>
 
   return (
-    <Container sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        {agency.name}
-      </Typography>
+    <Container sx={{ m: 4 }}>
+      <Typography variant="h4" gutterBottom>{agency.name}</Typography>
 
       {agency.logo && (
-        <Box sx={{ mb: 2 }}>
-          <img src={agency.logo} alt={agency.name} style={{ maxWidth: "300px", height: "auto" }} />
+        <Box sx={{ display: "flex", justifyContent: "start", mb: 2 }}>
+
+          <img src={agency.logo} alt={agency.name} style={{ maxWidth: "30%", height: "auto", objectFit: "contain" }} />
+          
         </Box>
       )}
 
-      <Box display="flex" alignItems="center" gap={2}>
+      <Box display="flex" alignItems="center" gap={2} sx={{ flexDirection: { xs: "column", sm: "row" } }}>
+
         <Rating value={averageRating} precision={0.5} readOnly />
         <Typography variant="body1">({reviews.length} atsiliepimai)</Typography>
-        <Button onClick={() => setShowReviews((prev) => !prev)} variant="outlined">
-          {showReviews ? "Slėpti" : "Rodyti"} atsiliepimus
-        </Button>
+        <Button onClick={() => setShowReviews((prev) => !prev)} variant="outlined" size="small">{showReviews ? "Slėpti" : "Rodyti"} atsiliepimus</Button>
+
       </Box>
 
       {showReviews && (
@@ -92,45 +97,17 @@ const AgencyItem: React.FC = () => {
               </Box>
             ))
           )}
-          <ReviewForm
-            agencyId={agency._id}
-            onReviewSubmitted={(newReview) => setReviews((prev) => [...prev, newReview])}
-          />
+          <ReviewForm agencyId={agency._id} onReviewSubmitted={(newReview) => setReviews((prev) => [...prev, newReview])} />
         </Box>
       )}
 
-      <Box mt={3}>
-        <Typography>{agency.fullDescription}</Typography>
-        <Typography variant="body2" sx={{ mt: 1 }}>
-          Kontaktai: {agency.contactInfo?.email}, {agency.contactInfo?.phone}
-        </Typography>
-        {agency.website && (
-          <Typography variant="body2">
-            Svetainė:{" "}
-            <MuiLink href={agency.website} target="_blank" rel="noopener">
-              {agency.website}
-            </MuiLink>
-          </Typography>
-        )}
-        {agency.establishedYear && (
-          <Typography variant="body2">Įkurta: {agency.establishedYear}</Typography>
-        )}
-      </Box>
-
       {destinations.length > 0 && (
         <Box mt={4}>
-          <Typography variant="h5" gutterBottom>
-            Kelionės siūlomos šios agentūros:
-          </Typography>
+          <Typography variant="h5" gutterBottom>Kelionės:</Typography>
           <Grid container spacing={2}>
             {destinations.map((dest) => (
-              <Grid key={dest._id} size={{ xs: 12, sm: 6, md: 4, lg: 3}}>
-                <DestinationCard
-                  destination={dest}
-                  averageRating={dest.rating || 0}
-                  reviewCount={dest.reviewCount || 0}
-                  onAddToCart={() => console.log("Įdėta į krepšelį")}
-                />
+              <Grid key={dest._id} size={{ xs: 10, sm: 6, md: 4, lg: 3 }}>
+                <DestinationCard destination={dest} averageRating={dest.rating || 0} reviewCount={dest.reviewCount || 0} onAddToCart={() => {}} />
               </Grid>
             ))}
           </Grid>
@@ -139,34 +116,36 @@ const AgencyItem: React.FC = () => {
 
       {hotels.length > 0 && (
         <Box mt={4}>
-          <Typography variant="h5" gutterBottom>
-            Viešbučiai siūlomi šios agentūros:
-          </Typography>
+          <Typography variant="h5" gutterBottom>Viešbučiai:</Typography>
           <Grid container spacing={2}>
             {hotels.map((hotel) => (
-              <Grid key={hotel._id} size={{ xs: 12, sm: 6, md: 4, lg: 3}}>
-                <HotelCard
-                  hotel={hotel}
-                  averageRating={hotel.rating || 0}
-                  reviewCount={hotel.reviewsCount || 0}
-                  onAddToCart={() => console.log("Įdėta į krepšelį")}
-                />
+              <Grid key={hotel._id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }} >
+                <HotelCard hotel={hotel} averageRating={hotel.rating || 0} reviewCount={hotel.reviewsCount || 0} onAddToCart={() => {}} />
               </Grid>
             ))}
           </Grid>
         </Box>
       )}
 
-      <Box mt={4} display="flex" gap={2}>
-        <Button onClick={() => navigate(-1)} variant="contained" color="secondary">
+      <Box mt={2} display="flex" flexWrap="wrap" justifyContent="flex-end">
+        <Button 
+          variant="contained" 
+          color="secondary"  
+          sx={{ m: 2 }} 
+          onClick={() => navigate(-1)}>
           Grįžti atgal
         </Button>
-        <Button onClick={() => navigate("/")} variant="outlined">
-          Į pagrindinį
+        
+        <Button 
+            variant="outlined" 
+            onClick={() => navigate('/')}
+            color="inherit"
+            sx={{ m: 2 }}>
+            Grįžti į pagrindinį puslapį
         </Button>
+            
       </Box>
     </Container>
   )
 }
-
 export default AgencyItem

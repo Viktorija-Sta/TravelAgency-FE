@@ -91,7 +91,7 @@ const NavBar: React.FC = () => {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            edge="end"
+            edge="start"
             onClick={handleDrawerToggle}
             sx={{ display: { md: "none" } }}
           >

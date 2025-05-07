@@ -40,28 +40,44 @@ const EditProfile: React.FC<Props> = ({ isOpen, onClose, userData, onUpdate }) =
     }
 
     return (
-        <Modal open={isOpen} onClose={onClose}>
-            <Box sx={{ 
-                position: 'absolute', top: '50%', left: '50%', 
-                transform: 'translate(-50%, -50%)', width: 400, 
-                bgcolor: 'background.paper', p: 4, borderRadius: 2 
-            }}>
-                <Typography variant="h6" gutterBottom>Redaguoti profilį</Typography>
-                <form onSubmit={submitHandler}>
-                    <TextField fullWidth label="Vardas" name="username" value={formData.username} onChange={changeHandler} sx={{ mb: 2 }} />
-                    <TextField fullWidth label="El. paštas" name="email" value={formData.email} onChange={changeHandler} sx={{ mb: 2 }} />
-                    <TextField fullWidth label="Telefono numeris" name="phoneNumber" value={formData.phoneNumber || ""} onChange={changeHandler} sx={{ mb: 2 }} />
-                    <TextField fullWidth label="Gatvė" name="address.street" value={formData.address?.street || ""} onChange={changeHandler} sx={{ mb: 2 }} />
-                    <TextField fullWidth label="Miestas" name="address.city" value={formData.address?.city || ""} onChange={changeHandler} sx={{ mb: 2 }} />
-                    <TextField fullWidth label="Pašto kodas" name="address.postalCode" value={formData.address?.postalCode || ""} onChange={changeHandler} sx={{ mb: 2 }} />
-                    <TextField fullWidth label="Šalis" name="address.country" value={formData.address?.country || ""} onChange={changeHandler} sx={{ mb: 2 }} />
-                    <Button fullWidth variant="contained" type="submit" disabled={loading}>
-                        {loading ? <CircularProgress size={24} /> : "Išsaugoti"}
-                    </Button>
-                </form>
-            </Box>
-        </Modal>
-    )
+      <Modal open={isOpen} onClose={onClose}>
+      <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: { xs: '90%', sm: '400px' },
+              bgcolor: 'background.paper',
+              p: 4,
+              borderRadius: 2,
+              boxShadow: 24,
+              maxHeight: '90vh',
+              overflowY: 'auto'
+          }}
+      >
+          <Typography variant="h6" gutterBottom>
+              Redaguoti profilį
+          </Typography>
+          <form onSubmit={submitHandler} style={{ width: '100%' }}>
+              <TextField fullWidth label="Vardas" name="username" value={formData.username} onChange={changeHandler} sx={{ mb: 2 }} />
+              <TextField fullWidth label="El. paštas" name="email" value={formData.email} onChange={changeHandler} sx={{ mb: 2 }} />
+              <TextField fullWidth label="Telefono numeris" name="phoneNumber" value={formData.phoneNumber || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+              <TextField fullWidth label="Gatvė" name="address.street" value={formData.address?.street || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+              <TextField fullWidth label="Miestas" name="address.city" value={formData.address?.city || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+              <TextField fullWidth label="Pašto kodas" name="address.postalCode" value={formData.address?.postalCode || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+              <TextField fullWidth label="Šalis" name="address.country" value={formData.address?.country || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+              <Button fullWidth variant="contained" type="submit" disabled={loading} sx={{ mt: 2 }}>
+                  {loading ? <CircularProgress size={24} /> : "Išsaugoti"}
+              </Button>
+          </form>
+      </Box>
+  </Modal>
+)
 }
 
 export default EditProfile

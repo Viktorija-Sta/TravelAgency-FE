@@ -10,6 +10,7 @@ import {
   Alert,
   Rating
 } from "@mui/material"
+import { useAuth } from "../../hooks/useAuth"
 
 interface ReviewFormProps {
   destinationId?: string
@@ -19,6 +20,7 @@ interface ReviewFormProps {
 }
 
 const ReviewForm: React.FC<ReviewFormProps> = ({ destinationId, hotelId, agencyId, onReviewSubmitted }) => {
+  const { user } = useAuth()
   const [rating, setRating] = useState<number>(5)
   const [comment, setComment] = useState<string>("")
   const [loading, setLoading] = useState(false)
@@ -42,11 +44,12 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ destinationId, hotelId, agencyI
         destination: destinationId,
         hotel: hotelId,
         agency: agencyId,
+        user: user ? user._id : null,
       })
 
       const reviewWithUser: Reviews = {
         ...response.data.review,
-        user: response.data.review.user || { username: "Anonimas" }
+        user: response.data.review.user || { username: user ? user.username : "Anonimas" }
       }
 
       if (onReviewSubmitted) {
