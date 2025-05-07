@@ -1,5 +1,5 @@
-import { Link, useLocation } from "react-router-dom"
-import "./Breadcrumb.scss"
+import { Link as RouterLink, useLocation } from "react-router-dom"
+import { Breadcrumbs, Link, Typography, Box } from "@mui/material"
 
 const Breadcrumb: React.FC = () => {
   const location = useLocation()
@@ -13,22 +13,56 @@ const Breadcrumb: React.FC = () => {
   ]
 
   return (
-    <nav className="admin-breadcrumbs">
-      {links.map(({ path, label }, index) => {
-        const isActive = location.pathname === path
-        return (
-          <span key={path}>
+    <Box 
+      sx={{ 
+        display: "flex", 
+        justifyContent: "center", 
+        marginBottom: 2, 
+        padding: "8px 0", 
+        backgroundColor: "transparent", 
+        color: "#ccc",
+        textAlign: "center"
+      }}
+    >
+      <Breadcrumbs 
+        aria-label="breadcrumb"
+        sx={{
+          backgroundColor: "transparent",
+          padding: "8px 16px",
+          borderRadius: "4px",
+        }}
+      >
+        {links.map(({ path, label }) => {
+          const isActive = location.pathname === path
+
+          return isActive ? (
+            <Typography 
+              key={path} 
+              color="text.primary" 
+              sx={{ fontWeight: "bold", color: "white" }}
+            >
+              {label}
+            </Typography>
+          ) : (
             <Link
+              key={path}
+              component={RouterLink}
               to={path}
-              className={isActive ? "breadcrumb-link active" : "breadcrumb-link"}
+              underline="hover"
+              sx={{ 
+                color: "#1976d2", 
+                textDecoration: "none",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              }}
             >
               {label}
             </Link>
-            {index < links.length - 1 && " / "}
-          </span>
-        )
-      })}
-    </nav>
+          )
+        })}
+      </Breadcrumbs>
+    </Box>
   )
 }
 

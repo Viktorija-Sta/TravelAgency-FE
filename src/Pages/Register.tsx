@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import { jwtDecode } from 'jwt-decode'
 import { User } from '../types/types'
 import { toast } from 'sonner'
+import { Alert, Box, Button, CircularProgress, Container, TextField, Typography } from '@mui/material'
 
 function Register() {
   const { login } = useAuth()
@@ -19,6 +20,7 @@ function Register() {
     username: '',
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -73,7 +75,8 @@ function Register() {
       toast.success('Sėkmingai prisiregistravote ir prisijungėte!')
 
       navigate('/')
-    } catch (error) {
+      console.error('Registracijos klaida:', error)
+      setError('Įvyko klaida registruojantis. Bandykite dar kartą.')
       console.error('Registracijos klaida:', error)
 
       if (axios.isAxiosError(error)) {
@@ -89,59 +92,87 @@ function Register() {
   }
 
   return (
-    <div className="register-container">
-      <h1>Registracija</h1>
-      <form onSubmit={submitHandler} className="register-form">
-        <div className="form-group">
-          <label>Vartotojo vardas:</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={changeHandler}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>El. paštas:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={changeHandler}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Slaptažodis:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={changeHandler}
-            required
-            minLength={6}
-          />
-        </div>
-        <div className="form-group">
-          <label>Pakartoti slaptažodį:</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={changeHandler}
-            required
-            minLength={6}
-          />
-        </div>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Registruojama...' : 'Registruotis'}
-        </button>
-      </form>
-      <p className="login-link">
-        Jau turite paskyrą? <Link to="/login">Prisijunkite</Link>
-      </p>
-    </div>
+    <Container maxWidth="xs" sx={{ marginTop: 4 }}>
+      <Box
+        component="form"
+        onSubmit={submitHandler}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+          padding: 3,
+          borderRadius: 2,
+          boxShadow: 3,
+          backgroundColor: '#f9f9f9',
+          marginBottom: '30px',
+        }}
+      >
+        <Typography variant="h4" align="center" gutterBottom>
+          Registracija
+        </Typography>
+        {error && (
+          <Alert severity="error" sx={{ marginBottom: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        <TextField
+          label="Vartotojo vardas"
+          name="username"
+          value={formData.username}
+          onChange={changeHandler}
+          required
+          fullWidth
+        />
+
+        <TextField
+          label="El. paštas"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={changeHandler}
+          required
+          fullWidth
+        />
+
+        <TextField
+          label="Slaptažodis"
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={changeHandler}
+          required
+          fullWidth
+          inputProps={{ minLength: 6 }}
+        />
+
+        <TextField
+          label="Pakartoti slaptažodį"
+          name="confirmPassword"
+          type="password"
+          value={formData.confirmPassword}
+          onChange={changeHandler}
+          required
+          fullWidth
+          inputProps={{ minLength: 6 }}
+        />
+
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={isLoading}
+          fullWidth
+          sx={{ mt: 1 }}
+        >
+          {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Registruotis'}
+        </Button>
+
+        <Typography variant="body2" align="center" sx={{ mt: 1 }}>
+          Jau turite paskyrą? <Link to="/login">Prisijunkite</Link>
+        </Typography>
+      </Box>
+    </Container>
   )
 }
 

@@ -2,106 +2,66 @@ import { useEffect, useState } from "react"
 import api from "../../utils/axios"
 import { UserProfile } from "../../types/types"
 import { toast } from "sonner"
+import { Modal, Box, TextField, Button, Typography, CircularProgress } from "@mui/material"
 
 interface Props {
-  isOpen: boolean
-  onClose: () => void
-  userData: UserProfile
-  onUpdate: (updated: UserProfile) => void
+    isOpen: boolean
+    onClose: () => void
+    userData: UserProfile
+    onUpdate: (updated: UserProfile) => void
 }
 
 const EditProfile: React.FC<Props> = ({ isOpen, onClose, userData, onUpdate }) => {
-  const [formData, setFormData] = useState<UserProfile>({
-    ...userData,
-    address: userData.address || {
-      street: "",
-      city: "",
-      postalCode: "",
-      country: ""
+    const [formData, setFormData] = useState<UserProfile>({ ...userData })
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        setFormData({ ...userData })
+    }, [userData])
+
+    const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setFormData((prev) => ({ ...prev, [name]: value }))
     }
-  })
 
-  useEffect(() => {
-    setFormData({
-      ...userData,
-      address: userData.address || {
-        street: "",
-        city: "",
-        postalCode: "",
-        country: ""
-      }
-    })
-  }, [userData])
-
-  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-
-    if (name.startsWith("address.")) {
-      const key = name.split(".")[1]
-      setFormData((prev) => ({
-        ...prev,
-        address: { ...prev.address, [key]: value }
-      }))
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }))
+    const submitHandler = async (e: React.FormEvent) => {
+        e.preventDefault()
+        try {
+            setLoading(true)
+            const response = await api.put(`/users/${userData._id}`, formData)
+            onUpdate(response.data.data)
+            onClose()
+            toast.success("Profilis atnaujintas sėkmingai")
+        } catch {
+            toast.error("Nepavyko atnaujinti profilio")
+        } finally {
+            setLoading(false)
+        }
     }
-  }
 
-  const submitHandler = async (e: React.FormEvent) => {
-    e.preventDefault()
-    try {
-      const response = await api.put(`/users/${userData._id}`, formData)
-      onUpdate(response.data.data)
-      onClose()
-      
-      toast.success("Profilis atnaujintas sėkmingai")
-    } catch {
-      toast.error("Nepavyko atnaujinti profilio")
-    }
-  }
-
-  if (!isOpen) return null
-
-  return (
-    <div className="modal-backdrop">
-      <div className="modal">
-        <h2>Redaguoti profilį</h2>
-        <form onSubmit={submitHandler}>
-          <label>
-            Vardas:
-            <input name="username" value={formData.username} onChange={changeHandler} />
-          </label>
-          <label>
-            El. paštas:
-            <input name="email" value={formData.email} onChange={changeHandler} />
-          </label>
-          <label>
-            Telefono numeris:
-            <input name="phoneNumber" value={formData.phoneNumber || ""} onChange={changeHandler} />
-          </label>
-          <label>
-            Gatvė:
-            <input name="address.street" value={formData.address?.street || ""} onChange={changeHandler} />
-          </label>
-          <label>
-            Miestas:
-            <input name="address.city" value={formData.address?.city || ""} onChange={changeHandler} />
-          </label>
-          <label>
-            Pašto kodas:
-            <input name="address.postalCode" value={formData.address?.postalCode || ""} onChange={changeHandler} />
-          </label>
-          <label>
-            Šalis:
-            <input name="address.country" value={formData.address?.country || ""} onChange={changeHandler} />
-          </label>
-
-          <button type="submit">Išsaugoti</button>
-          <button type="button" onClick={onClose}>Atšaukti</button>
-        </form>
-      </div>
-    </div>
-  )
+    return (
+        <Modal open={isOpen} onClose={onClose}>
+            <Box sx={{ 
+                position: 'absolute', top: '50%', left: '50%', 
+                transform: 'translate(-50%, -50%)', width: 400, 
+                bgcolor: 'background.paper', p: 4, borderRadius: 2 
+            }}>
+                <Typography variant="h6" gutterBottom>Redaguoti profilį</Typography>
+                <form onSubmit={submitHandler}>
+                    <TextField fullWidth label="Vardas" name="username" value={formData.username} onChange={changeHandler} sx={{ mb: 2 }} />
+                    <TextField fullWidth label="El. paštas" name="email" value={formData.email} onChange={changeHandler} sx={{ mb: 2 }} />
+                    <TextField fullWidth label="Telefono numeris" name="phoneNumber" value={formData.phoneNumber || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+                    <TextField fullWidth label="Gatvė" name="address.street" value={formData.address?.street || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+                    <TextField fullWidth label="Miestas" name="address.city" value={formData.address?.city || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+                    <TextField fullWidth label="Pašto kodas" name="address.postalCode" value={formData.address?.postalCode || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+                    <TextField fullWidth label="Šalis" name="address.country" value={formData.address?.country || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+                    <Button fullWidth variant="contained" type="submit" disabled={loading}>
+                        {loading ? <CircularProgress size={24} /> : "Išsaugoti"}
+                    </Button>
+                </form>
+            </Box>
+        </Modal>
+    )
 }
 
 export default EditProfile

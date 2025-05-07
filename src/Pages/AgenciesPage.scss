@@ -1,0 +1,29 @@
+.agencies-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3rem;
+    padding: 2rem;
+
+    h2 {
+        width: 100%;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        color: #333;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #bebebe;
+        text-align: left;
+        font-weight: bold;     
+    }
+    
+    .more {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1rem;
+    }
+    
+    h2 {
+        font-size: 1.4rem;
+        padding: 1rem;
+    }
+}

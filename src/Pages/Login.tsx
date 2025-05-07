@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import { AxiosError } from "axios"
 import { toast } from "sonner"
+import { Alert, Box, Button, CircularProgress, Container, TextField, Typography } from "@mui/material"
 
 function Login() {
   const { login, user } = useAuth()
@@ -48,48 +49,79 @@ function Login() {
   }
 
   return (
-    <div className="login-container">
-      <h1>Prisijungimas</h1>
+    <Container maxWidth="xs" sx={{ mt: 4 }}>
+    <Box
+      component="form"
+      onSubmit={submitHandler}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        padding: 3,
+        borderRadius: 2,
+        boxShadow: 3,
+        backgroundColor: "#f9f9f9",
+        marginBottom: "30px"
+      }}
+    >
+      <Typography variant="h4" align="center" gutterBottom>
+        Prisijungimas
+      </Typography>
 
       {sessionExpired && (
-        <div style={{ color: "red", marginBottom: "10px" }}>
-          ⚠️ Jūsų sesija baigėsi. Prisijunkite iš naujo.
-        </div>
+        <Alert severity="warning" sx={{ marginBottom: 2 }}>
+          Jūsų sesija baigėsi. Prisijunkite iš naujo.
+        </Alert>
       )}
 
-      {error && <div style={{ color: "red", marginBottom: "10px" }}>{error}</div>}
+      {error && (
+        <Alert severity="error" sx={{ marginBottom: 2 }}>
+          {error}
+        </Alert>
+      )}
 
-      <form onSubmit={submitHandler}>
-        <div>
-          <label>El. paštas:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={isLoading}
-          />
-        </div>
-        <div>
-          <label>Slaptažodis:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            disabled={isLoading}
-          />
-        </div>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Prisijungiama..." : "Prisijungti"}
-        </button>
-      </form>
+      <TextField
+        label="El. paštas"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        disabled={isLoading}
+        fullWidth
+      />
 
-      <p>
+      <TextField
+        label="Slaptažodis"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        disabled={isLoading}
+        fullWidth
+      />
+
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        disabled={isLoading}
+        fullWidth
+        sx={{ mt: 1 }}
+      >
+        {isLoading ? (
+          <CircularProgress size={24} color="inherit" />
+        ) : (
+          "Prisijungti"
+        )}
+      </Button>
+
+      <Typography variant="body2" align="center" sx={{ mt: 1 }}>
         Neturite paskyros? <Link to="/register">Registruotis</Link>
-      </p>
-    </div>
-  )
+      </Typography>
+    </Box>
+  </Container>
+)
 }
+
 
 export default Login

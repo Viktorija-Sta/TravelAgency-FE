@@ -91,7 +91,7 @@ const NavBar: React.FC = () => {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            edge="start"
+            edge="end"
             onClick={handleDrawerToggle}
             sx={{ display: { md: "none" } }}
           >
@@ -151,7 +151,7 @@ const NavBar: React.FC = () => {
       </nav>
 
       <Drawer
-        anchor="left"
+        anchor="right"
         open={mobileOpen}
         onClose={handleDrawerToggle}
         sx={{ display: { sm: "none" } }}

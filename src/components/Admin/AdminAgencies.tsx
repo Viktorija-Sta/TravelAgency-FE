@@ -2,6 +2,9 @@ import { useEffect, useState } from "react"
 import { Agencies } from "../../types/types"
 import api from "../../utils/axios"
 import { Link } from "react-router-dom"
+import {
+  Container, TextField, Button, Typography, Box, Grid, Card, CardContent
+} from "@mui/material"
 
 const AdminAgencies: React.FC = () => {
   const [agencies, setAgencies] = useState<Agencies[]>([])
@@ -12,13 +15,12 @@ const AdminAgencies: React.FC = () => {
 
   useEffect(() => {
     fetchAgencies()
-  }, []);
+  }, [])
 
   const fetchAgencies = async () => {
     try {
       const res = await api.get("/agencies")
       setAgencies(res.data)
-
     } catch (err) {
       console.error("Nepavyko gauti agentūrų:", err)
     }
@@ -40,13 +42,12 @@ const AdminAgencies: React.FC = () => {
         [name]: name === "establishedYear" ? parseInt(value) || undefined : value,
       }))
     }
-  };
+  }
 
   const createHandler = async () => {
     try {
       await api.post("/agencies", newAgency)
       setNewAgency({ contactInfo: { email: "", phone: "" } })
-
       fetchAgencies()
     } catch (err) {
       console.error("Nepavyko sukurti agentūros:", err)
@@ -57,10 +58,8 @@ const AdminAgencies: React.FC = () => {
     if (!editingId) return
     try {
       await api.put(`/agencies/${editingId}`, newAgency)
-
       setEditingId(null)
       setNewAgency({ contactInfo: { email: "", phone: "" } })
-
       fetchAgencies()
     } catch (err) {
       console.error("Nepavyko atnaujinti agentūros:", err)
@@ -70,7 +69,6 @@ const AdminAgencies: React.FC = () => {
   const deleteHandler = async (id: string) => {
     try {
       await api.delete(`/agencies/${id}`)
-
       fetchAgencies()
     } catch (err) {
       console.error("Nepavyko ištrinti agentūros:", err)
@@ -89,82 +87,66 @@ const AdminAgencies: React.FC = () => {
   }
 
   return (
-    <div>
-      <h2>Agentūrų valdymas</h2>
+    <Container maxWidth="md" sx={{ mt: 4,pb: 3}}>
+      <Typography variant="h4" gutterBottom>Agentūrų valdymas</Typography>
 
-      <form>
-        <label>
-          Pavadinimas:
-          <input name="name" value={newAgency.name || ""} onChange={changeHandler} />
-        </label>
-        <label>
-          Vieta:
-          <input name="location" value={newAgency.location || ""} onChange={changeHandler} />
-        </label>
-        <label>
-          Įkurimo metai:
-          <input
-            name="establishedYear"
-            type="number"
-            value={newAgency.establishedYear || ""}
-            onChange={changeHandler}
-          />
-        </label>
-        <label>
-          Telefonas:
-          <input name="phone" value={newAgency.contactInfo?.phone || ""} onChange={changeHandler} />
-        </label>
-        <label>
-          El. paštas:
-          <input name="email" value={newAgency.contactInfo?.email || ""} onChange={changeHandler} />
-        </label>
-        <label>
-          Tinklalapis:
-          <input name="website" value={newAgency.website || ""} onChange={changeHandler} />
-        </label>
-        <label>
-          Logotipas (URL):
-          <input name="logo" value={newAgency.logo || ""} onChange={changeHandler} />
-        </label>
-        <label>
-          Aprašymas:
-          <input name="description" value={newAgency.description || ""} onChange={changeHandler} />
-        </label>
-        <label>
-          Pilnas aprašymas:
-          <textarea
-            name="fullDescription"
-            value={newAgency.fullDescription || ""}
-            onChange={changeHandler}
-          />
-        </label>
+      <Grid container spacing={2} sx={{ mb: 4 }}>
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <TextField label="Pavadinimas" name="name" value={newAgency.name || ""} onChange={changeHandler} fullWidth size="small" />
+          <TextField label="Vieta" name="location" value={newAgency.location || ""} onChange={changeHandler} fullWidth size="small" sx={{ mt: 2 }} />
+          <TextField label="Įkurimo metai" name="establishedYear" type="number" value={newAgency.establishedYear || ""} onChange={changeHandler} fullWidth size="small" sx={{ mt: 2 }} />
+          <TextField label="Telefonas" name="phone" value={newAgency.contactInfo?.phone || ""} onChange={changeHandler} fullWidth size="small" sx={{ mt: 2 }} />
+        </Grid>
 
-        {editingId && (
-          <p>
-            Redaguojama agentūra:{" "}
-            <Link to={`/agency/${editingId}`} target="_blank" rel="noopener noreferrer">
-              Žiūrėti puslapį
-            </Link>
-          </p>
-        )}
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <TextField label="El. paštas" name="email" value={newAgency.contactInfo?.email || ""} onChange={changeHandler} fullWidth size="small" />
+          <TextField label="Tinklalapis" name="website" value={newAgency.website || ""} onChange={changeHandler} fullWidth size="small" sx={{ mt: 2 }} />
+          <TextField label="Logotipas (URL)" name="logo" value={newAgency.logo || ""} onChange={changeHandler} fullWidth size="small" sx={{ mt: 2 }} />
+          <TextField label="Aprašymas" name="description" value={newAgency.description || ""} onChange={changeHandler} fullWidth size="small" sx={{ mt: 2 }} />
+        </Grid>
+      </Grid>
 
-        {editingId ? (
-          <button type="button" onClick={updateHandler}>Atnaujinti</button>
-        ) : (
-          <button type="button" onClick={createHandler}>Sukurti</button>
-        )}
-      </form>
+      <TextField
+        label="Pilnas aprašymas"
+        name="fullDescription"
+        value={newAgency.fullDescription || ""}
+        onChange={changeHandler}
+        fullWidth
+        size="small"
+        multiline
+        rows={3}
+        sx={{ mb: 2 }}
+      />
 
-      <ul>
+      <Button variant="contained" onClick={editingId ? updateHandler : createHandler} size="small" sx={{ mb: 3 }}>
+        {editingId ? "Atnaujinti" : "Sukurti"}
+      </Button>
+
+      <Grid container spacing={2}>
         {agencies.map((agency) => (
-            <li key={agency._id}>
-            <Link to={`/agencies/${agency._id}`}>{agency.name}</Link> – {agency.location}
-            <button onClick={() => startEdit(agency)}>Redaguoti</button>
-            <button onClick={() => deleteHandler(agency._id)}>Ištrinti</button>
-            </li>
+          <Grid size={{ xs: 12, sm: 6 }} key={agency._id}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6">
+                  <Link to={`/agencies/${agency._id}`} style={{ textDecoration: "none", color: "#1976d2" }}>
+                    {agency.name}
+                  </Link>
+                </Typography>
+                <Typography variant="body1">{agency.location} - {agency.contactInfo?.phone}</Typography>
+                <Box sx={{ mt: 1 }}>
+                  <Button variant="outlined" color="primary" onClick={() => startEdit(agency)} size="small" sx={{ mr: 1 }}>
+                    Redaguoti
+                  </Button>
+                  <Button variant="outlined" color="error" onClick={() => deleteHandler(agency._id)} size="small">
+                    Ištrinti
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-        </ul>
-    </div>
+      </Grid>
+    </Container>
   )
 }
 

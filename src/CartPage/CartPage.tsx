@@ -2,11 +2,14 @@ import { useNavigate, Link } from "react-router-dom"
 import { useCart } from "../hooks/useCart"
 import { toast } from "sonner"
 import { CartItem } from "../types/types"
-import { CardContent } from "@mui/material";
+import { 
+  Avatar, Box, Button, Card, CardContent, Container, Divider, Grid, TextField, Typography, useMediaQuery 
+} from "@mui/material"
 
 const CartPage: React.FC = () => {
   const { items, removeFromCart, updateQuantity, getTotal, clearCart } = useCart()
   const navigate = useNavigate()
+  const isSmallScreen = useMediaQuery("(max-width:600px)")
 
   const removeItemHandler = (itemId: string) => {
     removeFromCart(itemId)
@@ -51,76 +54,105 @@ const CartPage: React.FC = () => {
 
   if (items.length === 0) {
     return (
-      <div className="empty-cart">
-        <h2>Krepšelis tuščias</h2>
-        <button onClick={continueShoppingHandler}>Tęsti apsipirkimą</button>
-      </div>
+      <Container maxWidth="md" sx={{ textAlign: "center", marginTop: 4 }}>
+        <Typography variant="h4">Krepšelis tuščias</Typography>
+        <Button variant="contained" onClick={continueShoppingHandler} sx={{ mt: 2 }}>
+          Tęsti apsipirkimą
+        </Button>
+      </Container>
     )
   }
 
   return (
-    <div className="cart-page">
-      <h1>Jūsų krepšelis</h1>
-      <CardContent className="cart-items">
+    <Container maxWidth="md" sx={{ marginTop: 4 }}>
+      <Typography variant="h4" gutterBottom>Jūsų krepšelis</Typography>
+      <Grid container spacing={3}>
         {items.map((item) => {
           const isDestination = item.modelType === "Destination"
           const relatedHotel = isDestination ? renderRelatedHotel(item) : null
           const itemLink = getItemLink(item)
 
           return (
-            <div key={item._id + item.modelType} className="cart-item" style={{ marginBottom: "2rem" }}>
-              <img
-                style={{ width: "300px" }}
-                src={item.image || "/fallback.jpg"}
-                alt={item.name}
-                className="cart-item-image"
-              />
-              <div className="cart-item-details">
-                <h2>
-                  <Link to={itemLink} style={{ textDecoration: "underline", color: "#0077cc" }}>
-                    {item.name}
-                  </Link>
-                </h2>
-                <p>Kaina: {item.price.toFixed(2)} €</p>
-                <label>
-                  Kiekis:
-                  <input
-                    type="number"
-                    min={1}
-                    value={item.quantity}
-                    onChange={(e) => updateQuantityHandler(item._id, Number(e.target.value))}
-                  />
-                </label>
-                <button onClick={() => removeItemHandler(item._id)}>Pašalinti</button>
-
-                {isDestination && relatedHotel && (
-                  <div className="related-hotel" style={{ marginTop: "1rem", borderTop: "1px solid #ccc", paddingTop: "1rem" }}>
-                    <h3>Pasirinktas viešbutis:</h3>
-                    <p>
-                      <Link to={`/hotels/${relatedHotel._id}`} style={{ textDecoration: "underline", color: "#0077cc" }}>
-                        {relatedHotel.name}
-                      </Link>
-                    </p>
-                    <p>Kaina: {relatedHotel.price.toFixed(2)} €</p>
-                    <img
-                      src={relatedHotel.image || "/fallback.jpg"}
-                      alt={relatedHotel.name}
-                      style={{ width: "200px", marginTop: "0.5rem" }}
+            <Grid size={{ xs: 12 }} key={item._id + item.modelType}>
+              <Card 
+                sx={{ 
+                  display: "flex", 
+                  flexDirection: isSmallScreen ? "column" : "row", 
+                  alignItems: "center", 
+                  padding: 2 
+                }}
+              >
+                <Avatar
+                  src={item.image || "/fallback.jpg"}
+                  alt={item.name}
+                  sx={{ width: 100, height: 100, marginRight: isSmallScreen ? 0 : 2, marginBottom: isSmallScreen ? 1 : 0 }}
+                />
+                <CardContent sx={{ flex: 1, textAlign: isSmallScreen ? "center" : "left" }}>
+                  <Typography variant="h6">
+                    <Link to={itemLink} style={{ textDecoration: "none", color: "#1976d2" }}>
+                      {item.name}
+                    </Link>
+                  </Typography>
+                  <Typography variant="body1">Kaina: {item.price.toFixed(2)} €</Typography>
+                  <Box 
+                    display="flex" 
+                    flexDirection={isSmallScreen ? "column" : "row"} 
+                    alignItems="center" 
+                    gap={1} 
+                    mt={1}
+                  >
+                    <Typography variant="body2">Kiekis:</Typography>
+                    <TextField
+                      type="number"
+                      variant="outlined"
+                      size="small"
+                      value={item.quantity}
+                      onChange={(e) => updateQuantityHandler(item._id, Number(e.target.value))}
+                      sx={{ maxWidth: 80 }}
                     />
-                  </div>
-                )}
-              </div>
-            </div>
+                    <Button 
+                      variant="outlined" 
+                      color="error" 
+                      onClick={() => removeItemHandler(item._id)}
+                      sx={{ marginLeft: isSmallScreen ? 0 : 2, marginTop: isSmallScreen ? 1 : 0 }}
+                    >
+                      Pašalinti
+                    </Button>
+                  </Box>
+                  {isDestination && relatedHotel && (
+                    <Box sx={{ mt: 2 }}>
+                      <Divider sx={{ mb: 1 }} />
+                      <Typography variant="body2">Pasirinktas viešbutis:</Typography>
+                      <Typography variant="body1">
+                        <Link to={`/hotels/${relatedHotel._id}`} style={{ textDecoration: "none", color: "#1976d2" }}>
+                          {relatedHotel.name}
+                        </Link>
+                      </Typography>
+                      <Typography variant="body1">Kaina: {relatedHotel.price.toFixed(2)} €</Typography>
+                    </Box>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
           )
         })}
-      </CardContent>
+      </Grid>
 
-      <div className="cart-total">
-        <h2>Iš viso: {getTotal().toFixed(2)} €</h2>
-        <button onClick={clearCartHandler}>Išvalyti krepšelį</button>
-        <button onClick={checkoutHandler}>Pateikti užsakymą</button>
-      </div>
-    </div>
+      <Box sx={{ mt: 4, textAlign: "center" }}>
+        <Typography variant="h5" sx={{ mb: 2 }}>Iš viso: {getTotal().toFixed(2)} €</Typography>
+        <Button 
+          variant="outlined" 
+          color="warning" 
+          onClick={clearCartHandler} 
+          sx={{ mr: 2 }}
+        >
+          Išvalyti krepšelį
+        </Button>
+        <Button variant="contained" color="primary" onClick={checkoutHandler}>
+          Pateikti užsakymą
+        </Button>
+      </Box>
+    </Container>
   )
 }
 

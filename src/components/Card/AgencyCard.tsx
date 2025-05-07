@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { Agencies } from "../../types/types"
 import "./AgencyCard.scss"
+import { Rating } from "@mui/material"
 
 interface AgencyProps {
   agency: Agencies
@@ -10,11 +11,6 @@ interface AgencyProps {
 
 const AgencyCard: React.FC<AgencyProps> = ({ agency, averageRating, reviewCount }) => {
 
-  const renderStars = (rating: number) => {
-    const fullStars = Math.round(rating)
-    const totalStars = 5
-    return "★".repeat(fullStars) + "☆".repeat(totalStars - fullStars)
-  }
 
   return (
     <div key={agency._id} className="agency-card">
@@ -30,8 +26,15 @@ const AgencyCard: React.FC<AgencyProps> = ({ agency, averageRating, reviewCount 
       )}
       {agency.establishedYear && <p>Įkurta: {agency.establishedYear}</p>}
 
-      <div className="mt-2 mb-2 text-sm text-gray-600">
-        {renderStars(averageRating || 0)} ({reviewCount || 0} atsiliepimai)
+      <div className="agency-rating">
+        <Rating
+          name="agency-rating"
+          value={averageRating || 0}
+          readOnly
+          precision={0.5}
+          size="small"
+        />
+        <span>({reviewCount || 0} atsiliepimai)</span>
       </div>
 
       <Link to={`/agencies/${agency._id}`}>Plačiau</Link>
