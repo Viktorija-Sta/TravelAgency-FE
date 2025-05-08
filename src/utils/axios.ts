@@ -1,17 +1,13 @@
 import axios from "axios"
-import {jwtDecode} from "jwt-decode"
-
-// Dinamiškas bazinis URL pagal aplinką
-const baseURL = import.meta.env.VITE_API_URL || "http://localhost:3001/api"
+import { jwtDecode } from "jwt-decode"
 
 const api = axios.create({
-  baseURL: baseURL,
+  baseURL: "http://localhost:3000/api",
   headers: {
     "Content-Type": "application/json",
   },
 })
 
-// Funkcija patikrinti, ar JWT tokenas yra pasibaigęs
 const isTokenExpired = (token: string): boolean => {
   try {
     const { exp } = jwtDecode<{ exp: number }>(token)
@@ -22,7 +18,6 @@ const isTokenExpired = (token: string): boolean => {
   }
 }
 
-// Užklausos interceptorius
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token")
@@ -42,14 +37,10 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Atsakymo interceptorius
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (
-      error.response &&
-      (error.response.status === 401 || error.response.status === 403)
-    ) {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
       localStorage.removeItem("token")
       if (window.location.pathname !== "/login") {
         window.location.replace("/login?sessionExpired=true")
