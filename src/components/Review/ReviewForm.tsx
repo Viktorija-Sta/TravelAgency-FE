@@ -92,7 +92,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ destinationId, hotelId, agencyI
         <Rating
           name="review-rating"
           value={rating}
-          onChange={(event, newValue) => setRating(newValue || 5)}
+          onChange={(_event, newValue) => setRating(newValue || 5)}
         />
       </Box>
 

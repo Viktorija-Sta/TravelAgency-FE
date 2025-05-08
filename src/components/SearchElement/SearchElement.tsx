@@ -38,7 +38,7 @@ const SearchElement: React.FC<SearchElementProps> = ({ onFilterChange, options, 
         options={options}
         getOptionLabel={(option) => option.label}
         value={selectedOptions}
-        onChange={(event, newValue) => setSelectedOptions(newValue)}
+        onChange={(_, newValue) => setSelectedOptions(newValue)}
         renderInput={(params) => (
           <TextField {...params} variant="outlined" placeholder="Pasirinkite kryptis..." />
         )}

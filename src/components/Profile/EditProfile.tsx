@@ -67,10 +67,10 @@ const EditProfile: React.FC<Props> = ({ isOpen, onClose, userData, onUpdate }) =
               <TextField fullWidth label="Vardas" name="username" value={formData.username} onChange={changeHandler} sx={{ mb: 2 }} />
               <TextField fullWidth label="El. paštas" name="email" value={formData.email} onChange={changeHandler} sx={{ mb: 2 }} />
               <TextField fullWidth label="Telefono numeris" name="phoneNumber" value={formData.phoneNumber || ""} onChange={changeHandler} sx={{ mb: 2 }} />
-              <TextField fullWidth label="Gatvė" name="address.street" value={formData.address?.street || ""} onChange={changeHandler} sx={{ mb: 2 }} />
-              <TextField fullWidth label="Miestas" name="address.city" value={formData.address?.city || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+              {/* <TextField fullWidth label="Adresas" name="address.street" value={formData.address || ""} onChange={changeHandler} sx={{ mb: 2 }} /> */}
+              {/* <TextField fullWidth label="Miestas" name="address.city" value={formData.address?.city || ""} onChange={changeHandler} sx={{ mb: 2 }} />
               <TextField fullWidth label="Pašto kodas" name="address.postalCode" value={formData.address?.postalCode || ""} onChange={changeHandler} sx={{ mb: 2 }} />
-              <TextField fullWidth label="Šalis" name="address.country" value={formData.address?.country || ""} onChange={changeHandler} sx={{ mb: 2 }} />
+              <TextField fullWidth label="Šalis" name="address.country" value={formData.address?.country || ""} onChange={changeHandler} sx={{ mb: 2 }} /> */}
               <Button fullWidth variant="contained" type="submit" disabled={loading} sx={{ mt: 2 }}>
                   {loading ? <CircularProgress size={24} /> : "Išsaugoti"}
               </Button>

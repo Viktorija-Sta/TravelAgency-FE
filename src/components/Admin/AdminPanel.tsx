@@ -20,6 +20,7 @@ const AdminPanel: React.FC = () => {
                                 variant="contained" 
                                 fullWidth
                                 sx={{ height: 60 }}
+                                style={{color: 'white'}}
                             >
                                 Valdyti duomenis
                             </Button>
@@ -34,6 +35,7 @@ const AdminPanel: React.FC = () => {
                                 color="primary" 
                                 fullWidth
                                 sx={{ height: 60 }}
+                                style={{color: 'white'}}
                             >
                                 Valdyti užsakymus
                             </Button>
@@ -48,6 +50,7 @@ const AdminPanel: React.FC = () => {
                                 color="secondary" 
                                 fullWidth
                                 sx={{ height: 60 }}
+                                style={{color: 'white'}}
                             >
                                 Užsakymų statistika
                             </Button>
