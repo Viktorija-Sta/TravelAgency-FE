@@ -2,7 +2,7 @@ import axios from "axios"
 import { jwtDecode } from "jwt-decode"
 
 const api = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "https://atsiskaitymas-fe-3tpy.vercel.app/api",
   headers: {
     "Content-Type": "application/json",
   },
