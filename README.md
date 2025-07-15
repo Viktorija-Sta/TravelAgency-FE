@@ -1,54 +1,63 @@
-# React + TypeScript + Vite
+# Baigiamasis projektas - Travel Agency
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Tai React + TypeScript pagrindu sukurta kelionių agentūros front-end aplikacija, skirta viešinti ir valdyti kelionės pasiūlymus, agentūras, apgyvendinimo įstaigas bei vartotojų atsiliepimus.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Gyvai pasiekiama
 
-## Expanding the ESLint configuration
+Projekto gyva versija:  
+[https://travelagency-viktorija.vercel.app](https://travelagency-viktorija.vercel.app)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Admino prisijungimas: login:admin, password: password123
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚀 Paleidimas
+git clone <your-repository-url>
+cd TravelAgency-FE
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Įdiek priklausomybes:
+npm install
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Paleisk aplikaciją:
+npm start
+
+Aplikacija bus pasiekiama adresu: http://localhost:3000
+
+## ✨ Funkcionalumas
+- Kelionės ir agentūros – peržiūra, paieška, filtravimas pagal kategorijas ar regionus
+
+- Apgyvendinimo įstaigos – informacijos rodymas
+
+- Atsiliepimai – vartotojų atsiliepimų pateikimas ir rodymas
+
+- Naudotojų registracija ir prisijungimas – su autentifikacija
+
+- Naudojama React Router puslapių navigacijai
+
+- API sąsaja su backend’u (kuris yra atskirai, su Node.js ir Express)
+
+- Stilistika – SCSS naudojimas, responsyvus dizainas
+
+
+## 🔧 Naudotos technologijos
+- React + TypeScript
+
+- React Router DOM
+
+- Axios (API užklausoms)
+
+- SCSS (modulinis stilius)
+
+- MaterialUI
+
+- Context API (state valdymui)
+
+- ESLint, Prettier (kodo kokybės užtikrinimui)
+
+## 📚 Nuorodos
+Backend repo: https://github.com/Viktorija-Sta/TravelAgency-BE
+
+Projekto gyva versija: https://travelagency-viktorija.vercel.app
+
