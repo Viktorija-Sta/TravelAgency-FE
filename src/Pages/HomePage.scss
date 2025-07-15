@@ -1,10 +1,12 @@
 .home-page {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 3rem;
   padding: 2rem;
 
   h2 {
+    width: 100%;
     font-size: 1.8rem;
     margin-bottom: 1rem;
     color: #333;
@@ -14,29 +16,28 @@
     font-weight: bold;
   }
 
-  section {
-    text-align: center;
-    padding: 1rem;
-
-    .MuiGrid-container {
-      justify-content: center;
-      gap: 1rem;
-    }
-  }
-
   .more {
     display: flex;
     justify-content: center;
     margin-top: 1rem;
+  }
 
-    a {
-      color: #1976d2;
-      text-decoration: none;
-      font-weight: bold;
+  .more a {
+    color: #1976d2;
+    text-decoration: none;
+    font-weight: bold;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 
-      &:hover {
-        text-decoration: underline;
-      }
+  section {
+    text-align: center;
+    padding: 1rem;
+
+    .MuiGrid-root {
+      justify-content: center;
+      gap: 1rem;
     }
   }
 }
