@@ -14,17 +14,27 @@ Admino prisijungimas: login:admin, password: password123
 ---
 
 ## 🚀 Paleidimas
+
+1. Klonuok šią repositoriją
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/Viktorija-Sta/TravelAgency-FE.git
 cd TravelAgency-FE
 
-Įdiek priklausomybes:
+```
+
+2. Įdiek priklausomybes:
+``` bash
 npm install
 
-Paleisk aplikaciją:
+```
+
+3. Paleisk aplikaciją:
+``` bash
 npm start
 
-Aplikacija bus pasiekiama adresu: http://localhost:3000
+```
+
+5. Aplikacija bus pasiekiama adresu: http://localhost:3000
 
 ## ✨ Funkcionalumas
 - Kelionės ir agentūros – peržiūra, paieška, filtravimas pagal kategorijas ar regionus
