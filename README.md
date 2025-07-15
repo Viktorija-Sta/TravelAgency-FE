@@ -14,6 +14,7 @@ Admino prisijungimas: login:admin, password: password123
 ---
 
 ## 🚀 Paleidimas
+```bash
 git clone <your-repository-url>
 cd TravelAgency-FE
 
@@ -48,7 +49,7 @@ Aplikacija bus pasiekiama adresu: http://localhost:3000
 
 - Axios (API užklausoms)
 
-- SCSS (modulinis stilius)
+- SCSS 
 
 - MaterialUI
 
