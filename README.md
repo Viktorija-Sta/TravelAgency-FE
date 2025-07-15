@@ -30,11 +30,11 @@ npm install
 
 3. Paleisk aplikaciją:
 ``` bash
-npm start
+npm run dev
 
 ```
 
-5. Aplikacija bus pasiekiama adresu: http://localhost:3000
+4. Aplikacija bus pasiekiama adresu: http://localhost:3000
 
 ## ✨ Funkcionalumas
 - Kelionės ir agentūros – peržiūra, paieška, filtravimas pagal kategorijas ar regionus
