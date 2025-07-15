@@ -10,32 +10,32 @@ Tai React + TypeScript pagrindu sukurtas vartotojo sąsajos sprendimas, skirtas 
 Projekto gyva versija:  
 [https://travelagency-viktorija.vercel.app](https://travelagency-viktorija.vercel.app)
 
-Admino prisijungimas: login:admin, password: password123
+Admino prisijungimas: login: admin, email: admin@admin.com, password: password123
 
 ---
 
 ## 🚀 Paleidimas
 
-1. Klonuok šią repositoriją
+### 1. Klonuok šią repositoriją
 ```bash
 git clone https://github.com/Viktorija-Sta/TravelAgency-FE.git
 cd TravelAgency-FE
 
 ```
 
-2. Įdiek priklausomybes:
+### 2. Įdiek priklausomybes:
 ``` bash
 npm install
 
 ```
 
-3. Paleisk aplikaciją:
+### 3. Paleisk aplikaciją:
 ``` bash
 npm run dev
 
 ```
 
-4. Aplikacija bus pasiekiama adresu: http://localhost:3000
+### 4. Aplikacija bus pasiekiama adresu: http://localhost:3000
 
 ## ✨ Funkcionalumas
 
