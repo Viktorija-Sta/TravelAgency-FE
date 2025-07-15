@@ -1,6 +1,7 @@
 # Baigiamasis projektas - Travel Agency
 
-Tai React + TypeScript pagrindu sukurta kelionių agentūros front-end aplikacija, skirta viešinti ir valdyti kelionės pasiūlymus, agentūras, apgyvendinimo įstaigas bei vartotojų atsiliepimus.
+Tai React + TypeScript pagrindu sukurtas vartotojo sąsajos sprendimas, skirtas kelionių rezervacijos sistemai. Naudotojai gali naršyti kelionių kryptis, viešbučius, agentūras, palikti atsiliepimus, pridėti pasiūlymus į krepšelį ir atlikti užsakymus. Taip pat yra administratoriaus panelė turinio valdymui.
+
 
 ---
 
@@ -37,35 +38,53 @@ npm run dev
 4. Aplikacija bus pasiekiama adresu: http://localhost:3000
 
 ## ✨ Funkcionalumas
-- Kelionės ir agentūros – peržiūra, paieška, filtravimas pagal kategorijas ar regionus
 
-- Apgyvendinimo įstaigos – informacijos rodymas
+## Vartotojo pusėje
+✅ Vartotojo registracija, prisijungimas, profilio redagavimas (nuotrauka, adresas ir kt.)
 
-- Atsiliepimai – vartotojų atsiliepimų pateikimas ir rodymas
+✅ Kelionių krypčių naršymas su filtravimu pagal kategorijas
 
-- Naudotojų registracija ir prisijungimas – su autentifikacija
+✅ Viešbučių paieška ir pridėjimas prie užsakymo
 
-- Naudojama React Router puslapių navigacijai
+✅ Agentūrų atsiliepimų peržiūra
 
-- API sąsaja su backend’u (kuris yra atskirai, su Node.js ir Express)
+✅ Atsiliepimų rašymas kryptims, viešbučiams ir agentūroms
 
-- Stilistika – SCSS naudojimas, responsyvus dizainas
+✅ Krepšelio sistema su kiekių redagavimu
+
+✅ Užsakymo pateikimas su pilnu adresu
+
+✅ Rodymas, kiek naktų truks kelionė, ir bendra kaina
+
+## Administratoriams
+✅ Valdymo skydelis su užsakymų, produktų, agentūrų ir vartotojų peržiūra
+
+✅ Naujų viešbučių, agentūrų, krypčių kūrimas ir redagavimas
+
+✅ Užsakymų detalių peržiūra (adresai, prekės, kiekiai)
+
+✅ Rolėmis paremtas turinio matomumas ir valdymas
 
 
 ## 🔧 Naudotos technologijos
-- React + TypeScript
+- ✅ React 19 + TypeScript + Vite
 
-- React Router DOM
+- ✅ Vite kaip bundleris
 
-- Axios (API užklausoms)
+- ✅ React Router v7
 
-- SCSS 
+- ✅ Context API 
 
-- MaterialUI
+- ✅ Axios
 
-- Context API (state valdymui)
+- ✅ Material UI ir MUI Rating
 
-- ESLint, Prettier (kodo kokybės užtikrinimui)
+- ✅ React Hook Form
+
+- ✅ SCSS
+
+## 📝 Pastabos
+Projektas sukurtas siekiant užtikrinti funkcionalumą, aiškią struktūrą ir gerą vartotojo patirtį. Komponentai suskaidyti pagal atsakomybę, API keliai aiškiai išskirstyti, duomenų modeliai apgalvoti taip, kad būtų lengva plėsti funkcionalumą (pvz., galima lengvai prijungti daugiau produktų tipų). Platforma palaiko dinamišką filtravimą, krepšelio valdymą ir rolių pagrindu ribotą prieigą, todėl tinka tiek paprastiems vartotojams, tiek administratorių valdymui.
 
 ## 📚 Nuorodos
 Backend repo: https://github.com/Viktorija-Sta/TravelAgency-BE
