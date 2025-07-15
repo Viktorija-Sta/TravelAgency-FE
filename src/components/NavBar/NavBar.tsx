@@ -3,7 +3,7 @@ import { useAuth } from "../../hooks/useAuth"
 import "./NavBar.scss"
 import { useState } from "react"
 import MenuIcon from "@mui/icons-material/Menu"
-import { Drawer, IconButton, List, ListItem, Box, Button, } from "@mui/material"
+import { Drawer, IconButton, List, ListItem, Box, } from "@mui/material"
 
 const NavBar: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth()
@@ -86,10 +86,6 @@ const NavBar: React.FC = () => {
 
   return (
     <>
-      <div>
-      <h1>Home</h1>
-      <Button variant="contained" color="primary">Test</Button>
-    </div>
       <nav className="navbar">
         <div className="mobile-menu-icon">
           <IconButton
