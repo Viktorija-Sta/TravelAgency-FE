@@ -40,30 +40,30 @@ npm run dev
 ## ✨ Funkcionalumas
 
 ## Vartotojo pusėje
-✅ Vartotojo registracija, prisijungimas, profilio redagavimas (nuotrauka, adresas ir kt.)
+- ✅ Vartotojo registracija, prisijungimas, profilio redagavimas (nuotrauka, adresas ir kt.)
 
-✅ Kelionių krypčių naršymas su filtravimu pagal kategorijas
+- ✅ Kelionių krypčių naršymas su filtravimu pagal kategorijas
 
-✅ Viešbučių paieška ir pridėjimas prie užsakymo
+- ✅ Viešbučių paieška ir pridėjimas prie užsakymo
 
-✅ Agentūrų atsiliepimų peržiūra
+- ✅ Agentūrų atsiliepimų peržiūra
 
-✅ Atsiliepimų rašymas kryptims, viešbučiams ir agentūroms
+- ✅ Atsiliepimų rašymas kryptims, viešbučiams ir agentūroms
 
-✅ Krepšelio sistema su kiekių redagavimu
+- ✅ Krepšelio sistema su kiekių redagavimu
 
-✅ Užsakymo pateikimas su pilnu adresu
+- ✅ Užsakymo pateikimas su pilnu adresu
 
-✅ Rodymas, kiek naktų truks kelionė, ir bendra kaina
+- ✅ Rodymas, kiek naktų truks kelionė, ir bendra kaina
 
 ## Administratoriams
-✅ Valdymo skydelis su užsakymų, produktų, agentūrų ir vartotojų peržiūra
+- ✅ Valdymo skydelis su užsakymų, produktų, agentūrų ir vartotojų peržiūra
 
-✅ Naujų viešbučių, agentūrų, krypčių kūrimas ir redagavimas
+- ✅ Naujų viešbučių, agentūrų, krypčių kūrimas ir redagavimas
 
-✅ Užsakymų detalių peržiūra (adresai, prekės, kiekiai)
+- ✅ Užsakymų detalių peržiūra (adresai, prekės, kiekiai)
 
-✅ Rolėmis paremtas turinio matomumas ir valdymas
+- ✅ Rolėmis paremtas turinio matomumas ir valdymas
 
 
 ## 🔧 Naudotos technologijos
