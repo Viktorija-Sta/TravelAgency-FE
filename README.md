@@ -35,7 +35,7 @@ npm run dev
 
 ```
 
-### 4. Aplikacija bus pasiekiama adresu: http://localhost:3000
+### 4. Aplikacija bus pasiekiama adresu: http://localhost:2000
 
 ## ✨ Funkcionalumas
 
