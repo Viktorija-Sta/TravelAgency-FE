@@ -8,7 +8,7 @@ Tai React + TypeScript pagrindu sukurtas vartotojo sąsajos sprendimas, skirtas 
 ## 🌐 Gyvai pasiekiama
 
 Projekto gyva versija:  
-[https://travelagency-viktorija.vercel.app](https://travelagency-viktorija.vercel.app)
+https://kelioniu-agentura-1k7a3x6ux-viktorija-stas-projects.vercel.app/home
 
 Admino prisijungimas: login: admin, email: admin@admin.com, password: password123
 
@@ -89,5 +89,5 @@ Projektas sukurtas siekiant užtikrinti funkcionalumą, aiškią struktūrą ir 
 ## 📚 Nuorodos
 Backend repo: https://github.com/Viktorija-Sta/TravelAgency-BE
 
-Projekto gyva versija: https://travelagency-viktorija.vercel.app
+Projekto gyva versija: https://kelioniu-agentura-1k7a3x6ux-viktorija-stas-projects.vercel.app/home
 
