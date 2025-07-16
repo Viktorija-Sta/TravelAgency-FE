@@ -9,7 +9,7 @@ import { useCart } from "../hooks/useCart"
 import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
 import "./HomePage.scss"
-import { Button, CircularProgress, Container } from "@mui/material"
+import { CircularProgress, Container } from "@mui/material"
 
 const HomePage: React.FC = () => {
   const { addToCart } = useCart()
@@ -108,10 +108,6 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="home-page">
-        <div>
-      <h1>Home</h1>
-      <Button variant="contained" color="primary">Test</Button>
-    </div>
       <section>
         <Typography variant="h4" component="h2">Top 3 Kelionės</Typography>
         <Grid container spacing={5} justifyContent="center" >
