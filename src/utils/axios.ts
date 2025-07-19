@@ -2,7 +2,7 @@ import axios from "axios"
 import { jwtDecode } from "jwt-decode"
 
 const api = axios.create({
-  baseURL: "https://travel-agency-be-eipr.onrender.com",
+  baseURL: "https://travel-agency-be-eipr.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
