@@ -85,5 +85,3 @@ Projektas sukurtas siekiant užtikrinti funkcionalumą, aiškią struktūrą ir 
 
 ## 📚 Nuorodos
 Backend repo: https://github.com/Viktorija-Sta/TravelAgency-BE
-
-
