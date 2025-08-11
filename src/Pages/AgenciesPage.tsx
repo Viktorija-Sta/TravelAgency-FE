@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Agencies, Reviews } from "../types/types"
+import type { Agencies, Reviews } from "../types/types"
 import api from "../utils/axios"
 import AgencyCard from "../components/Card/AgencyCard"
 import { CircularProgress, Container, Grid, Typography } from "@mui/material"

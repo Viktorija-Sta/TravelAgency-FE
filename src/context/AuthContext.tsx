@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import axiosInstance from "../utils/axios"
 import { jwtDecode } from "jwt-decode"
-import { User } from "../types/types"
 import { toast } from "sonner"
+import type { User } from "../types/types"
 
   
   interface DecodedToken {

@@ -1,7 +1,7 @@
 import { useNavigate, useParams, Link } from "react-router-dom"
 import { useCart } from "../../hooks/useCart"
 import { useEffect, useState } from "react"
-import { Destinations, Hotels, Reviews } from "../../types/types"
+import type { Destinations, Hotels, Reviews } from "../../types/types"
 import api from "../../utils/axios"
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
 import "./DestinationItem.scss"

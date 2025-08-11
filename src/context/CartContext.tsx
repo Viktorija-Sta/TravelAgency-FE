@@ -1,10 +1,11 @@
-import { createContext, useReducer, useEffect, ReactNode, useContext } from "react"
-import { CartItem } from "../types/types"
+import { createContext, useReducer, useEffect, useContext } from "react"
+import type { ReactNode } from "react"
+import { cartReducer } from "../reducer/cartReducer"
+import type { CartItem } from "../types/types"
 
 export interface CartState {
   items: CartItem[]
 }
-import { cartReducer } from "../reducer/cartReducer"
 
 interface CartContextType {
   items: CartItem[]

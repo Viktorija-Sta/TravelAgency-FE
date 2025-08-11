@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { Agencies, Hotels } from "../../types/types"
+import type { Agencies, Hotels } from "../../types/types"
 import api from "../../utils/axios"
 import { 
   Container, TextField, Button, Typography, Box, Grid, Card, CardContent, Select, MenuItem, InputLabel, FormControl 

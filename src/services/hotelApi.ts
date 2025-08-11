@@ -1,4 +1,4 @@
-import { Hotels } from "../types/types"
+import type { Hotels } from "../types/types"
 import api from "../utils/axios"
 
 export const getHotelsByDestination = async (destinationId: string) => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Agencies } from "../../types/types"
+import type { Agencies } from "../../types/types"
 import api from "../../utils/axios"
 import { Link } from "react-router-dom"
 import {

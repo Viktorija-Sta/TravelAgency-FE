@@ -1,7 +1,7 @@
 import { useNavigate, Link } from "react-router-dom"
 import { useCart } from "../hooks/useCart"
 import { toast } from "sonner"
-import { CartItem } from "../types/types"
+import type { CartItem } from "../types/types"
 import { 
   Avatar, Box, Button, Card, CardContent, Container, Divider, Grid, TextField, Typography, useMediaQuery 
 } from "@mui/material"

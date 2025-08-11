@@ -1,10 +1,11 @@
-import { useState, FormEvent } from 'react'
+import { useState } from 'react'
+import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios, { AxiosError } from 'axios'
 import api from '../utils/axios'
 import { useAuth } from '../context/AuthContext'
 import { jwtDecode } from 'jwt-decode'
-import { User } from '../types/types'
+import type { User } from '../types/types'
 import { toast } from 'sonner'
 import { Alert, Box, Button, CircularProgress, Container, TextField, Typography } from '@mui/material'
 

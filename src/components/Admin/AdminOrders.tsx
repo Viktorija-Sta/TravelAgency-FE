@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "../../context/AuthContext"
-import { Order } from "../../types/types"
+import type { Order } from "../../types/types"
 import api from "../../utils/axios"
 import Breadcrumb from "../Breadcrumb/Breadcrumb"
 import { toast } from "sonner"

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react"
 import { useCart } from "../hooks/useCart"
-import { Destinations, Hotels, Reviews } from "../types/types"
+import type { Destinations, Hotels, Reviews } from "../types/types"
 import api from "../utils/axios"
 import HotelCard from "../components/Card/HotelCard"
 import SearchElement from "../components/SearchElement/SearchElement"

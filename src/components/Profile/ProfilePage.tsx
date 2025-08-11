@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
 import api from "../../utils/axios"
-import { UserProfile } from "../../types/types"
+import type { UserProfile } from "../../types/types"
 import EditProfile from "./EditProfile"
 import { Container, Typography, Button, Avatar, CircularProgress, Alert, Box } from "@mui/material"
 

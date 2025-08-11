@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Agencies, Categories, Destinations, Hotels } from "../../types/types"
+import type { Agencies, Categories, Destinations, Hotels } from "../../types/types"
 import api from "../../utils/axios"
 import { Link } from "react-router"
 import { Box, Button, Card, CardContent, Checkbox, Container, FormControl, FormControlLabel, FormGroup, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import api from "../../utils/axios"
-import { Reviews } from "../../types/types"
+import type { Reviews } from "../../types/types"
 import {
   Box,
   Button,

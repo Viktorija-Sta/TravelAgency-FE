@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { Agencies, Destinations, Hotels, Reviews } from "../types/types"
+import type { Agencies, Destinations, Hotels, Reviews } from "../types/types"
 import api from "../utils/axios"
 import DestinationCard from "../components/Card/DestinationCard"
 import HotelCard from "../components/Card/HotelCard"

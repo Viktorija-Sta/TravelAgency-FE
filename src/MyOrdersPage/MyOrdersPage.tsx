@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "../hooks/useAuth"
-import { Order } from "../types/types"
+import type { Order } from "../types/types"
 import api from "../utils/axios"
 import { Alert, Card, CardContent, CircularProgress, Container, List, Typography } from "@mui/material"
 

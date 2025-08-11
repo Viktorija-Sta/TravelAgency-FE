@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Reviews } from "../../types/types"
+import type { Reviews } from "../../types/types"
 import { Link } from "react-router-dom"
 import api from "../../utils/axios"
 import {

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { Agencies } from "../../types/types"
+import type { Agencies } from "../../types/types"
 import "./AgencyCard.scss"
 import { Rating } from "@mui/material"
 

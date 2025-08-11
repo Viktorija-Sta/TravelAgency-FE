@@ -1,4 +1,4 @@
-import { Reviews } from "../../types/types"
+import type { Reviews } from "../../types/types"
 
 interface ReviewsListProps {
   reviews: Reviews[]

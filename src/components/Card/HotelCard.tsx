@@ -1,4 +1,4 @@
-import { Hotels } from "../../types/types"
+import type { Hotels } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
 import { Link } from "react-router-dom"
 import "./HotelCard.scss"

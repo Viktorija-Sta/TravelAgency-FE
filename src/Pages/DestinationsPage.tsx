@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Destinations, Categories, Reviews } from "../types/types"
+import type { Destinations, Categories, Reviews } from "../types/types"
 import { getAllDestinations } from "../services/destinationApi"
 import { useCart } from "../hooks/useCart"
 import DestinationCard from "../components/Card/DestinationCard"

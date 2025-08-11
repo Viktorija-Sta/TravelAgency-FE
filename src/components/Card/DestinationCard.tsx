@@ -1,9 +1,9 @@
-import { Destinations } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
 import { Link } from "react-router"
 import { toast } from "sonner"
 import "./DestinationCard.scss"
 import { Rating } from "@mui/material"
+import type { Destinations } from "../../types/types"
 
 interface DestinationProps {
   destination: Destinations
